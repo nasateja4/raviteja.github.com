@@ -3,7 +3,7 @@ import { collection, getDocs, doc, setDoc, deleteDoc, updateDoc } from 'firebase
 import { Project } from './types';
 import { defaultProjects } from './defaultData';
 
-const LOCAL_STORAGE_KEY = 'raviteja_portfolio_projects_v3';
+const LOCAL_STORAGE_KEY = 'raviteja_portfolio_projects_v4';
 
 // Helper to get projects from localStorage fallback with auto-sync of default projects
 function getLocalProjects(): Project[] {

@@ -74,8 +74,7 @@ Developed and deployed **fastenersstandards.com**, a specialized online engineer
     heroImage: '/static/bom.png',
     galleryImages: [
       '/static/bom.png',
-      '/static/TKAP1058.JPG',
-      '/static/TBNL9271.JPG',
+      '/static/macro.png',
     ],
     tools: ['ASME Standards', 'ISO Standards', 'SolidWorks CAD Data', 'Web Development', 'Engineering Calculation'],
     externalUrl: 'https://fastenersstandards.com',
@@ -96,15 +95,16 @@ Developed and deployed **fastenersstandards.com**, a specialized online engineer
     shortDescription: 'Collection of 6 functional mechanical 3D modeling and additive prototyping projects. Use the interactive project switcher arrows to explore each sub-project with its 3D model, photos, and video demos.',
     fullDescription: `A comprehensive portfolio of 6 physical hardware prototyping projects spanning wearable IoT enclosures, autonomous agricultural rovers, custom lathe fixtures, motorized display turntables, CNC carving units, and robotic actuator housings.`,
     category: '3D CAD & Printing',
-    heroImage: '/static/3dModel.jpeg',
+    heroImage: '/static/rower/3dModel.jpeg',
     galleryImages: [
-      '/static/3dModel.jpeg',
-      '/static/watch.jpeg',
-      '/static/watch_explore.jpeg',
-      '/static/GPT.jpg',
-      '/static/IMG_3625.JPG',
-      '/static/IMG_3564.JPG',
-      '/static/IMG_3563.JPG',
+      '/static/rower/3dModel.jpeg',
+      '/static/rower/IMG_20241119_221533.jpg',
+      '/static/watch/watch.jpeg',
+      '/static/watch/watch_explore.jpeg',
+      '/static/3d_printing/IMG_3563.JPG',
+      '/static/3d_printing/IMG_3564.JPG',
+      '/static/3d_printing/IMG_3625.JPG',
+      '/static/3d_printing/IMG_3626.JPG',
     ],
     tools: ['SolidWorks', 'Fusion 360', 'Blender', 'ANSYS FEA', '3D Printing (FDM, SLS)'],
     model3d: {
@@ -144,8 +144,9 @@ Performed comprehensive mechanical calculations to determine tractive effort, ge
         ],
         videoUrl: 'https://www.youtube.com/embed/2D0GofY40FA',
         galleryImages: [
-          '/static/3dModel.jpeg',
-          '/static/IMG_3564.JPG',
+          '/static/rower/3dModel.jpeg',
+          '/static/rower/IMG_20241119_221533.jpg',
+          '/static/rower/car_3d.gif',
         ],
         specs: [
           { label: 'Application', value: 'Agricultural Towing & Field Inspection' },
@@ -174,9 +175,9 @@ At present, working on embedded firmware and development of a customized mobile 
         },
         videoUrl: 'https://www.youtube.com/embed/O3_xjl86TO4',
         galleryImages: [
-          '/static/watch.jpeg',
-          '/static/watch_explore.jpeg',
-          '/static/IMG_3625.JPG',
+          '/static/watch/watch.jpeg',
+          '/static/watch/watch.png',
+          '/static/watch/watch_explore.jpeg',
           '/static/GPT.jpg',
         ],
         specs: [
@@ -197,8 +198,8 @@ This required a rotary bed to securely center the ring and rotate it precisely a
 To overcome this, designed and 3D printed a custom 3-jaw self-centering scroll chuck in **Autodesk Fusion 360**. Sliced with high infill density using PLA for dimensional rigidity and wear resistance. Verified concentricity and holding force, successfully achieving clean 360° ring engravings.`,
         videoUrl: 'https://www.youtube.com/embed/S4zS77OUl8o',
         galleryImages: [
-          '/static/3dModel.jpeg',
-          '/static/IMG_3563.JPG',
+          '/static/3d_printing/IMG_3563.JPG',
+          '/static/3d_printing/IMG_3625.JPG',
         ],
         specs: [
           { label: 'Commercial Savings', value: 'Saved ₹2,000 – ₹3,000 in hardware tooling' },
@@ -221,8 +222,8 @@ Designed in **Fusion 360** with focus on low rotational friction, smooth bearing
         },
         videoUrl: 'https://youtube.com/embed/-SqQ3uOOTR8',
         galleryImages: [
-          '/static/IMG_3626.JPG',
-          '/static/IMG_3564.JPG',
+          '/static/3d_printing/IMG_3564.JPG',
+          '/static/3d_printing/IMG_3626.JPG',
         ],
         specs: [
           { label: 'Rotation Span', value: '360° Continuous Smooth Rotation' },
@@ -244,10 +245,10 @@ Designed a new rigid Z-axis carriage in **Fusion 360** engineered to support a s
         },
         videoUrl: 'https://youtube.com/embed/zGyGgTdxowI',
         galleryImages: [
-          '/static/laser.png',
-          '/static/IMG_3565.JPG',
-          '/static/IMG_3566.JPG',
-          '/static/IMG_3582.JPG',
+          '/static/leaser_cnc/laser.png',
+          '/static/leaser_cnc/IMG_3565.JPG',
+          '/static/leaser_cnc/IMG_3566.JPG',
+          '/static/leaser_cnc/IMG_3582.JPG',
         ],
         specs: [
           { label: 'Milling Depth', value: '1 mm per pass controlled depth' },
@@ -287,8 +288,7 @@ Designed custom stepper motor outer housings and mounting flanges in **SolidWork
         videoUrl: 'https://youtube.com/embed/3BYo8GMtsGc',
         galleryImages: [
           '/static/arm.jpg',
-          '/static/IWDY3040.JPG',
-          '/static/IMG_2590.JPG',
+          '/static/3d_printing/IMG_3625.JPG',
         ],
         specs: [
           { label: '3D Models Included', value: 'Stepper Motor v7, Cylindrical v1, NEMA 21' },
@@ -323,12 +323,12 @@ Designed and built an automated desktop CNC laser engraver and upgraded Z-axis m
 - **Z-Axis Upgrade Assembly**: Designed a custom rigid Z-axis gantry in Fusion 360 accommodating a spindle motor for 1mm per pass depth milling in wood and soft materials.
 - **Laser Optics**: Equipped with a 5.5W 450nm optical laser module with PWM duty-cycle intensity control.`,
     category: 'Robotics & Automation',
-    heroImage: '/static/laser.png',
+    heroImage: '/static/leaser_cnc/laser.png',
     galleryImages: [
-      '/static/laser.png',
-      '/static/IMG_3565.JPG',
-      '/static/IMG_3566.JPG',
-      '/static/IMG_3582.JPG',
+      '/static/leaser_cnc/laser.png',
+      '/static/leaser_cnc/IMG_3565.JPG',
+      '/static/leaser_cnc/IMG_3566.JPG',
+      '/static/leaser_cnc/IMG_3582.JPG',
     ],
     tools: ['SolidWorks', 'Fusion 360', 'Arduino', 'GRBL', 'CNC Machining', 'LaserGRBL', '3D Printing'],
     model3d: {
@@ -376,8 +376,7 @@ Designed a 6-Degrees-of-Freedom articulated robotic arm optimized for pick-and-p
     heroImage: '/static/arm.jpg',
     galleryImages: [
       '/static/arm.jpg',
-      '/static/IWDY3040.JPG',
-      '/static/IMG_2590.JPG',
+      '/static/3d_printing/IMG_3625.JPG',
     ],
     tools: ['SolidWorks', 'Fusion 360', 'Python Kinematics', 'Microcontrollers', 'Robotics', 'Stepper Motors'],
     model3d: {
@@ -431,8 +430,8 @@ Developed custom SolidWorks automation macros (enhanced with ChatGPT prompt engi
     heroImage: '/static/macro.png',
     galleryImages: [
       '/static/macro.png',
-      '/static/PCFH9191.JPG',
-      '/static/MRYC6906.JPG',
+      '/static/bom.png',
+      '/static/GPT.jpg',
     ],
     tools: ['SolidWorks API', 'VBA Macros (VBA)', 'ChatGPT Automation', 'Batch File Processing'],
     specs: [
@@ -459,14 +458,24 @@ Led an engineering team of **18 engineers** in the mechanical and electrical con
 - **Finite Element Analysis (FEA)**: Conducted static structural and vibrational simulations in **ANSYS** to validate yield strength, safety factors, and fatigue endurance of the motor mounting bracket under peak torque.
 - **3D Modeling & Kinematics**: Utilized **Autodesk Fusion 360** for overall powertrain component layout, clearance verification, and assembly packaging.`,
     category: 'EV & Automotive',
-    heroImage: '/static/EV_car.JPG',
+    heroImage: '/static/EV_vehical/EV_car.JPG',
     galleryImages: [
-      '/static/EV_car.JPG',
-      '/static/car_3d.gif',
-      '/static/IMG_3262.JPG',
-      '/static/IMG_3263.JPG',
-      '/static/IMG_3265.JPG',
-      '/static/IMG_2140.JPG',
+      '/static/EV_vehical/EV_car.JPG',
+      '/static/EV_vehical/award.png',
+      '/static/EV_vehical/news.png',
+      '/static/EV_vehical/IMG_3262.JPG',
+      '/static/EV_vehical/IMG_3263.JPG',
+      '/static/EV_vehical/IMG_3265.JPG',
+      '/static/EV_vehical/IMG_2140.JPG',
+      '/static/EV_vehical/IMG_2590.JPG',
+      '/static/EV_vehical/IMG_2600.JPG',
+      '/static/EV_vehical/IMG_2603.JPG',
+      '/static/EV_vehical/IMG_3353.JPG',
+      '/static/EV_vehical/IWDY3040.JPG',
+      '/static/EV_vehical/MRYC6906.JPG',
+      '/static/EV_vehical/PCFH9191.JPG',
+      '/static/EV_vehical/TBNL9271.JPG',
+      '/static/EV_vehical/TKAP1058.JPG',
     ],
     tools: ['Fusion 360', 'ANSYS Structural', 'BLDC Motor Powertrain', 'Gearbox Mount', 'Fabrication'],
     specs: [
