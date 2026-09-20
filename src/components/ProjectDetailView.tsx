@@ -446,6 +446,29 @@ export default function ProjectDetailView({ project }: ProjectDetailViewProps) {
         </div>
       </div>
 
+      {/* DEDICATED PROJECT VIDEO DEMO SECTION (Matching original HTML project pages) */}
+      {Boolean(activeVideoUrl) && (
+        <div className="glass-panel bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+          <div className="flex items-center gap-2">
+            <Video className="w-5 h-5 text-blue-600" />
+            <h3 className="font-display font-bold text-2xl text-slate-900">Project Demonstration Video</h3>
+          </div>
+          <p className="text-slate-600 text-sm leading-relaxed">
+            Watch the video below to see the project demo in action.
+          </p>
+          <div className="aspect-video w-full rounded-2xl overflow-hidden glass-panel bg-black border border-slate-200 shadow-xl">
+            <iframe
+              src={activeVideoUrl}
+              title={`${activeTitle} Video Demo`}
+              className="w-full h-full border-0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+            />
+          </div>
+        </div>
+      )}
+
       {/* Bottom Sub-Project Shift & CTA */}
       <div className="pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
         {hasSubProjects ? (

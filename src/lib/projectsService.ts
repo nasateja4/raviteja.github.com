@@ -3,7 +3,7 @@ import { collection, getDocs, doc, setDoc, deleteDoc } from 'firebase/firestore'
 import { Project, SubProject } from './types';
 import { defaultProjects } from './defaultData';
 
-const LOCAL_STORAGE_KEY = 'raviteja_portfolio_projects_v12';
+const LOCAL_STORAGE_KEY = 'raviteja_portfolio_projects_v14';
 
 // IDs of projects that strictly belong inside the single 3D CAD & Printing card collection
 const SUB_PROJECT_IDS = new Set([
@@ -48,7 +48,7 @@ function getLocalProjects(): Project[] {
     const parsed: Project[] = JSON.parse(stored)
       .filter((p: Project) => !SUB_PROJECT_IDS.has(p.id) && !SUB_PROJECT_IDS.has(p.slug) && !OBSOLETE_PROJECT_IDS.has(p.id) && !OBSOLETE_PROJECT_IDS.has(p.slug))
       .map(normalizeProject);
-    // Ensure all default projects exist in stored data (merge missing ones)
+    // Ensure all default projects exist in stored data (merge missing or updated ones)
     let updated = false;
     const merged = [...parsed];
     for (const def of defaultProjects) {
@@ -56,6 +56,25 @@ function getLocalProjects(): Project[] {
       if (existingIndex === -1) {
         merged.push(normalizeProject(def));
         updated = true;
+      } else {
+        const cur = merged[existingIndex];
+        if (def.videoUrl && cur.videoUrl !== def.videoUrl) {
+          cur.videoUrl = def.videoUrl;
+          updated = true;
+        }
+        if (def.heroImage && cur.heroImage !== def.heroImage) {
+          cur.heroImage = def.heroImage;
+          updated = true;
+        }
+        if (def.galleryImages && (!cur.galleryImages || cur.galleryImages.length < def.galleryImages.length)) {
+          cur.galleryImages = def.galleryImages;
+          updated = true;
+        }
+        if (def.model3d === undefined && cur.model3d !== undefined) {
+          delete cur.model3d;
+          delete cur.models3d;
+          updated = true;
+        }
       }
     }
 
@@ -118,13 +137,36 @@ export async function getProjects(): Promise<Project[]> {
           fetched.push(normalizeProject({ id: docSnap.id, ...data }));
         });
 
-        // Ensure all default projects are present
+        // Ensure all default projects are present and updated with latest videoUrls and assets
         for (const def of defaultProjects) {
-          const exists = fetched.some((p) => p.id === def.id || p.slug === def.slug);
-          if (!exists) {
+          const index = fetched.findIndex((p) => p.id === def.id || p.slug === def.slug);
+          if (index === -1) {
             const normalizedDef = normalizeProject(def);
             fetched.push(normalizedDef);
             setDoc(doc(db, 'projects', def.id), normalizedDef).catch(() => {});
+          } else {
+            const cur = fetched[index];
+            let needsSync = false;
+            if (def.videoUrl && cur.videoUrl !== def.videoUrl) {
+              cur.videoUrl = def.videoUrl;
+              needsSync = true;
+            }
+            if (def.heroImage && cur.heroImage !== def.heroImage) {
+              cur.heroImage = def.heroImage;
+              needsSync = true;
+            }
+            if (def.galleryImages && (!cur.galleryImages || cur.galleryImages.length < def.galleryImages.length)) {
+              cur.galleryImages = def.galleryImages;
+              needsSync = true;
+            }
+            if (def.model3d === undefined && cur.model3d !== undefined) {
+              delete cur.model3d;
+              delete cur.models3d;
+              needsSync = true;
+            }
+            if (needsSync) {
+              setDoc(doc(db, 'projects', cur.id), cur).catch(() => {});
+            }
           }
         }
 
