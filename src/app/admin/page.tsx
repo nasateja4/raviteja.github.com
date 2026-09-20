@@ -62,7 +62,15 @@ export default function AdminDashboardPage() {
     }
   };
 
+  const [filterCategory, setFilterCategory] = useState<'All' | '3D CAD & Printing' | 'Engineering Projects'>('All');
+
   const modelCount = projects.filter((p) => p.model3d?.url).length;
+  const cadCount = projects.filter((p) => p.category === '3D CAD & Printing').length;
+  const engCount = projects.filter((p) => p.category === 'Engineering Projects').length;
+
+  const filteredProjects = filterCategory === 'All'
+    ? projects
+    : projects.filter((p) => p.category === filterCategory);
 
   return (
     <div className="py-12 max-w-7xl mx-auto px-6 space-y-8">
@@ -139,20 +147,89 @@ export default function AdminDashboardPage() {
 
       {/* Projects Table */}
       <div className="glass-panel bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
-        <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
-          <h2 className="font-display font-bold text-lg text-slate-900">All Portfolio Projects</h2>
-          <span className="text-xs text-slate-500 font-mono font-medium">{projects.length} Items</span>
+        <div className="px-6 py-4 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-50">
+          <div>
+            <h2 className="font-display font-bold text-lg text-slate-900">
+              {filterCategory === 'All'
+                ? 'All Portfolio Projects'
+                : filterCategory === '3D CAD & Printing'
+                ? '3D CAD & Printing Projects'
+                : 'Engineering Projects'}
+            </h2>
+            <p className="text-xs text-slate-500 mt-0.5 font-medium">
+              Showing {filteredProjects.length} of {projects.length} total projects
+            </p>
+          </div>
+
+          {/* Filter Buttons */}
+          <div className="flex flex-wrap items-center gap-2 p-1.5 bg-white rounded-2xl border border-slate-200 shadow-sm">
+            <button
+              onClick={() => setFilterCategory('All')}
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
+                filterCategory === 'All'
+                  ? 'bg-slate-900 text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+              }`}
+            >
+              <span>All Projects</span>
+              <span
+                className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold ${
+                  filterCategory === 'All' ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-600'
+                }`}
+              >
+                {projects.length}
+              </span>
+            </button>
+
+            <button
+              onClick={() => setFilterCategory('3D CAD & Printing')}
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
+                filterCategory === '3D CAD & Printing'
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'text-slate-600 hover:text-blue-700 hover:bg-blue-50'
+              }`}
+            >
+              <Box className="w-3.5 h-3.5" />
+              <span>3D CAD & Printing</span>
+              <span
+                className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold ${
+                  filterCategory === '3D CAD & Printing' ? 'bg-blue-700 text-white' : 'bg-slate-100 text-slate-600'
+                }`}
+              >
+                {cadCount}
+              </span>
+            </button>
+
+            <button
+              onClick={() => setFilterCategory('Engineering Projects')}
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
+                filterCategory === 'Engineering Projects'
+                  ? 'bg-slate-900 text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+              }`}
+            >
+              <Cpu className="w-3.5 h-3.5" />
+              <span>Engineering Projects</span>
+              <span
+                className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold ${
+                  filterCategory === 'Engineering Projects' ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-600'
+                }`}
+              >
+                {engCount}
+              </span>
+            </button>
+          </div>
         </div>
 
         {loading ? (
           <div className="py-20 text-center text-slate-500">Loading projects...</div>
-        ) : projects.length === 0 ? (
+        ) : filteredProjects.length === 0 ? (
           <div className="py-16 text-center text-slate-500">
-            No projects found. Click "Add New Project" or "Reset" to seed default data.
+            No {filterCategory === 'All' ? '' : filterCategory} projects found. Click &quot;Add {filterCategory === '3D CAD & Printing' ? '3D CAD & Printing' : 'Engineering'}&quot; to create one.
           </div>
         ) : (
           <div className="divide-y divide-slate-100">
-            {projects.map((proj) => (
+            {filteredProjects.map((proj) => (
               <div
                 key={proj.id}
                 className="p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover:bg-slate-50/75 transition-colors"
