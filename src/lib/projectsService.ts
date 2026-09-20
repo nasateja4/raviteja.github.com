@@ -3,7 +3,7 @@ import { collection, getDocs, doc, setDoc, deleteDoc } from 'firebase/firestore'
 import { Project, SubProject } from './types';
 import { defaultProjects } from './defaultData';
 
-const LOCAL_STORAGE_KEY = 'raviteja_portfolio_projects_v8';
+const LOCAL_STORAGE_KEY = 'raviteja_portfolio_projects_v10';
 
 // IDs of projects that strictly belong inside the single 3D CAD & Printing card collection
 const SUB_PROJECT_IDS = new Set([
@@ -50,6 +50,20 @@ function getLocalProjects(): Project[] {
         updated = true;
       }
     }
+
+    // Explicitly guarantee 3D Modeling card is order: 1 (Top position)
+    const p3d = merged.find((p) => p.id === '3d-printing-modeling' || p.slug === '3d-printing-modeling');
+    if (p3d && p3d.order !== 1) {
+      p3d.order = 1;
+      updated = true;
+    }
+    merged.forEach((p) => {
+      if (p.id !== '3d-printing-modeling' && p.slug !== '3d-printing-modeling' && p.order <= 1) {
+        p.order = 2;
+        updated = true;
+      }
+    });
+
     merged.sort((a, b) => a.order - b.order);
     if (updated) {
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(merged));
@@ -91,12 +105,26 @@ export async function getProjects(): Promise<Project[]> {
           fetched.push(normalizeProject({ id: docSnap.id, ...data }));
         });
 
-        // Ensure 3d-printing-modeling is present
-        const has3D = fetched.some((p) => p.slug === '3d-printing-modeling' || p.id === '3d-printing-modeling');
-        if (!has3D) {
+        // Ensure 3d-printing-modeling is present and pinned to order: 1 (Top of list)
+        const p3d = fetched.find((p) => p.slug === '3d-printing-modeling' || p.id === '3d-printing-modeling');
+        if (!p3d) {
           const def3D = defaultProjects.find((p) => p.slug === '3d-printing-modeling');
-          if (def3D) fetched.push(normalizeProject(def3D));
+          if (def3D) {
+            const normalized3D = normalizeProject({ ...def3D, order: 1 });
+            fetched.push(normalized3D);
+            setDoc(doc(db, 'projects', '3d-printing-modeling'), normalized3D).catch(() => {});
+          }
+        } else if (p3d.order !== 1) {
+          p3d.order = 1;
+          setDoc(doc(db, 'projects', p3d.id), p3d, { merge: true }).catch(() => {});
         }
+
+        // Shift any non-3D project that claims order <= 1 so 3D card stays #1
+        fetched.forEach((p) => {
+          if (p.id !== '3d-printing-modeling' && p.slug !== '3d-printing-modeling' && p.order <= 1) {
+            p.order = 2;
+          }
+        });
 
         fetched.sort((a, b) => a.order - b.order);
         return fetched;

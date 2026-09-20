@@ -17,71 +17,6 @@ export const defaultProfile: ProfileData = {
 
 export const defaultProjects: Project[] = [
   {
-    id: 'advanced-thread-wizard',
-    slug: 'advanced-thread-wizard',
-    title: 'Advanced Thread Wizard – SolidWorks Add-in',
-    shortDescription: 'Custom SolidWorks add-in generating standard and custom threads directly inside CAD, slashing thread creation from 15–20 minutes to 20–40 seconds.',
-    fullDescription: `### Advanced Thread Wizard for SolidWorks
-
-Developed a custom SolidWorks Add-in engineered using the **SolidWorks API** in **C# / VB.NET / VBA** to automate standard and custom thread generation directly inside the CAD design environment.
-
-#### Key Engineering & Software Highlights:
-- **Massive Time Reduction**: Cut thread generation and specification time from **15–20 minutes** (manual standard lookup, profile sketch, and sweep cut/boss) down to **20–40 seconds**.
-- **Standardized Profile Library**: Integrated international thread profiles compliant with **ISO and ASME** standards:
-  - UN, UNJ, and UNR series (including Fine, Extra-Fine, and Special series)
-  - Parallel and Taper pipe threads (NPT, BSPP, BSPT)
-  - Metric Trapezoidal and ACME threads
-- **Parametric Feature Automation**: Fully automated parametric sketch and helical sweep creation, eliminating manual sketching errors and ensuring exact pitch diameters and dimensional tolerances.
-- **Embedded CAD GUI**: Designed an intuitive WPF/Windows Forms user interface directly docked inside SolidWorks for instant profile selection, real-time pitch calculation, and live 3D preview.`,
-    category: 'Engineering Projects',
-    heroImage: '',
-    galleryImages: [],
-    tools: ['SolidWorks API', 'C# / .NET', 'VB.NET / VBA', 'ASME Standards', 'ISO Standards'],
-    specs: [
-      { label: 'Time Efficiency', value: '15-20 min down to 20-40 sec' },
-      { label: 'Supported Standards', value: 'ISO Metric, ASME UN/UNJ/UNR, Pipe, Trapezoidal' },
-      { label: 'Integration', value: 'Native SolidWorks Add-in (.dll)' },
-      { label: 'Development Language', value: 'C#, VB.NET, VBA' },
-      { label: 'Tolerance Control', value: 'Precise Pitch & Root Radii Automation' },
-    ],
-    featured: true,
-    date: '2024',
-    order: 1,
-  },
-  {
-    id: 'fasteners-standards',
-    slug: 'fasteners-standards',
-    title: 'Fasteners Standards — Engineering Reference & CAD Tool',
-    shortDescription: 'Engineering reference platform (fastenersstandards.com) providing precise thread dimensions, tolerances, and downloadable SolidWorks CAD models with 25–30 daily visitors.',
-    fullDescription: `### FastenersStandards.com — Web & CAD Reference Platform
-Live Website: [https://fastenersstandards.com](https://fastenersstandards.com)
-
-Developed and deployed **fastenersstandards.com**, a specialized online engineering reference tool created to solve the industry pain-point of fragmented and unreliable thread-standard data available online for CAD designers.
-
-#### Project Milestones & Functionality:
-- **Comprehensive Standard Extraction**: Studied ISO and ASME standards in depth to extract precise thread data for:
-  - Unified National (UN, UNC, UNF, UNEF) internal and external threads
-  - Metric ISO 68-1 and ISO 965 tolerance classes (4h, 6g, 6H, 7H)
-  - Trapezoidal (TR) and lead-screw thread geometries
-- **Direct CAD Asset Distribution**: Provided downloadable, verified **SolidWorks part and profile files** so mechanical design engineers can immediately incorporate standard thread geometry into their production models.
-- **Real-World Impact**: Receives **25–30 daily active engineering visitors** across mechanical and aerospace design communities.
-- **Continuous Expansion**: Built using modern web technologies and AI-assisted development tools, regularly updated with fastener specifications, bolt grades, and clearance hole charts.`,
-    category: 'Engineering Projects',
-    heroImage: '',
-    galleryImages: [],
-    tools: ['ASME Standards', 'ISO Standards', 'SolidWorks CAD Data', 'Web Development', 'Engineering Calculation'],
-    externalUrl: 'https://fastenersstandards.com',
-    specs: [
-      { label: 'Live Website', value: 'fastenersstandards.com' },
-      { label: 'Daily Engineering Visitors', value: '25 – 30 active daily users' },
-      { label: 'Standards Covered', value: 'ASME B1.1, ISO 68-1, ISO 2901/2903' },
-      { label: 'Deliverables', value: 'Online Dimension Engine & SolidWorks Files' },
-    ],
-    featured: true,
-    date: '2024',
-    order: 2,
-  },
-  {
     id: '3d-printing-modeling',
     slug: '3d-printing-modeling',
     title: '3D Modeling & Additive Prototyping Projects',
@@ -272,6 +207,71 @@ The team required a dedicated chassis capable of pulling high drawbar payload lo
       { label: 'CAD Software', value: 'SolidWorks 2024 / Fusion 360' },
       { label: 'Manufacturing Process', value: 'FDM & SLS 3D Printing' },
       { label: 'Materials Tested', value: 'PLA+, PETG, ABS' },
+    ],
+    featured: true,
+    date: '2024',
+    order: 1,
+  },
+  {
+    id: 'advanced-thread-wizard',
+    slug: 'advanced-thread-wizard',
+    title: 'Advanced Thread Wizard – SolidWorks Add-in',
+    shortDescription: 'Custom SolidWorks add-in generating standard and custom threads directly inside CAD, slashing thread creation from 15–20 minutes to 20–40 seconds.',
+    fullDescription: `### Advanced Thread Wizard for SolidWorks
+
+Developed a custom SolidWorks Add-in engineered using the **SolidWorks API** in **C# / VB.NET / VBA** to automate standard and custom thread generation directly inside the CAD design environment.
+
+#### Key Engineering & Software Highlights:
+- **Massive Time Reduction**: Cut thread generation and specification time from **15–20 minutes** (manual standard lookup, profile sketch, and sweep cut/boss) down to **20–40 seconds**.
+- **Standardized Profile Library**: Integrated international thread profiles compliant with **ISO and ASME** standards:
+  - UN, UNJ, and UNR series (including Fine, Extra-Fine, and Special series)
+  - Parallel and Taper pipe threads (NPT, BSPP, BSPT)
+  - Metric Trapezoidal and ACME threads
+- **Parametric Feature Automation**: Fully automated parametric sketch and helical sweep creation, eliminating manual sketching errors and ensuring exact pitch diameters and dimensional tolerances.
+- **Embedded CAD GUI**: Designed an intuitive WPF/Windows Forms user interface directly docked inside SolidWorks for instant profile selection, real-time pitch calculation, and live 3D preview.`,
+    category: 'Engineering Projects',
+    heroImage: '',
+    galleryImages: [],
+    tools: ['SolidWorks API', 'C# / .NET', 'VB.NET / VBA', 'ASME Standards', 'ISO Standards'],
+    specs: [
+      { label: 'Time Efficiency', value: '15-20 min down to 20-40 sec' },
+      { label: 'Supported Standards', value: 'ISO Metric, ASME UN/UNJ/UNR, Pipe, Trapezoidal' },
+      { label: 'Integration', value: 'Native SolidWorks Add-in (.dll)' },
+      { label: 'Development Language', value: 'C#, VB.NET, VBA' },
+      { label: 'Tolerance Control', value: 'Precise Pitch & Root Radii Automation' },
+    ],
+    featured: true,
+    date: '2024',
+    order: 2,
+  },
+  {
+    id: 'fasteners-standards',
+    slug: 'fasteners-standards',
+    title: 'Fasteners Standards — Engineering Reference & CAD Tool',
+    shortDescription: 'Engineering reference platform (fastenersstandards.com) providing precise thread dimensions, tolerances, and downloadable SolidWorks CAD models with 25–30 daily visitors.',
+    fullDescription: `### FastenersStandards.com — Web & CAD Reference Platform
+Live Website: [https://fastenersstandards.com](https://fastenersstandards.com)
+
+Developed and deployed **fastenersstandards.com**, a specialized online engineering reference tool created to solve the industry pain-point of fragmented and unreliable thread-standard data available online for CAD designers.
+
+#### Project Milestones & Functionality:
+- **Comprehensive Standard Extraction**: Studied ISO and ASME standards in depth to extract precise thread data for:
+  - Unified National (UN, UNC, UNF, UNEF) internal and external threads
+  - Metric ISO 68-1 and ISO 965 tolerance classes (4h, 6g, 6H, 7H)
+  - Trapezoidal (TR) and lead-screw thread geometries
+- **Direct CAD Asset Distribution**: Provided downloadable, verified **SolidWorks part and profile files** so mechanical design engineers can immediately incorporate standard thread geometry into their production models.
+- **Real-World Impact**: Receives **25–30 daily active engineering visitors** across mechanical and aerospace design communities.
+- **Continuous Expansion**: Built using modern web technologies and AI-assisted development tools, regularly updated with fastener specifications, bolt grades, and clearance hole charts.`,
+    category: 'Engineering Projects',
+    heroImage: '',
+    galleryImages: [],
+    tools: ['ASME Standards', 'ISO Standards', 'SolidWorks CAD Data', 'Web Development', 'Engineering Calculation'],
+    externalUrl: 'https://fastenersstandards.com',
+    specs: [
+      { label: 'Live Website', value: 'fastenersstandards.com' },
+      { label: 'Daily Engineering Visitors', value: '25 – 30 active daily users' },
+      { label: 'Standards Covered', value: 'ASME B1.1, ISO 68-1, ISO 2901/2903' },
+      { label: 'Deliverables', value: 'Online Dimension Engine & SolidWorks Files' },
     ],
     featured: true,
     date: '2024',
