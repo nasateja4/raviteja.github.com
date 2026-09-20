@@ -86,11 +86,16 @@ export default function Hero({ profile }: HeroProps) {
             {/* Outer bezel */}
             <div className="relative w-full h-full rounded-3xl p-1 bg-gradient-to-tr from-blue-500 via-cyan-400 to-indigo-500 shadow-xl overflow-hidden">
               <img
-                src="/static/me.jpeg"
+                src="/static/me.jpg"
                 alt={profile.name}
                 className="w-full h-full object-cover rounded-[22px]"
                 onError={(e) => {
-                  (e.target as HTMLElement).setAttribute('src', 'https://placehold.co/400x400/e0f2fe/0284c7?text=Ravi+Teja');
+                  const target = e.target as HTMLImageElement;
+                  if (!target.src.includes('me.jpeg')) {
+                    target.src = '/static/me.jpeg';
+                  } else {
+                    target.src = 'https://placehold.co/400x400/e0f2fe/0284c7?text=Ravi+Teja';
+                  }
                 }}
               />
             </div>
