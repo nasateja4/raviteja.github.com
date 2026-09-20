@@ -1,6 +1,6 @@
 import { db, isFirebaseConfigured } from './firebase';
 import { collection, getDocs, doc, setDoc, deleteDoc } from 'firebase/firestore';
-import { Project, SubProject } from './types';
+import { Project, SubProject, VideoItem, Model3D } from './types';
 import { defaultProjects } from './defaultData';
 
 const LOCAL_STORAGE_KEY = 'raviteja_portfolio_projects_v18';
@@ -78,6 +78,103 @@ export function formatYouTubeEmbedUrl(url?: string): string | undefined {
   }
 
   return trimmed;
+}
+
+/**
+ * Parses multiline string or array of video URLs (with optional "Title | URL" syntax)
+ * into a clean list of VideoItem objects with normalized embed URLs.
+ */
+export function parseVideoList(raw?: (string | VideoItem)[] | string): VideoItem[] {
+  if (!raw) return [];
+  const list: VideoItem[] = [];
+
+  if (typeof raw === 'string') {
+    const lines = raw.split('\n').map((l) => l.trim()).filter(Boolean);
+    lines.forEach((line, idx) => {
+      let title = `Video ${idx + 1}`;
+      let url = line;
+      if (line.includes('|')) {
+        const parts = line.split('|');
+        title = parts[0].trim() || `Video ${idx + 1}`;
+        url = parts.slice(1).join('|').trim();
+      }
+      const formatted = formatYouTubeEmbedUrl(url);
+      if (formatted) {
+        list.push({ title, url: formatted });
+      }
+    });
+    return list;
+  }
+
+  if (Array.isArray(raw)) {
+    raw.forEach((item, idx) => {
+      if (typeof item === 'string') {
+        let title = `Video ${idx + 1}`;
+        let url = item.trim();
+        if (url.includes('|')) {
+          const parts = url.split('|');
+          title = parts[0].trim() || `Video ${idx + 1}`;
+          url = parts.slice(1).join('|').trim();
+        }
+        const formatted = formatYouTubeEmbedUrl(url);
+        if (formatted) list.push({ title, url: formatted });
+      } else if (item && typeof item === 'object' && item.url) {
+        const formatted = formatYouTubeEmbedUrl(item.url);
+        if (formatted) list.push({ title: item.title || `Video ${idx + 1}`, url: formatted });
+      }
+    });
+  }
+
+  return list;
+}
+
+/**
+ * Parses multiline string or array of 3D CAD models (with optional "Part Label | Embed URL" syntax)
+ * into a clean list of Model3D objects.
+ */
+export function parse3DModelsList(raw?: (string | Model3D)[] | string, defaultTitle: string = '3D Part'): Model3D[] {
+  if (!raw) return [];
+  const list: Model3D[] = [];
+
+  if (typeof raw === 'string') {
+    const lines = raw.split('\n').map((l) => l.trim()).filter(Boolean);
+    lines.forEach((line, idx) => {
+      let title = lines.length === 1 ? defaultTitle : `${defaultTitle} ${idx + 1}`;
+      let url = line;
+      if (line.includes('|')) {
+        const parts = line.split('|');
+        title = parts[0].trim() || `${defaultTitle} ${idx + 1}`;
+        url = parts.slice(1).join('|').trim();
+      }
+      if (url) {
+        list.push({ title, url, type: 'sketchfab' });
+      }
+    });
+    return list;
+  }
+
+  if (Array.isArray(raw)) {
+    raw.forEach((item, idx) => {
+      if (typeof item === 'string' && item.trim()) {
+        let title = `${defaultTitle} ${idx + 1}`;
+        let url = item.trim();
+        if (url.includes('|')) {
+          const parts = url.split('|');
+          title = parts[0].trim() || `${defaultTitle} ${idx + 1}`;
+          url = parts.slice(1).join('|').trim();
+        }
+        if (url) list.push({ title, url, type: 'sketchfab' });
+      } else if (item && typeof item === 'object' && item.url) {
+        list.push({
+          title: item.title || `${defaultTitle} ${idx + 1}`,
+          url: item.url.trim(),
+          type: item.type || 'sketchfab',
+        });
+      }
+    });
+  }
+
+  return list;
 }
 
 /**
@@ -308,9 +405,30 @@ export async function saveProject(project: Project): Promise<void> {
   unmarkProjectDeleted(project.id);
   if (project.slug) unmarkProjectDeleted(project.slug);
 
-  // Normalize YouTube URL: If empty or whitespace, clean to undefined. If valid URL, format into standard embed URL.
-  if (project.videoUrl !== undefined) {
-    project.videoUrl = formatYouTubeEmbedUrl(project.videoUrl);
+  // Normalize multi-videos if present
+  if (project.videoUrls && project.videoUrls.length > 0) {
+    const parsedVideos = parseVideoList(project.videoUrls);
+    project.videoUrls = parsedVideos.length > 0 ? parsedVideos : undefined;
+    project.videoUrl = parsedVideos.length > 0 ? parsedVideos[0].url : undefined;
+  } else if (project.videoUrl !== undefined) {
+    const formatted = formatYouTubeEmbedUrl(project.videoUrl);
+    project.videoUrl = formatted;
+    project.videoUrls = formatted ? [{ title: 'Main Demo Video', url: formatted }] : undefined;
+  } else {
+    project.videoUrl = undefined;
+    project.videoUrls = undefined;
+  }
+
+  // Normalize multi-3D models if present
+  if (project.models3d && project.models3d.length > 0) {
+    const parsedModels = parse3DModelsList(project.models3d, project.title);
+    project.models3d = parsedModels.length > 0 ? parsedModels : undefined;
+    project.model3d = parsedModels.length > 0 ? parsedModels[0] : undefined;
+  } else if (project.model3d !== undefined && project.model3d.url) {
+    project.models3d = [project.model3d];
+  } else {
+    project.model3d = undefined;
+    project.models3d = undefined;
   }
 
   // Ensure heroImage, externalUrl, etc. are properly trimmed or undefined if empty
@@ -377,9 +495,32 @@ export async function getSubProjectById(subId: string): Promise<SubProject | nul
 }
 
 export async function saveSubProject(sub: SubProject): Promise<void> {
-  if (sub.videoUrl !== undefined) {
-    sub.videoUrl = formatYouTubeEmbedUrl(sub.videoUrl);
+  // Normalize multi-videos if present
+  if (sub.videoUrls && sub.videoUrls.length > 0) {
+    const parsedVideos = parseVideoList(sub.videoUrls);
+    sub.videoUrls = parsedVideos.length > 0 ? parsedVideos : undefined;
+    sub.videoUrl = parsedVideos.length > 0 ? parsedVideos[0].url : undefined;
+  } else if (sub.videoUrl !== undefined) {
+    const formatted = formatYouTubeEmbedUrl(sub.videoUrl);
+    sub.videoUrl = formatted;
+    sub.videoUrls = formatted ? [{ title: 'Demo Video', url: formatted }] : undefined;
+  } else {
+    sub.videoUrl = undefined;
+    sub.videoUrls = undefined;
   }
+
+  // Normalize multi-3D models if present
+  if (sub.models3d && sub.models3d.length > 0) {
+    const parsedModels = parse3DModelsList(sub.models3d, sub.title);
+    sub.models3d = parsedModels.length > 0 ? parsedModels : undefined;
+    sub.model3d = parsedModels.length > 0 ? parsedModels[0] : undefined;
+  } else if (sub.model3d !== undefined && sub.model3d.url) {
+    sub.models3d = [sub.model3d];
+  } else {
+    sub.model3d = undefined;
+    sub.models3d = undefined;
+  }
+
   if (sub.heroImage !== undefined) {
     sub.heroImage = sub.heroImage.trim() || undefined;
   }

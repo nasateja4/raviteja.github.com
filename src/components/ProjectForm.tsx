@@ -3,13 +3,54 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Project, SubProject } from '@/lib/types';
-import { saveProject, getProjectBySlug, saveSubProject, getSubProjectById } from '@/lib/projectsService';
+import {
+  saveProject,
+  getProjectBySlug,
+  saveSubProject,
+  getSubProjectById,
+  parseVideoList,
+  parse3DModelsList,
+} from '@/lib/projectsService';
 import { Box, Save, ArrowLeft, Cpu, Sparkles, CheckSquare, Layers } from 'lucide-react';
 import Link from 'next/link';
 
 interface ProjectFormProps {
   initialData?: Project;
   isEditing?: boolean;
+}
+
+function formatVideosToText(videoUrls?: (string | { title?: string; url: string })[], singleUrl?: string): string {
+  if (videoUrls && videoUrls.length > 0) {
+    return videoUrls
+      .map((v) => {
+        if (typeof v === 'string') return v;
+        if (v && v.url) {
+          return v.title ? `${v.title} | ${v.url}` : v.url;
+        }
+        return '';
+      })
+      .filter(Boolean)
+      .join('\n');
+  }
+  return singleUrl || '';
+}
+
+function formatModelsToText(models3d?: { title?: string; url?: string }[], singleModel?: { title?: string; url?: string }): string {
+  if (models3d && models3d.length > 0) {
+    return models3d
+      .map((m) => {
+        if (m && m.url) {
+          return m.title ? `${m.title} | ${m.url}` : m.url;
+        }
+        return '';
+      })
+      .filter(Boolean)
+      .join('\n');
+  }
+  if (singleModel && singleModel.url) {
+    return singleModel.title ? `${singleModel.title} | ${singleModel.url}` : singleModel.url;
+  }
+  return '';
 }
 
 export default function ProjectForm({ initialData, isEditing = false }: ProjectFormProps) {
@@ -42,9 +83,12 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
   const [galleryText, setGalleryText] = useState(
     initialData?.galleryImages?.join('\n') || ''
   );
-  const [modelUrl, setModelUrl] = useState(initialData?.model3d?.url || '');
-  const [modelTitle, setModelTitle] = useState(initialData?.model3d?.title || '');
-  const [videoUrl, setVideoUrl] = useState(initialData?.videoUrl || '');
+  const [modelsText, setModelsText] = useState(
+    formatModelsToText(initialData?.models3d, initialData?.model3d)
+  );
+  const [videosText, setVideosText] = useState(
+    formatVideosToText(initialData?.videoUrls, initialData?.videoUrl)
+  );
   const [toolsText, setToolsText] = useState(
     initialData?.tools?.join(', ') ||
       (projectMode === 'cad'
@@ -70,9 +114,8 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
           setSlug(sub.id);
           setShortDescription(sub.shortDescription || '');
           setFullDescription(sub.description);
-          setModelUrl(sub.model3d?.url || '');
-          setModelTitle(sub.model3d?.title || '');
-          setVideoUrl(sub.videoUrl || '');
+          setModelsText(formatModelsToText(sub.models3d, sub.model3d));
+          setVideosText(formatVideosToText(sub.videoUrls, sub.videoUrl));
           setHeroImage(sub.heroImage || (sub.galleryImages?.[0] || ''));
           setGalleryText(sub.galleryImages?.join('\n') || '');
           setToolsText(sub.tools?.join(', ') || '');
@@ -135,6 +178,9 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
         })
         .filter(Boolean) as { label: string; value: string }[];
 
+      const parsedVideos = parseVideoList(videosText);
+      const parsedModels = parse3DModelsList(modelsText, title.trim());
+
       if (projectMode === 'cad') {
         // Save directly into the single 3D CAD & Printing card collection
         const subData: SubProject = {
@@ -142,8 +188,10 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
           title: title.trim(),
           shortDescription: shortDescription.trim(),
           description: fullDescription.trim(),
-          model3d: modelUrl.trim() ? { type: 'sketchfab', url: modelUrl.trim(), title: modelTitle.trim() || title.trim() } : undefined,
-          videoUrl: videoUrl.trim() ? videoUrl.trim() : undefined,
+          model3d: parsedModels.length > 0 ? parsedModels[0] : undefined,
+          models3d: parsedModels.length > 0 ? parsedModels : undefined,
+          videoUrl: parsedVideos.length > 0 ? parsedVideos[0].url : undefined,
+          videoUrls: parsedVideos.length > 0 ? parsedVideos : undefined,
           heroImage: heroImage.trim() || (galleryImages.length > 0 ? galleryImages[0] : undefined),
           galleryImages: galleryImages.length > 0 ? galleryImages : heroImage.trim() ? [heroImage.trim()] : [],
           tools,
@@ -163,8 +211,10 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
           heroImage: heroImage.trim(),
           galleryImages,
           tools,
-          model3d: modelUrl.trim() ? { type: 'sketchfab', url: modelUrl.trim(), title: modelTitle.trim() || title.trim() } : undefined,
-          videoUrl: videoUrl.trim() ? videoUrl.trim() : undefined,
+          model3d: parsedModels.length > 0 ? parsedModels[0] : undefined,
+          models3d: parsedModels.length > 0 ? parsedModels : undefined,
+          videoUrl: parsedVideos.length > 0 ? parsedVideos[0].url : undefined,
+          videoUrls: parsedVideos.length > 0 ? parsedVideos : undefined,
           externalUrl: externalUrl.trim() ? externalUrl.trim() : undefined,
           specs,
           featured,
@@ -377,31 +427,24 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
               )}
             </div>
 
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  3D Model Embed URL {projectMode === 'cad' && '(Sketchfab)'}
-                </label>
-                <input
-                  type="text"
-                  value={modelUrl}
-                  onChange={(e) => setModelUrl(e.target.value)}
-                  placeholder="https://sketchfab.com/models/fd99e5beff4b4b15a7503bdb507d2df2/embed"
-                  className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-900 focus:outline-none focus:border-blue-500"
-                />
-                <p className="text-[11px] text-slate-500 mt-1">Paste a Sketchfab embed URL or 3D model link</p>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">3D Model Part Label</label>
-                <input
-                  type="text"
-                  value={modelTitle}
-                  onChange={(e) => setModelTitle(e.target.value)}
-                  placeholder="e.g. Agricultural Rover Full Assembly"
-                  className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-900 focus:outline-none focus:border-blue-500"
-                />
-              </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                3D CAD Models Embed (Format: <span className="text-blue-700 font-mono">Part Label | Embed URL</span> or just <span className="text-blue-700 font-mono">Embed URL</span>, one per line)
+              </label>
+              <textarea
+                value={modelsText}
+                onChange={(e) => setModelsText(e.target.value)}
+                rows={3}
+                placeholder={
+                  projectMode === 'cad'
+                    ? `Full Assembly | https://sketchfab.com/models/fd99e5beff4b4b15a7503bdb507d2df2/embed\nChassis Frame | https://sketchfab.com/models/f9d694f2260c42a490f925d8bae35d0e/embed`
+                    : `Full CAD Assembly | https://sketchfab.com/models/.../embed`
+                }
+                className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 font-mono focus:outline-none focus:border-blue-500"
+              />
+              <p className="text-[11px] text-slate-500 mt-1">
+                Press Enter to add multiple 3D models. Visitors can interactively switch between them using part buttons.
+              </p>
             </div>
 
             {/* In 3D CAD mode: Clear notification that this saves into the single 3D card collection */}
@@ -451,15 +494,18 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
 
             <div className={projectMode === 'cad' ? 'sm:col-span-2' : ''}>
               <label className="block text-xs font-semibold text-slate-700 mb-1">
-                YouTube Video Embed URL (Optional)
+                YouTube Videos (Format: <span className="text-blue-700 font-mono">Title | URL</span> or just <span className="text-blue-700 font-mono">URL</span>, one per line)
               </label>
-              <input
-                type="text"
-                value={videoUrl}
-                onChange={(e) => setVideoUrl(e.target.value)}
-                placeholder="https://www.youtube.com/embed/..."
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500 focus:bg-white"
+              <textarea
+                value={videosText}
+                onChange={(e) => setVideosText(e.target.value)}
+                rows={2}
+                placeholder={`Main Project Demo | https://www.youtube.com/watch?v=...\nTesting & Calibration | https://youtu.be/...`}
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-900 font-mono focus:outline-none focus:border-blue-500 focus:bg-white"
               />
+              <p className="text-[11px] text-slate-500 mt-1">
+                Press Enter to add multiple videos. Visitors can switch between them on the project page.
+              </p>
             </div>
           </div>
 

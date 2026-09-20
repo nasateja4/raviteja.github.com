@@ -4,6 +4,11 @@ export interface Model3D {
   title: string;
 }
 
+export interface VideoItem {
+  title: string;
+  url: string;
+}
+
 export interface SubProject {
   id: string;
   title: string;
@@ -12,6 +17,7 @@ export interface SubProject {
   model3d?: Model3D;
   models3d?: Model3D[];
   videoUrl?: string;
+  videoUrls?: (string | VideoItem)[];
   galleryImages: string[];
   heroImage?: string;
   tools?: string[];
@@ -32,7 +38,7 @@ export interface Project {
   models3d?: Model3D[];
   subProjects?: SubProject[]; // Sub-projects carousel with independent heading, 3D model, video & photos
   videoUrl?: string;
-  videoUrls?: { title: string; url: string }[];
+  videoUrls?: (string | VideoItem)[];
   externalUrl?: string;
   specs?: { label: string; value: string }[];
   featured: boolean;

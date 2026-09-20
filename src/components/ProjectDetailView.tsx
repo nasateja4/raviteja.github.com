@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Project, Model3D, SubProject } from '@/lib/types';
+import { Project, Model3D, SubProject, VideoItem } from '@/lib/types';
+import { parseVideoList } from '@/lib/projectsService';
 import ModelViewer from '@/components/ModelViewer';
 import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, Box, Video, Image as ImageIcon, Calendar, Cpu, Layers } from 'lucide-react';
 
@@ -160,8 +161,23 @@ export default function ProjectDetailView({ project }: ProjectDetailViewProps) {
 
   const [activeModelIndex, setActiveModelIndex] = useState(0);
 
-  // Active Videos
-  const activeVideoUrl = currentSub?.videoUrl || project.videoUrl;
+  // Active Videos (supports multiple videos dynamically)
+  const rawVideos = currentSub
+    ? currentSub.videoUrls && currentSub.videoUrls.length > 0
+      ? currentSub.videoUrls
+      : currentSub.videoUrl
+      ? [currentSub.videoUrl]
+      : []
+    : project.videoUrls && project.videoUrls.length > 0
+    ? project.videoUrls
+    : project.videoUrl
+    ? [project.videoUrl]
+    : [];
+
+  const allVideos: VideoItem[] = parseVideoList(rawVideos);
+  const [activeVideoIndex, setActiveVideoIndex] = useState(0);
+  const activeVideo = allVideos[activeVideoIndex] || allVideos[0];
+  const activeVideoUrl = activeVideo?.url;
 
   // Active Gallery Images
   const gallery = currentSub?.galleryImages && currentSub.galleryImages.length > 0
@@ -185,11 +201,12 @@ export default function ProjectDetailView({ project }: ProjectDetailViewProps) {
     const nextIdx = activeSubIndex > 0 ? activeSubIndex - 1 : project.subProjects!.length - 1;
     setActiveSubIndex(nextIdx);
     setActiveModelIndex(0);
+    setActiveVideoIndex(0);
     setActiveGalleryIndex(0);
     const nextSub = project.subProjects![nextIdx];
     if (nextSub.model3d || (nextSub.models3d && nextSub.models3d.length > 0)) {
       setActiveMediaTab('3d');
-    } else if (nextSub.videoUrl) {
+    } else if (nextSub.videoUrl || (nextSub.videoUrls && nextSub.videoUrls.length > 0)) {
       setActiveMediaTab('video');
     } else {
       setActiveMediaTab('gallery');
@@ -201,11 +218,12 @@ export default function ProjectDetailView({ project }: ProjectDetailViewProps) {
     const nextIdx = activeSubIndex < project.subProjects!.length - 1 ? activeSubIndex + 1 : 0;
     setActiveSubIndex(nextIdx);
     setActiveModelIndex(0);
+    setActiveVideoIndex(0);
     setActiveGalleryIndex(0);
     const nextSub = project.subProjects![nextIdx];
     if (nextSub.model3d || (nextSub.models3d && nextSub.models3d.length > 0)) {
       setActiveMediaTab('3d');
-    } else if (nextSub.videoUrl) {
+    } else if (nextSub.videoUrl || (nextSub.videoUrls && nextSub.videoUrls.length > 0)) {
       setActiveMediaTab('video');
     } else {
       setActiveMediaTab('gallery');
@@ -215,11 +233,12 @@ export default function ProjectDetailView({ project }: ProjectDetailViewProps) {
   const handleSelectSub = (idx: number) => {
     setActiveSubIndex(idx);
     setActiveModelIndex(0);
+    setActiveVideoIndex(0);
     setActiveGalleryIndex(0);
     const nextSub = project.subProjects![idx];
     if (nextSub.model3d || (nextSub.models3d && nextSub.models3d.length > 0)) {
       setActiveMediaTab('3d');
-    } else if (nextSub.videoUrl) {
+    } else if (nextSub.videoUrl || (nextSub.videoUrls && nextSub.videoUrls.length > 0)) {
       setActiveMediaTab('video');
     } else {
       setActiveMediaTab('gallery');
@@ -427,6 +446,29 @@ export default function ProjectDetailView({ project }: ProjectDetailViewProps) {
 
           {activeMediaTab === 'video' && activeVideoUrl && (
             <div className="space-y-3">
+              {/* If multiple videos exist, render video selector pills */}
+              {allVideos.length > 1 && (
+                <div className="flex flex-wrap items-center gap-2 p-2 rounded-xl bg-slate-100 border border-slate-200">
+                  <span className="text-xs font-bold text-slate-500 px-2 flex items-center gap-1">
+                    <Video className="w-3.5 h-3.5 text-blue-600" />
+                    Select Video:
+                  </span>
+                  {allVideos.map((v, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setActiveVideoIndex(idx)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                        activeVideoIndex === idx
+                          ? 'bg-blue-600 text-white shadow-sm'
+                          : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200'
+                      }`}
+                    >
+                      {v.title}
+                    </button>
+                  ))}
+                </div>
+              )}
+
               <div className="flex items-center gap-2 sm:gap-4 w-full">
                 {hasSubProjects && (
                   <button
@@ -567,17 +609,36 @@ export default function ProjectDetailView({ project }: ProjectDetailViewProps) {
       {/* DEDICATED PROJECT VIDEO DEMO SECTION (Matching original HTML project pages) */}
       {Boolean(activeVideoUrl) && (
         <div className="glass-panel bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-          <div className="flex items-center gap-2">
-            <Video className="w-5 h-5 text-blue-600" />
-            <h3 className="font-display font-bold text-2xl text-slate-900">Project Demonstration Video</h3>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+            <div className="flex items-center gap-2">
+              <Video className="w-5 h-5 text-blue-600" />
+              <h3 className="font-display font-bold text-2xl text-slate-900">Project Demonstration Video</h3>
+            </div>
+            {allVideos.length > 1 && (
+              <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-slate-100 border border-slate-200">
+                {allVideos.map((v, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setActiveVideoIndex(idx)}
+                    className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                      activeVideoIndex === idx
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200'
+                    }`}
+                  >
+                    {v.title}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
           <p className="text-slate-600 text-sm leading-relaxed">
-            Watch the video below to see the project demo in action.
+            {activeVideo?.title ? `Playing: ${activeVideo.title}` : 'Watch the video below to see the project demo in action.'}
           </p>
           <div className="aspect-video w-full rounded-2xl overflow-hidden glass-panel bg-black border border-slate-200 shadow-xl">
             <iframe
               src={activeVideoUrl}
-              title={`${activeTitle} Video Demo`}
+              title={`${activeTitle} - ${activeVideo?.title || 'Video Demo'}`}
               className="w-full h-full border-0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               referrerPolicy="strict-origin-when-cross-origin"
