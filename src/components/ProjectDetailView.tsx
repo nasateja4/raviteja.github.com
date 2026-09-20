@@ -50,13 +50,15 @@ export default function ProjectDetailView({ project }: ProjectDetailViewProps) {
     ? currentSub.galleryImages
     : project.galleryImages && project.galleryImages.length > 0
     ? project.galleryImages
-    : [project.heroImage];
+    : project.heroImage
+    ? [project.heroImage]
+    : [];
 
   const [activeGalleryIndex, setActiveGalleryIndex] = useState(0);
 
   // Determine initial active media tab
-  const [activeMediaTab, setActiveMediaTab] = useState<'3d' | 'video' | 'gallery'>(
-    all3DModels.length > 0 ? '3d' : activeVideoUrl ? 'video' : 'gallery'
+  const [activeMediaTab, setActiveMediaTab] = useState<'3d' | 'video' | 'gallery' | null>(
+    all3DModels.length > 0 ? '3d' : activeVideoUrl ? 'video' : gallery.length > 0 ? 'gallery' : null
   );
 
   // Handlers for switching sub-projects
@@ -175,48 +177,51 @@ export default function ProjectDetailView({ project }: ProjectDetailViewProps) {
       </div>
 
       {/* DYNAMIC MEDIA SWITCHER TABS (3D Model / Video / Photos of THIS sub-project) */}
-      <div className="space-y-4">
-        <div className="flex items-center gap-2 border-b border-slate-200 pb-2">
-          {all3DModels.length > 0 && (
-            <button
-              onClick={() => setActiveMediaTab('3d')}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
-                activeMediaTab === '3d'
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'text-slate-600 hover:text-slate-900 bg-white border border-slate-200'
-              }`}
-            >
-              <Box className="w-4 h-4" />
-              <span>Interactive 3D Model {all3DModels.length > 1 ? `(${all3DModels.length})` : ''}</span>
-            </button>
-          )}
+      {Boolean(activeMediaTab) && (
+        <div className="space-y-4">
+          <div className="flex items-center gap-2 border-b border-slate-200 pb-2">
+            {all3DModels.length > 0 && (
+              <button
+                onClick={() => setActiveMediaTab('3d')}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
+                  activeMediaTab === '3d'
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'text-slate-600 hover:text-slate-900 bg-white border border-slate-200'
+                }`}
+              >
+                <Box className="w-4 h-4" />
+                <span>Interactive 3D Model {all3DModels.length > 1 ? `(${all3DModels.length})` : ''}</span>
+              </button>
+            )}
 
-          {activeVideoUrl && (
-            <button
-              onClick={() => setActiveMediaTab('video')}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
-                activeMediaTab === 'video'
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'text-slate-600 hover:text-slate-900 bg-white border border-slate-200'
-              }`}
-            >
-              <Video className="w-4 h-4" />
-              <span>Video Demonstration</span>
-            </button>
-          )}
+            {activeVideoUrl && (
+              <button
+                onClick={() => setActiveMediaTab('video')}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
+                  activeMediaTab === 'video'
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'text-slate-600 hover:text-slate-900 bg-white border border-slate-200'
+                }`}
+              >
+                <Video className="w-4 h-4" />
+                <span>Video Demonstration</span>
+              </button>
+            )}
 
-          <button
-            onClick={() => setActiveMediaTab('gallery')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
-              activeMediaTab === 'gallery'
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-slate-600 hover:text-slate-900 bg-white border border-slate-200'
-            }`}
-          >
-            <ImageIcon className="w-4 h-4" />
-            <span>Photos & CAD ({gallery.length})</span>
-          </button>
-        </div>
+            {gallery.length > 0 && (
+              <button
+                onClick={() => setActiveMediaTab('gallery')}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
+                  activeMediaTab === 'gallery'
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'text-slate-600 hover:text-slate-900 bg-white border border-slate-200'
+                }`}
+              >
+                <ImageIcon className="w-4 h-4" />
+                <span>Photos & CAD ({gallery.length})</span>
+              </button>
+            )}
+          </div>
 
         {/* Media Viewport */}
         <div className="w-full">
@@ -413,6 +418,7 @@ export default function ProjectDetailView({ project }: ProjectDetailViewProps) {
           )}
         </div>
       </div>
+      )}
 
       {/* DYNAMIC TECHNICAL SPECS FOR THIS SUB-PROJECT */}
       {activeSpecs.length > 0 && (

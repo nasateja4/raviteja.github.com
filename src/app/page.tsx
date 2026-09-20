@@ -7,7 +7,7 @@ import ModelViewer from '@/components/ModelViewer';
 import SkillsSection from '@/components/SkillsSection';
 import ExperienceTimeline from '@/components/ExperienceTimeline';
 import { getProjects } from '@/lib/projectsService';
-import { defaultProfile, defaultExperiences, defaultEducation, defaultSkillCategories } from '@/lib/defaultData';
+import { defaultProfile, defaultExperiences, defaultEducation, defaultSkillCategories, defaultProjects } from '@/lib/defaultData';
 import { Project } from '@/lib/types';
 import { Sparkles, ChevronLeft, ChevronRight, Box, Layers } from 'lucide-react';
 
@@ -71,9 +71,9 @@ const spotlightModels = [
 ];
 
 export default function HomePage() {
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<Project[]>(defaultProjects);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   // Default to index 0: Rower (Agricultural Rover) as requested!
   const [activeSpotlightIndex, setActiveSpotlightIndex] = useState<number>(0);
@@ -82,11 +82,11 @@ export default function HomePage() {
     async function loadData() {
       try {
         const projs = await getProjects();
-        setProjects(projs);
+        if (projs && projs.length > 0) {
+          setProjects(projs);
+        }
       } catch (err) {
         console.error('Failed to load projects', err);
-      } finally {
-        setLoading(false);
       }
     }
     loadData();

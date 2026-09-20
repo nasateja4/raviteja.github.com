@@ -3,7 +3,7 @@ import { collection, getDocs, doc, setDoc, deleteDoc, updateDoc } from 'firebase
 import { Project } from './types';
 import { defaultProjects } from './defaultData';
 
-const LOCAL_STORAGE_KEY = 'raviteja_portfolio_projects_v4';
+const LOCAL_STORAGE_KEY = 'raviteja_portfolio_projects_v5';
 
 // Helper to get projects from localStorage fallback with auto-sync of default projects
 function getLocalProjects(): Project[] {
@@ -45,7 +45,11 @@ export async function getProjects(): Promise<Project[]> {
   if (isFirebaseConfigured && db) {
     try {
       const colRef = collection(db, 'projects');
-      const snapshot = await getDocs(colRef);
+      const fetchPromise = getDocs(colRef);
+      const timeoutPromise = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('Firestore timeout')), 1500)
+      );
+      const snapshot = await Promise.race([fetchPromise, timeoutPromise]);
       if (!snapshot.empty) {
         const fetched: Project[] = [];
         snapshot.forEach((docSnap) => {
@@ -62,7 +66,7 @@ export async function getProjects(): Promise<Project[]> {
         return defaultProjects;
       }
     } catch (err) {
-      console.warn('Firestore fetch failed, falling back to local storage:', err);
+      console.warn('Firestore fetch failed or timed out, falling back to local storage:', err);
       return getLocalProjects();
     }
   }

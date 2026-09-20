@@ -34,12 +34,8 @@ Developed a custom SolidWorks Add-in engineered using the **SolidWorks API** in 
 - **Parametric Feature Automation**: Fully automated parametric sketch and helical sweep creation, eliminating manual sketching errors and ensuring exact pitch diameters and dimensional tolerances.
 - **Embedded CAD GUI**: Designed an intuitive WPF/Windows Forms user interface directly docked inside SolidWorks for instant profile selection, real-time pitch calculation, and live 3D preview.`,
     category: 'Engineering Tools',
-    heroImage: '/static/macro.png',
-    galleryImages: [
-      '/static/macro.png',
-      '/static/3dModel.jpeg',
-      '/static/GPT.jpg',
-    ],
+    heroImage: '',
+    galleryImages: [],
     tools: ['SolidWorks API', 'C# / .NET', 'VB.NET / VBA', 'ASME Standards', 'ISO Standards'],
     specs: [
       { label: 'Time Efficiency', value: '15-20 min down to 20-40 sec' },
@@ -71,11 +67,8 @@ Developed and deployed **fastenersstandards.com**, a specialized online engineer
 - **Real-World Impact**: Receives **25–30 daily active engineering visitors** across mechanical and aerospace design communities.
 - **Continuous Expansion**: Built using modern web technologies and AI-assisted development tools, regularly updated with fastener specifications, bolt grades, and clearance hole charts.`,
     category: 'Engineering Tools',
-    heroImage: '/static/bom.png',
-    galleryImages: [
-      '/static/bom.png',
-      '/static/macro.png',
-    ],
+    heroImage: '',
+    galleryImages: [],
     tools: ['ASME Standards', 'ISO Standards', 'SolidWorks CAD Data', 'Web Development', 'Engineering Calculation'],
     externalUrl: 'https://fastenersstandards.com',
     specs: [

@@ -7,7 +7,7 @@ import { getProjects, deleteProject, resetProjectsToDefault } from '@/lib/projec
 import { Project } from '@/lib/types';
 import { isFirebaseConfigured, auth } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
-import { Plus, Trash2, Edit, ExternalLink, Box, LogOut, CheckCircle2, RefreshCw } from 'lucide-react';
+import { Plus, Trash2, Edit, ExternalLink, Box, Cpu, LogOut, CheckCircle2, RefreshCw } from 'lucide-react';
 
 export default function AdminDashboardPage() {
   const router = useRouter();
@@ -78,18 +78,26 @@ export default function AdminDashboardPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <Link
-            href="/admin/project/new"
-            className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm flex items-center gap-2 shadow-sm transition-all"
+            href="/admin/project/new?type=cad"
+            className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm flex items-center gap-2 shadow-sm transition-all cursor-pointer"
           >
-            <Plus className="w-4 h-4" />
-            <span>Add New Project</span>
+            <Box className="w-4 h-4" />
+            <span>Add 3D CAD & Printing Project</span>
+          </Link>
+
+          <Link
+            href="/admin/project/new?type=engineering"
+            className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm flex items-center gap-2 shadow-sm transition-all cursor-pointer"
+          >
+            <Cpu className="w-4 h-4" />
+            <span>Add Engineering Project</span>
           </Link>
 
           <button
             onClick={handleLogout}
-            className="p-2.5 rounded-xl bg-white border border-slate-200 hover:border-red-300 text-slate-600 hover:text-red-600 transition-colors shadow-sm"
+            className="p-2.5 rounded-xl bg-white border border-slate-200 hover:border-red-300 text-slate-600 hover:text-red-600 transition-colors shadow-sm ml-1"
             title="Log Out"
           >
             <LogOut className="w-4 h-4" />
