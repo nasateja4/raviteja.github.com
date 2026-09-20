@@ -8,49 +8,21 @@ import {
   getProjectBySlug,
   saveSubProject,
   getSubProjectById,
+  get3DContainerProject,
+  getProjects,
+} from '@/lib/projectsService';
+import {
   parseVideoList,
   parse3DModelsList,
-} from '@/lib/projectsService';
+  formatVideosToText,
+  formatModelsToText,
+} from '@/lib/mediaUtils';
 import { Box, Save, ArrowLeft, Cpu, Sparkles, CheckSquare, Layers } from 'lucide-react';
 import Link from 'next/link';
 
 interface ProjectFormProps {
   initialData?: Project;
   isEditing?: boolean;
-}
-
-function formatVideosToText(videoUrls?: (string | { title?: string; url: string })[], singleUrl?: string): string {
-  if (videoUrls && videoUrls.length > 0) {
-    return videoUrls
-      .map((v) => {
-        if (typeof v === 'string') return v;
-        if (v && v.url) {
-          return v.title ? `${v.title} | ${v.url}` : v.url;
-        }
-        return '';
-      })
-      .filter(Boolean)
-      .join('\n');
-  }
-  return singleUrl || '';
-}
-
-function formatModelsToText(models3d?: { title?: string; url?: string }[], singleModel?: { title?: string; url?: string }): string {
-  if (models3d && models3d.length > 0) {
-    return models3d
-      .map((m) => {
-        if (m && m.url) {
-          return m.title ? `${m.title} | ${m.url}` : m.url;
-        }
-        return '';
-      })
-      .filter(Boolean)
-      .join('\n');
-  }
-  if (singleModel && singleModel.url) {
-    return singleModel.title ? `${singleModel.title} | ${singleModel.url}` : singleModel.url;
-  }
-  return '';
 }
 
 export default function ProjectForm({ initialData, isEditing = false }: ProjectFormProps) {
@@ -124,6 +96,24 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
       });
     }
   }, [subIdParam, projectMode]);
+
+  // Automatically iterate order when creating a new project or switching project type
+  useEffect(() => {
+    if (!isEditing && !subIdParam) {
+      if (projectMode === 'cad') {
+        get3DContainerProject().then((container) => {
+          const nextOrder = (container?.subProjects?.length || 0) + 1;
+          setOrder(nextOrder);
+        });
+      } else {
+        getProjects().then((all) => {
+          const eng = all.filter((p) => p.category === 'Engineering Projects');
+          const maxOrder = eng.reduce((max, p) => Math.max(max, p.order || 0), 1);
+          setOrder(maxOrder + 1);
+        });
+      }
+    }
+  }, [projectMode, isEditing, subIdParam]);
 
   // Update category when switching mode
   const handleModeChange = (mode: 'cad' | 'engineering') => {

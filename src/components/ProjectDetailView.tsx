@@ -179,9 +179,13 @@ export default function ProjectDetailView({ project }: ProjectDetailViewProps) {
   const activeVideo = allVideos[activeVideoIndex] || allVideos[0];
   const activeVideoUrl = activeVideo?.url;
 
-  // Active Gallery Images
-  const gallery = currentSub?.galleryImages && currentSub.galleryImages.length > 0
-    ? currentSub.galleryImages
+  // Active Gallery Images (strictly isolated to currentSub so it never displays phantom images from the container)
+  const gallery = currentSub
+    ? currentSub.galleryImages && currentSub.galleryImages.length > 0
+      ? currentSub.galleryImages
+      : currentSub.heroImage
+      ? [currentSub.heroImage]
+      : []
     : project.galleryImages && project.galleryImages.length > 0
     ? project.galleryImages
     : project.heroImage
@@ -204,12 +208,20 @@ export default function ProjectDetailView({ project }: ProjectDetailViewProps) {
     setActiveVideoIndex(0);
     setActiveGalleryIndex(0);
     const nextSub = project.subProjects![nextIdx];
-    if (nextSub.model3d || (nextSub.models3d && nextSub.models3d.length > 0)) {
+    const nextHas3D = Boolean(nextSub.model3d || (nextSub.models3d && nextSub.models3d.length > 0));
+    const nextHasVideo = Boolean(nextSub.videoUrl || (nextSub.videoUrls && nextSub.videoUrls.length > 0));
+    const nextHasGallery = Boolean(
+      (nextSub.galleryImages && nextSub.galleryImages.length > 0) || nextSub.heroImage
+    );
+
+    if (nextHas3D) {
       setActiveMediaTab('3d');
-    } else if (nextSub.videoUrl || (nextSub.videoUrls && nextSub.videoUrls.length > 0)) {
+    } else if (nextHasVideo) {
       setActiveMediaTab('video');
-    } else {
+    } else if (nextHasGallery) {
       setActiveMediaTab('gallery');
+    } else {
+      setActiveMediaTab(null);
     }
   };
 
@@ -221,12 +233,20 @@ export default function ProjectDetailView({ project }: ProjectDetailViewProps) {
     setActiveVideoIndex(0);
     setActiveGalleryIndex(0);
     const nextSub = project.subProjects![nextIdx];
-    if (nextSub.model3d || (nextSub.models3d && nextSub.models3d.length > 0)) {
+    const nextHas3D = Boolean(nextSub.model3d || (nextSub.models3d && nextSub.models3d.length > 0));
+    const nextHasVideo = Boolean(nextSub.videoUrl || (nextSub.videoUrls && nextSub.videoUrls.length > 0));
+    const nextHasGallery = Boolean(
+      (nextSub.galleryImages && nextSub.galleryImages.length > 0) || nextSub.heroImage
+    );
+
+    if (nextHas3D) {
       setActiveMediaTab('3d');
-    } else if (nextSub.videoUrl || (nextSub.videoUrls && nextSub.videoUrls.length > 0)) {
+    } else if (nextHasVideo) {
       setActiveMediaTab('video');
-    } else {
+    } else if (nextHasGallery) {
       setActiveMediaTab('gallery');
+    } else {
+      setActiveMediaTab(null);
     }
   };
 
@@ -236,12 +256,20 @@ export default function ProjectDetailView({ project }: ProjectDetailViewProps) {
     setActiveVideoIndex(0);
     setActiveGalleryIndex(0);
     const nextSub = project.subProjects![idx];
-    if (nextSub.model3d || (nextSub.models3d && nextSub.models3d.length > 0)) {
+    const nextHas3D = Boolean(nextSub.model3d || (nextSub.models3d && nextSub.models3d.length > 0));
+    const nextHasVideo = Boolean(nextSub.videoUrl || (nextSub.videoUrls && nextSub.videoUrls.length > 0));
+    const nextHasGallery = Boolean(
+      (nextSub.galleryImages && nextSub.galleryImages.length > 0) || nextSub.heroImage
+    );
+
+    if (nextHas3D) {
       setActiveMediaTab('3d');
-    } else if (nextSub.videoUrl || (nextSub.videoUrls && nextSub.videoUrls.length > 0)) {
+    } else if (nextHasVideo) {
       setActiveMediaTab('video');
-    } else {
+    } else if (nextHasGallery) {
       setActiveMediaTab('gallery');
+    } else {
+      setActiveMediaTab(null);
     }
   };
 
@@ -533,7 +561,7 @@ export default function ProjectDetailView({ project }: ProjectDetailViewProps) {
                   alt="Gallery View"
                   className="w-full h-full object-contain"
                   onError={(e) => {
-                    (e.target as HTMLElement).setAttribute('src', project.heroImage);
+                    (e.target as HTMLElement).style.display = 'none';
                   }}
                 />
 
