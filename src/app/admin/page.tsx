@@ -27,7 +27,7 @@ export default function AdminDashboardPage() {
       if (!loggedIn || (email && email !== ALLOWED_ADMIN_EMAIL)) {
         localStorage.removeItem('portfolio_admin_logged_in');
         localStorage.removeItem('portfolio_admin_email');
-        router.push('/admin/login');
+        router.push('/');
       }
     }
   };

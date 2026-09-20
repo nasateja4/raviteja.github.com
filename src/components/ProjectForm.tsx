@@ -84,7 +84,7 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
       const storedEmail = localStorage.getItem('portfolio_admin_email')?.toLowerCase().trim();
       const allowed = (process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'nasateja4@gmail.com').toLowerCase().trim();
       if (!loggedIn || (storedEmail && storedEmail !== allowed)) {
-        router.push('/admin/login');
+        router.push('/admin');
       }
     }
   }, [router]);
