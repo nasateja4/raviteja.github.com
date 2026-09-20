@@ -21,7 +21,7 @@ const spotlightModels = [
     description: 'Custom autonomous agricultural rover assembly designed for K.I.T.E. Engineering College students. Engineered with mechanical calculations for heavy drawbar payload pulling and steep hill climb gradeability.',
     url: 'https://sketchfab.com/models/fd99e5beff4b4b15a7503bdb507d2df2/embed?autospin=1&autostart=1',
     tools: ['SolidWorks', 'Calculations', 'Chassis Design', '3D Printing'],
-    slug: 'agricultural-rover',
+    slug: '3d-printing-modeling',
   },
   {
     id: 'rower-chassis',
@@ -30,7 +30,7 @@ const spotlightModels = [
     description: 'Chassis frame geometry engineered with mechanical stress analysis to ensure structural integrity and terrain clearance across irregular agricultural soil.',
     url: 'https://sketchfab.com/models/f9d694f2260c42a490f925d8bae35d0e/embed?autospin=1&autostart=1',
     tools: ['SolidWorks', 'FEA Structural', 'Sheet Metal'],
-    slug: 'agricultural-rover',
+    slug: '3d-printing-modeling',
   },
   {
     id: 'smart-watch',
@@ -39,7 +39,7 @@ const spotlightModels = [
     description: 'Compact wearable IoT watch enclosure designed with snap-fit joints, integrating ESP32-S3, MAX30102 pulse oximeter, and MPU6050 accelerometer.',
     url: 'https://sketchfab.com/models/462b5d8ede60480c998d240b1384288c/embed?autostart=1',
     tools: ['Fusion 360', 'UltiMaker Cura', 'Snap-Fit Enclosure', 'IoT Wearable'],
-    slug: 'smart-health-watch',
+    slug: '3d-printing-modeling',
   },
   {
     id: 'cnc-z-axis',
@@ -48,7 +48,7 @@ const spotlightModels = [
     description: 'Rigid Z-axis gantry carriage accommodating a high-RPM spindle motor for 1mm per pass depth milling in hardwoods and soft aluminum.',
     url: 'https://sketchfab.com/models/ce1bf2b9e3c340c9a85c28e2003a8a75/embed?autospin=1&autostart=1',
     tools: ['Fusion 360', 'CNC Machining', 'Lead Screw Drive', 'GRBL'],
-    slug: 'cnc-z-axis-upgrade',
+    slug: '3d-printing-modeling',
   },
   {
     id: 'rotating-bed',
@@ -57,7 +57,7 @@ const spotlightModels = [
     description: 'Concentric 360-degree rotating turntable bed designed in Fusion 360 for dynamic CAD model inspection and video recording.',
     url: 'https://sketchfab.com/models/f9a45683183e4bc3a382eedf9c332771/embed?autospin=1&autostart=1',
     tools: ['Fusion 360', 'FDM 3D Printing', 'Product Presentation'],
-    slug: 'rotating-display-bed',
+    slug: '3d-printing-modeling',
   },
   {
     id: 'stepper-v7',
@@ -66,7 +66,7 @@ const spotlightModels = [
     description: 'Tailored stepper motor outer housing and mounting flange designed in SolidWorks to guarantee structural alignment with robotic joint reducers.',
     url: 'https://sketchfab.com/models/099d6834458b4f1487ff29ad16225d22/embed?autospin=1&autostart=1',
     tools: ['SolidWorks', 'Robotics Kinematics', 'Actuator Enclosures'],
-    slug: 'custom-stepper-motors',
+    slug: '3d-printing-modeling',
   },
 ];
 

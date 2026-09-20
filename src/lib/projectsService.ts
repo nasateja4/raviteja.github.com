@@ -1,9 +1,23 @@
 import { db, isFirebaseConfigured } from './firebase';
-import { collection, getDocs, doc, setDoc, deleteDoc, updateDoc } from 'firebase/firestore';
-import { Project } from './types';
+import { collection, getDocs, doc, setDoc, deleteDoc } from 'firebase/firestore';
+import { Project, SubProject } from './types';
 import { defaultProjects } from './defaultData';
 
 const LOCAL_STORAGE_KEY = 'raviteja_portfolio_projects_v8';
+
+// IDs of projects that strictly belong inside the single 3D CAD & Printing card collection
+const SUB_PROJECT_IDS = new Set([
+  'agricultural-rover',
+  'smart-health-watch',
+  'smart-watch',
+  'lathe-3-jaw-chuck',
+  '3-jaw-chuck',
+  'rotating-display-bed',
+  'cnc-z-axis-upgrade',
+  'cnc-z-axis',
+  'custom-stepper-motors',
+  'stepper-motors',
+]);
 
 function normalizeProject(p: any): Project {
   const category = p.category === '3D CAD & Printing' ? '3D CAD & Printing' : 'Engineering Projects';
@@ -24,7 +38,7 @@ function getLocalProjects(): Project[] {
   }
   try {
     const parsed: Project[] = JSON.parse(stored)
-      .filter((p: any) => p.id !== '3d-printing-modeling' && p.slug !== '3d-printing-modeling')
+      .filter((p: Project) => !SUB_PROJECT_IDS.has(p.id) && !SUB_PROJECT_IDS.has(p.slug))
       .map(normalizeProject);
     // Ensure all default projects exist in stored data (merge missing ones)
     let updated = false;
@@ -48,7 +62,10 @@ function getLocalProjects(): Project[] {
 
 function saveLocalProjects(projects: Project[]) {
   if (typeof window !== 'undefined') {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(projects.map(normalizeProject)));
+    const filtered = projects
+      .filter((p) => !SUB_PROJECT_IDS.has(p.id) && !SUB_PROJECT_IDS.has(p.slug))
+      .map(normalizeProject);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(filtered));
   }
 }
 
@@ -64,38 +81,32 @@ export async function getProjects(): Promise<Project[]> {
       if (!snapshot.empty) {
         const fetched: Project[] = [];
         snapshot.forEach((docSnap) => {
-          if (docSnap.id !== '3d-printing-modeling') {
-            fetched.push(normalizeProject({ id: docSnap.id, ...docSnap.data() }));
+          const id = docSnap.id;
+          const data = docSnap.data();
+          // If a standalone CAD subproject was previously saved, purge it from top-level
+          if (SUB_PROJECT_IDS.has(id) || SUB_PROJECT_IDS.has(data.slug)) {
+            deleteDoc(doc(db, 'projects', id)).catch(() => {});
+            return;
           }
+          fetched.push(normalizeProject({ id: docSnap.id, ...data }));
         });
 
-        // Ensure all newly separated default projects exist in Firestore data:
-        for (const def of defaultProjects) {
-          const exists = fetched.some((p) => p.id === def.id || p.slug === def.slug);
-          if (!exists) {
-            const normalizedDef = normalizeProject(def);
-            fetched.push(normalizedDef);
-            // Write to Firestore so it is stored permanently
-            setDoc(doc(db, 'projects', def.id), normalizedDef).catch((e) =>
-              console.warn('Sync def to Firestore err:', e)
-            );
-          }
+        // Ensure 3d-printing-modeling is present
+        const has3D = fetched.some((p) => p.slug === '3d-printing-modeling' || p.id === '3d-printing-modeling');
+        if (!has3D) {
+          const def3D = defaultProjects.find((p) => p.slug === '3d-printing-modeling');
+          if (def3D) fetched.push(normalizeProject(def3D));
         }
 
-        // Delete old bundled container from Firestore
-        deleteDoc(doc(db, 'projects', '3d-printing-modeling')).catch(() => {});
-
         fetched.sort((a, b) => a.order - b.order);
-        saveLocalProjects(fetched);
         return fetched;
       } else {
         // First-time seed into Firestore
         console.log('Seeding initial projects to Firestore...');
-        const normalized = defaultProjects.map(normalizeProject);
-        for (const proj of normalized) {
-          await setDoc(doc(db, 'projects', proj.id), proj);
+        for (const proj of defaultProjects) {
+          await setDoc(doc(db, 'projects', proj.id), normalizeProject(proj));
         }
-        return normalized;
+        return defaultProjects.map(normalizeProject);
       }
     } catch (err) {
       console.warn('Firestore fetch failed or timed out, falling back to local storage:', err);
@@ -111,24 +122,18 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
   const found = all.find((p) => p.slug === decoded || p.id === decoded || p.slug === slug || p.id === slug);
   if (found) return found;
 
-  // Fallback for previous 3d-printing-modeling link
-  if (decoded === '3d-printing-modeling' || slug === '3d-printing-modeling') {
-    return all.find((p) => p.slug === 'agricultural-rover') || all[0] || null;
-  }
-
   // Direct fallback to defaultProjects so no project is ever missed
   const fallback = defaultProjects.find(
     (p) => p.slug === decoded || p.id === decoded || p.slug === slug || p.id === slug
   );
-  return fallback ? normalizeProject(fallback) : null;
+  return fallback || null;
 }
 
 export async function saveProject(project: Project): Promise<void> {
-  const normalized = normalizeProject(project);
   if (isFirebaseConfigured && db) {
     try {
-      const docRef = doc(db, 'projects', normalized.id);
-      await setDoc(docRef, normalized);
+      const docRef = doc(db, 'projects', project.id);
+      await setDoc(docRef, project);
     } catch (err) {
       console.error('Error saving to Firestore:', err);
     }
@@ -136,11 +141,11 @@ export async function saveProject(project: Project): Promise<void> {
 
   // Always keep local copy synchronized
   const local = getLocalProjects();
-  const index = local.findIndex((p) => p.id === normalized.id);
+  const index = local.findIndex((p) => p.id === project.id);
   if (index >= 0) {
-    local[index] = normalized;
+    local[index] = project;
   } else {
-    local.push(normalized);
+    local.push(project);
   }
   saveLocalProjects(local);
 }
@@ -158,16 +163,48 @@ export async function deleteProject(id: string): Promise<void> {
   saveLocalProjects(local);
 }
 
+// -------------------------------------------------------------
+// Sub-Projects Management (All 3D CAD Projects reside here!)
+// -------------------------------------------------------------
+export async function get3DContainerProject(): Promise<Project> {
+  const main = await getProjectBySlug('3d-printing-modeling');
+  if (main) return main;
+  const def = defaultProjects.find((p) => p.slug === '3d-printing-modeling')!;
+  return def;
+}
+
+export async function getSubProjectById(subId: string): Promise<SubProject | null> {
+  const container = await get3DContainerProject();
+  if (!container.subProjects) return null;
+  return container.subProjects.find((s) => s.id === subId) || null;
+}
+
+export async function saveSubProject(sub: SubProject): Promise<void> {
+  const container = await get3DContainerProject();
+  const currentSubs = container.subProjects ? [...container.subProjects] : [];
+  const idx = currentSubs.findIndex((s) => s.id === sub.id);
+  if (idx >= 0) {
+    currentSubs[idx] = sub;
+  } else {
+    currentSubs.push(sub);
+  }
+  container.subProjects = currentSubs;
+  await saveProject(container);
+}
+
+export async function deleteSubProject(subId: string): Promise<void> {
+  const container = await get3DContainerProject();
+  if (!container.subProjects) return;
+  container.subProjects = container.subProjects.filter((s) => s.id !== subId);
+  await saveProject(container);
+}
+
 export async function resetProjectsToDefault(): Promise<void> {
-  const normalized = defaultProjects.map(normalizeProject);
   if (typeof window !== 'undefined') {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(normalized));
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(defaultProjects));
   }
   if (isFirebaseConfigured && db) {
-    try {
-      await deleteDoc(doc(db, 'projects', '3d-printing-modeling'));
-    } catch (e) {}
-    for (const p of normalized) {
+    for (const p of defaultProjects) {
       await setDoc(doc(db, 'projects', p.id), p);
     }
   }

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { getProjects, deleteProject, resetProjectsToDefault } from '@/lib/projectsService';
+import { getProjects, deleteProject, resetProjectsToDefault, deleteSubProject } from '@/lib/projectsService';
 import { Project } from '@/lib/types';
 import { isFirebaseConfigured, auth } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
@@ -48,6 +48,15 @@ export default function AdminDashboardPage() {
     if (confirm(`Are you sure you want to delete "${title}"?`)) {
       await deleteProject(id);
       setActionMessage(`Deleted "${title}" successfully.`);
+      setTimeout(() => setActionMessage(''), 3000);
+      loadData();
+    }
+  };
+
+  const handleDeleteSubProject = async (subId: string, title: string) => {
+    if (confirm(`Are you sure you want to delete 3D project "${title}" from the 3D collection?`)) {
+      await deleteSubProject(subId);
+      setActionMessage(`Deleted "${title}" successfully from 3D CAD & Printing.`);
       setTimeout(() => setActionMessage(''), 3000);
       loadData();
     }
@@ -229,63 +238,137 @@ export default function AdminDashboardPage() {
           </div>
         ) : (
           <div className="divide-y divide-slate-100">
-            {filteredProjects.map((proj) => (
-              <div
-                key={proj.id}
-                className="p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover:bg-slate-50/75 transition-colors"
-              >
-                {/* Left: Thumbnail & Info */}
-                <div className="flex items-center gap-4">
-                  <img
-                    src={proj.heroImage}
-                    alt={proj.title}
-                    className="w-16 h-12 rounded-lg object-cover bg-slate-100 flex-shrink-0 border border-slate-200"
-                    onError={(e) => {
-                      (e.target as HTMLElement).setAttribute('src', '/static/3dModel.jpeg');
-                    }}
-                  />
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-display font-bold text-slate-900 text-base">{proj.title}</h3>
-                      {proj.model3d?.url && (
-                        <span className="flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 border border-blue-200">
-                          <Box className="w-2.5 h-2.5" /> 3D
-                        </span>
+            {filteredProjects.map((proj) => {
+              const is3DCollection = proj.slug === '3d-printing-modeling' || proj.category === '3D CAD & Printing';
+              const subList = proj.subProjects || [];
+
+              return (
+                <div key={proj.id} className="p-4 sm:p-6 hover:bg-slate-50/75 transition-colors space-y-4">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    {/* Left: Thumbnail & Info */}
+                    <div className="flex items-center gap-4">
+                      <img
+                        src={proj.heroImage}
+                        alt={proj.title}
+                        className="w-16 h-12 rounded-lg object-cover bg-slate-100 flex-shrink-0 border border-slate-200"
+                        onError={(e) => {
+                          (e.target as HTMLElement).setAttribute('src', '/static/3dModel.jpeg');
+                        }}
+                      />
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-display font-bold text-slate-900 text-base">{proj.title}</h3>
+                          {proj.model3d?.url && (
+                            <span className="flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 border border-blue-200">
+                              <Box className="w-2.5 h-2.5" /> 3D
+                            </span>
+                          )}
+                          {is3DCollection && subList.length > 0 && (
+                            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-cyan-100 text-cyan-800 border border-cyan-200">
+                              {subList.length} Projects inside Card
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-slate-500 mt-0.5 font-medium">
+                          <span className="text-blue-700 font-semibold">{proj.category}</span> • {proj.date}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Right: Actions */}
+                    <div className="flex items-center gap-2 self-end sm:self-center">
+                      <Link
+                        href={`/projects/${proj.slug}`}
+                        target="_blank"
+                        className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-blue-600 transition-colors"
+                        title="View Live Page"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                      </Link>
+                      <Link
+                        href={`/admin/project/${proj.id}`}
+                        className="p-2 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 transition-colors"
+                        title="Edit Project Card"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </Link>
+                      {!is3DCollection && (
+                        <button
+                          onClick={() => handleDelete(proj.id, proj.title)}
+                          className="p-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 transition-colors"
+                          title="Delete Project"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                       )}
                     </div>
-                    <p className="text-xs text-slate-500 mt-0.5 font-medium">
-                      <span className="text-blue-700 font-semibold">{proj.category}</span> • {proj.date}
-                    </p>
                   </div>
-                </div>
 
-                {/* Right: Actions */}
-                <div className="flex items-center gap-2 self-end sm:self-center">
-                  <Link
-                    href={`/projects/${proj.slug}`}
-                    target="_blank"
-                    className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-blue-600 transition-colors"
-                    title="View Live Page"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                  </Link>
-                  <Link
-                    href={`/admin/project/${proj.id}`}
-                    className="p-2 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 transition-colors"
-                    title="Edit Project"
-                  >
-                    <Edit className="w-4 h-4" />
-                  </Link>
-                  <button
-                    onClick={() => handleDelete(proj.id, proj.title)}
-                    className="p-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 transition-colors"
-                    title="Delete Project"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                  {/* If 3D CAD card, display its nested projects with independent Edit & Delete! */}
+                  {is3DCollection && subList.length > 0 && (
+                    <div className="mt-3 pt-3 border-t border-slate-100 pl-2 sm:pl-6 space-y-2.5">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                          Projects in this 3D CAD & Printing Card ({subList.length}):
+                        </span>
+                        <Link
+                          href="/admin/project/new?type=cad"
+                          className="text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1"
+                        >
+                          <Plus className="w-3.5 h-3.5" />
+                          <span>Add 3D Project to this Card</span>
+                        </Link>
+                      </div>
+
+                      <div className="divide-y divide-slate-100 bg-slate-50/70 rounded-2xl border border-slate-200 overflow-hidden">
+                        {subList.map((sub) => (
+                          <div key={sub.id} className="p-3 sm:px-4 flex items-center justify-between gap-3 hover:bg-white transition-colors">
+                            <div className="flex items-center gap-3">
+                              <img
+                                src={sub.galleryImages?.[0] || '/static/rower/3dModel.jpeg'}
+                                alt={sub.title}
+                                className="w-10 h-8 rounded object-cover bg-white border border-slate-200 shrink-0"
+                                onError={(e) => {
+                                  (e.target as HTMLElement).setAttribute('src', '/static/rower/3dModel.jpeg');
+                                }}
+                              />
+                              <div className="min-w-0">
+                                <div className="flex items-center gap-1.5">
+                                  <h4 className="text-xs font-bold text-slate-900 truncate">{sub.title}</h4>
+                                  {sub.model3d?.url && (
+                                    <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-blue-100 text-blue-700">
+                                      3D
+                                    </span>
+                                  )}
+                                </div>
+                                <p className="text-[11px] text-slate-500 truncate max-w-md">{sub.shortDescription}</p>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-1.5 shrink-0">
+                              <Link
+                                href={`/admin/project/new?type=cad&subId=${sub.id}`}
+                                className="p-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 transition-colors"
+                                title="Edit 3D Project"
+                              >
+                                <Edit className="w-3.5 h-3.5" />
+                              </Link>
+                              <button
+                                onClick={() => handleDeleteSubProject(sub.id, sub.title)}
+                                className="p-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 transition-colors"
+                                title="Delete 3D Project"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

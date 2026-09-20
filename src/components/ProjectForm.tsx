@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Project, SubProject } from '@/lib/types';
-import { saveProject, getProjectBySlug } from '@/lib/projectsService';
+import { saveProject, getProjectBySlug, saveSubProject, getSubProjectById } from '@/lib/projectsService';
 import { Box, Save, ArrowLeft, Cpu, Sparkles, CheckSquare, Layers } from 'lucide-react';
 import Link from 'next/link';
 
@@ -18,6 +18,8 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
 
   // Mode: 'cad' for 3D CAD & Printing, 'engineering' for all other engineering projects
   const queryType = searchParams?.get('type');
+  const subIdParam = searchParams?.get('subId');
+
   const [projectMode, setProjectMode] = useState<'cad' | 'engineering'>(
     initialData
       ? initialData.category === '3D CAD & Printing'
@@ -55,10 +57,30 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
   const [date, setDate] = useState(initialData?.date || new Date().getFullYear().toString());
   const [featured, setFeatured] = useState(initialData?.featured ?? true);
   const [order, setOrder] = useState(initialData?.order || 1);
-  const [addToCarousel, setAddToCarousel] = useState(true);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  // If editing an existing 3D CAD subproject, populate its data
+  useEffect(() => {
+    if (subIdParam && projectMode === 'cad') {
+      getSubProjectById(subIdParam).then((sub) => {
+        if (sub) {
+          setTitle(sub.title);
+          setSlug(sub.id);
+          setShortDescription(sub.shortDescription || '');
+          setFullDescription(sub.description);
+          setModelUrl(sub.model3d?.url || '');
+          setModelTitle(sub.model3d?.title || '');
+          setVideoUrl(sub.videoUrl || '');
+          setHeroImage(sub.heroImage || (sub.galleryImages?.[0] || ''));
+          setGalleryText(sub.galleryImages?.join('\n') || '');
+          setToolsText(sub.tools?.join(', ') || '');
+          setSpecsText(sub.specs?.map((s) => `${s.label}: ${s.value}`).join('\n') || '');
+        }
+      });
+    }
+  }, [subIdParam, projectMode]);
 
   // Update category when switching mode
   const handleModeChange = (mode: 'cad' | 'engineering') => {
@@ -68,7 +90,7 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
 
   const handleTitleChange = (val: string) => {
     setTitle(val);
-    if (!isEditing && !slug) {
+    if (!isEditing && !subIdParam && !slug) {
       setSlug(
         val
           .toLowerCase()
@@ -113,55 +135,44 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
         })
         .filter(Boolean) as { label: string; value: string }[];
 
-      const projectData: Project = {
-        id: initialData?.id || slug,
-        slug,
-        title,
-        category,
-        shortDescription,
-        fullDescription,
-        heroImage,
-        galleryImages: galleryImages.length > 0 ? galleryImages : heroImage ? [heroImage] : [],
-        tools,
-        model3d: modelUrl ? { type: 'sketchfab', url: modelUrl, title: modelTitle || title } : undefined,
-        videoUrl: videoUrl || undefined,
-        externalUrl: externalUrl || undefined,
-        specs,
-        featured,
-        date,
-        order: Number(order) || 1,
-      };
+      if (projectMode === 'cad') {
+        // Save directly into the single 3D CAD & Printing card collection
+        const subData: SubProject = {
+          id: slug,
+          title,
+          shortDescription,
+          description: fullDescription,
+          model3d: modelUrl ? { type: 'sketchfab', url: modelUrl, title: modelTitle || title } : undefined,
+          videoUrl: videoUrl || undefined,
+          heroImage: heroImage || (galleryImages.length > 0 ? galleryImages[0] : undefined),
+          galleryImages: galleryImages.length > 0 ? galleryImages : heroImage ? [heroImage] : [],
+          tools,
+          specs,
+        };
 
-      await saveProject(projectData);
+        await saveSubProject(subData);
+      } else {
+        // Save as independent Engineering Project card
+        const projectData: Project = {
+          id: initialData?.id || slug,
+          slug,
+          title,
+          category: 'Engineering Projects',
+          shortDescription,
+          fullDescription,
+          heroImage,
+          galleryImages: galleryImages.length > 0 ? galleryImages : heroImage ? [heroImage] : [],
+          tools,
+          model3d: modelUrl ? { type: 'sketchfab', url: modelUrl, title: modelTitle || title } : undefined,
+          videoUrl: videoUrl || undefined,
+          externalUrl: externalUrl || undefined,
+          specs,
+          featured,
+          date,
+          order: Number(order) || 1,
+        };
 
-      // If in 3D CAD mode and addToCarousel is checked, auto-sync to 3d-printing-modeling subprojects
-      if (projectMode === 'cad' && addToCarousel) {
-        try {
-          const main3D = await getProjectBySlug('3d-printing-modeling');
-          if (main3D) {
-            const currentSubs = main3D.subProjects ? [...main3D.subProjects] : [];
-            const subData: SubProject = {
-              id: slug,
-              title,
-              shortDescription,
-              description: fullDescription,
-              model3d: modelUrl ? { type: 'sketchfab', url: modelUrl, title: modelTitle || title } : undefined,
-              videoUrl: videoUrl || undefined,
-              galleryImages,
-              specs,
-            };
-            const existingIdx = currentSubs.findIndex((s) => s.id === slug);
-            if (existingIdx >= 0) {
-              currentSubs[existingIdx] = subData;
-            } else {
-              currentSubs.push(subData);
-            }
-            main3D.subProjects = currentSubs;
-            await saveProject(main3D);
-          }
-        } catch (subErr) {
-          console.warn('Failed to auto-sync to 3d-printing-modeling subprojects:', subErr);
-        }
+        await saveProject(projectData);
       }
 
       router.push('/admin');
@@ -392,19 +403,13 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
               </div>
             </div>
 
-            {/* In 3D CAD mode: Option to auto-sync to 3D printing page carousel */}
+            {/* In 3D CAD mode: Clear notification that this saves into the single 3D card collection */}
             {projectMode === 'cad' && (
-              <div className="pt-2 border-t border-blue-200/60 flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="addToCarousel"
-                  checked={addToCarousel}
-                  onChange={(e) => setAddToCarousel(e.target.checked)}
-                  className="w-4 h-4 rounded text-blue-600 border-slate-300 focus:ring-blue-500 cursor-pointer"
-                />
-                <label htmlFor="addToCarousel" className="text-xs font-medium text-blue-900 cursor-pointer">
-                  Sync directly into <strong>3D Modeling & Prototyping Projects</strong> carousel (navigable via canvas arrows on <code className="text-blue-700 font-mono">/projects/3d-printing-modeling</code>)
-                </label>
+              <div className="pt-2 border-t border-blue-200/60 flex items-center gap-2 text-xs text-blue-900 font-medium">
+                <CheckSquare className="w-4 h-4 text-blue-600 shrink-0" />
+                <span>
+                  Automatically adds this project inside the single <strong>3D Modeling & Prototyping Projects</strong> card on your portfolio (interactive via arrows on <code className="text-blue-700 font-mono">/projects/3d-printing-modeling</code>).
+                </span>
               </div>
             )}
           </div>

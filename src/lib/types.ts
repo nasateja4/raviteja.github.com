@@ -13,6 +13,8 @@ export interface SubProject {
   models3d?: Model3D[];
   videoUrl?: string;
   galleryImages: string[];
+  heroImage?: string;
+  tools?: string[];
   specs?: { label: string; value: string }[];
 }
 
