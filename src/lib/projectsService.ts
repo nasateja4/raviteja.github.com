@@ -3,7 +3,36 @@ import { collection, getDocs, doc, setDoc, deleteDoc } from 'firebase/firestore'
 import { Project, SubProject } from './types';
 import { defaultProjects } from './defaultData';
 
-const LOCAL_STORAGE_KEY = 'raviteja_portfolio_projects_v16';
+const LOCAL_STORAGE_KEY = 'raviteja_portfolio_projects_v17';
+const DELETED_PROJECTS_KEY = 'raviteja_portfolio_deleted_v17';
+
+function getDeletedProjectIds(): Set<string> {
+  if (typeof window === 'undefined') return new Set();
+  try {
+    const raw = localStorage.getItem(DELETED_PROJECTS_KEY);
+    return raw ? new Set(JSON.parse(raw)) : new Set();
+  } catch {
+    return new Set();
+  }
+}
+
+function markProjectDeleted(id: string) {
+  if (typeof window === 'undefined') return;
+  try {
+    const set = getDeletedProjectIds();
+    set.add(id);
+    localStorage.setItem(DELETED_PROJECTS_KEY, JSON.stringify(Array.from(set)));
+  } catch {}
+}
+
+function unmarkProjectDeleted(id: string) {
+  if (typeof window === 'undefined') return;
+  try {
+    const set = getDeletedProjectIds();
+    set.delete(id);
+    localStorage.setItem(DELETED_PROJECTS_KEY, JSON.stringify(Array.from(set)));
+  } catch {}
+}
 
 // IDs of projects that strictly belong inside the single 3D CAD & Printing card collection
 const SUB_PROJECT_IDS = new Set([
@@ -35,51 +64,44 @@ function normalizeProject(p: any): Project {
   };
 }
 
-// Helper to get projects from localStorage fallback with auto-sync of default projects
+// Helper to get projects from localStorage fallback without destructive overwrites
 function getLocalProjects(): Project[] {
   if (typeof window === 'undefined') return defaultProjects.map(normalizeProject);
   const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
+  const deletedIds = getDeletedProjectIds();
+
   if (!stored) {
-    const initialized = defaultProjects.map(normalizeProject);
+    const initialized = defaultProjects
+      .filter((p) => !deletedIds.has(p.id) && !deletedIds.has(p.slug))
+      .map(normalizeProject);
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(initialized));
     return initialized;
   }
+
   try {
     const parsed: Project[] = JSON.parse(stored)
-      .filter((p: Project) => !SUB_PROJECT_IDS.has(p.id) && !SUB_PROJECT_IDS.has(p.slug) && !OBSOLETE_PROJECT_IDS.has(p.id) && !OBSOLETE_PROJECT_IDS.has(p.slug))
+      .filter(
+        (p: Project) =>
+          !deletedIds.has(p.id) &&
+          !deletedIds.has(p.slug) &&
+          !SUB_PROJECT_IDS.has(p.id) &&
+          !SUB_PROJECT_IDS.has(p.slug) &&
+          !OBSOLETE_PROJECT_IDS.has(p.id) &&
+          !OBSOLETE_PROJECT_IDS.has(p.slug)
+      )
       .map(normalizeProject);
-    // Ensure all default projects exist in stored data (merge missing or updated ones)
+
+    // If new default project was added in code and not deleted by user, seed it
     let updated = false;
     const merged = [...parsed];
     for (const def of defaultProjects) {
+      if (deletedIds.has(def.id) || deletedIds.has(def.slug)) continue;
       const existingIndex = merged.findIndex((p) => p.id === def.id || p.slug === def.slug);
       if (existingIndex === -1) {
         merged.push(normalizeProject(def));
         updated = true;
-      } else {
-        const cur = merged[existingIndex];
-        if (def.fullDescription && cur.fullDescription !== def.fullDescription) {
-          cur.fullDescription = def.fullDescription;
-          updated = true;
-        }
-        if (def.videoUrl && cur.videoUrl !== def.videoUrl) {
-          cur.videoUrl = def.videoUrl;
-          updated = true;
-        }
-        if (def.heroImage && cur.heroImage !== def.heroImage) {
-          cur.heroImage = def.heroImage;
-          updated = true;
-        }
-        if (def.galleryImages && (!cur.galleryImages || cur.galleryImages.length < def.galleryImages.length)) {
-          cur.galleryImages = def.galleryImages;
-          updated = true;
-        }
-        if (def.model3d === undefined && cur.model3d !== undefined) {
-          delete cur.model3d;
-          delete cur.models3d;
-          updated = true;
-        }
       }
+      // Note: Do NOT overwrite user-modified fields with static defaults
     }
 
     // Explicitly guarantee 3D Modeling card is order: 1 (Top position)
@@ -107,20 +129,31 @@ function getLocalProjects(): Project[] {
 
 function saveLocalProjects(projects: Project[]) {
   if (typeof window !== 'undefined') {
+    const deletedIds = getDeletedProjectIds();
     const filtered = projects
-      .filter((p) => !SUB_PROJECT_IDS.has(p.id) && !SUB_PROJECT_IDS.has(p.slug) && !OBSOLETE_PROJECT_IDS.has(p.id) && !OBSOLETE_PROJECT_IDS.has(p.slug))
+      .filter(
+        (p) =>
+          !deletedIds.has(p.id) &&
+          !deletedIds.has(p.slug) &&
+          !SUB_PROJECT_IDS.has(p.id) &&
+          !SUB_PROJECT_IDS.has(p.slug) &&
+          !OBSOLETE_PROJECT_IDS.has(p.id) &&
+          !OBSOLETE_PROJECT_IDS.has(p.slug)
+      )
       .map(normalizeProject);
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(filtered));
   }
 }
 
 export async function getProjects(): Promise<Project[]> {
+  const deletedIds = getDeletedProjectIds();
+
   if (isFirebaseConfigured && db) {
     try {
       const colRef = collection(db, 'projects');
       const fetchPromise = getDocs(colRef);
       const timeoutPromise = new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error('Firestore timeout')), 1500)
+        setTimeout(() => reject(new Error('Firestore timeout')), 2500)
       );
       const snapshot = await Promise.race([fetchPromise, timeoutPromise]);
       if (!snapshot.empty) {
@@ -128,12 +161,13 @@ export async function getProjects(): Promise<Project[]> {
         snapshot.forEach((docSnap) => {
           const id = docSnap.id;
           const data = docSnap.data();
-          // If a standalone CAD subproject was previously saved, purge it from top-level
+          if (deletedIds.has(id) || deletedIds.has(data.slug)) {
+            return;
+          }
           if (SUB_PROJECT_IDS.has(id) || SUB_PROJECT_IDS.has(data.slug)) {
             deleteDoc(doc(db, 'projects', id)).catch(() => {});
             return;
           }
-          // If obsolete template project, purge it
           if (OBSOLETE_PROJECT_IDS.has(id) || OBSOLETE_PROJECT_IDS.has(data.slug)) {
             deleteDoc(doc(db, 'projects', id)).catch(() => {});
             return;
@@ -141,41 +175,16 @@ export async function getProjects(): Promise<Project[]> {
           fetched.push(normalizeProject({ id: docSnap.id, ...data }));
         });
 
-        // Ensure all default projects are present and updated with latest videoUrls and assets
+        // Ensure default projects exist if not deleted by user
         for (const def of defaultProjects) {
+          if (deletedIds.has(def.id) || deletedIds.has(def.slug)) continue;
           const index = fetched.findIndex((p) => p.id === def.id || p.slug === def.slug);
           if (index === -1) {
             const normalizedDef = normalizeProject(def);
             fetched.push(normalizedDef);
             setDoc(doc(db, 'projects', def.id), normalizedDef).catch(() => {});
-          } else {
-            const cur = fetched[index];
-            let needsSync = false;
-            if (def.fullDescription && cur.fullDescription !== def.fullDescription) {
-              cur.fullDescription = def.fullDescription;
-              needsSync = true;
-            }
-            if (def.videoUrl && cur.videoUrl !== def.videoUrl) {
-              cur.videoUrl = def.videoUrl;
-              needsSync = true;
-            }
-            if (def.heroImage && cur.heroImage !== def.heroImage) {
-              cur.heroImage = def.heroImage;
-              needsSync = true;
-            }
-            if (def.galleryImages && (!cur.galleryImages || cur.galleryImages.length < def.galleryImages.length)) {
-              cur.galleryImages = def.galleryImages;
-              needsSync = true;
-            }
-            if (def.model3d === undefined && cur.model3d !== undefined) {
-              delete cur.model3d;
-              delete cur.models3d;
-              needsSync = true;
-            }
-            if (needsSync) {
-              setDoc(doc(db, 'projects', cur.id), cur).catch(() => {});
-            }
           }
+          // Do NOT overwrite user modifications stored in Firestore with default data
         }
 
         // Ensure 3d-printing-modeling is present and pinned to order: 1 (Top of list)
@@ -193,14 +202,19 @@ export async function getProjects(): Promise<Project[]> {
         });
 
         fetched.sort((a, b) => a.order - b.order);
+        saveLocalProjects(fetched);
         return fetched;
       } else {
         // First-time seed into Firestore
         console.log('Seeding initial projects to Firestore...');
+        const seeded: Project[] = [];
         for (const proj of defaultProjects) {
-          await setDoc(doc(db, 'projects', proj.id), normalizeProject(proj));
+          const norm = normalizeProject(proj);
+          seeded.push(norm);
+          await setDoc(doc(db, 'projects', proj.id), norm);
         }
-        return defaultProjects.map(normalizeProject);
+        saveLocalProjects(seeded);
+        return seeded;
       }
     } catch (err) {
       console.warn('Firestore fetch failed or timed out, falling back to local storage:', err);
@@ -212,18 +226,29 @@ export async function getProjects(): Promise<Project[]> {
 
 export async function getProjectBySlug(slug: string): Promise<Project | null> {
   const decoded = decodeURIComponent(slug);
+  const deletedIds = getDeletedProjectIds();
+  if (deletedIds.has(decoded) || deletedIds.has(slug)) {
+    return null;
+  }
+
   const all = await getProjects();
   const found = all.find((p) => p.slug === decoded || p.id === decoded || p.slug === slug || p.id === slug);
   if (found) return found;
 
-  // Direct fallback to defaultProjects so no project is ever missed
+  // Direct fallback to defaultProjects only if not deleted
   const fallback = defaultProjects.find(
     (p) => p.slug === decoded || p.id === decoded || p.slug === slug || p.id === slug
   );
-  return fallback || null;
+  if (fallback && !deletedIds.has(fallback.id) && !deletedIds.has(fallback.slug)) {
+    return normalizeProject(fallback);
+  }
+  return null;
 }
 
 export async function saveProject(project: Project): Promise<void> {
+  unmarkProjectDeleted(project.id);
+  if (project.slug) unmarkProjectDeleted(project.slug);
+
   if (isFirebaseConfigured && db) {
     try {
       const docRef = doc(db, 'projects', project.id);
@@ -235,7 +260,7 @@ export async function saveProject(project: Project): Promise<void> {
 
   // Always keep local copy synchronized
   const local = getLocalProjects();
-  const index = local.findIndex((p) => p.id === project.id);
+  const index = local.findIndex((p) => p.id === project.id || p.slug === project.slug);
   if (index >= 0) {
     local[index] = project;
   } else {
@@ -245,6 +270,8 @@ export async function saveProject(project: Project): Promise<void> {
 }
 
 export async function deleteProject(id: string): Promise<void> {
+  markProjectDeleted(id);
+
   if (isFirebaseConfigured && db) {
     try {
       await deleteDoc(doc(db, 'projects', id));
@@ -253,7 +280,7 @@ export async function deleteProject(id: string): Promise<void> {
     }
   }
 
-  const local = getLocalProjects().filter((p) => p.id !== id);
+  const local = getLocalProjects().filter((p) => p.id !== id && p.slug !== id);
   saveLocalProjects(local);
 }
 
@@ -295,11 +322,12 @@ export async function deleteSubProject(subId: string): Promise<void> {
 
 export async function resetProjectsToDefault(): Promise<void> {
   if (typeof window !== 'undefined') {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(defaultProjects));
+    localStorage.removeItem(DELETED_PROJECTS_KEY);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(defaultProjects.map(normalizeProject)));
   }
   if (isFirebaseConfigured && db) {
     for (const p of defaultProjects) {
-      await setDoc(doc(db, 'projects', p.id), p);
+      await setDoc(doc(db, 'projects', p.id), normalizeProject(p));
     }
   }
 }

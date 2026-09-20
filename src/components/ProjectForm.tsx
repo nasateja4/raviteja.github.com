@@ -160,8 +160,8 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
           category: 'Engineering Projects',
           shortDescription,
           fullDescription,
-          heroImage,
-          galleryImages: galleryImages.length > 0 ? galleryImages : heroImage ? [heroImage] : [],
+          heroImage: heroImage.trim(),
+          galleryImages,
           tools,
           model3d: modelUrl ? { type: 'sketchfab', url: modelUrl, title: modelTitle || title } : undefined,
           videoUrl: videoUrl || undefined,
@@ -176,6 +176,7 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
       }
 
       router.push('/admin');
+      router.refresh();
     } catch (err: any) {
       setError(err.message || 'Failed to save project.');
       setLoading(false);
@@ -473,8 +474,8 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
               rows={3}
               placeholder={
                 projectMode === 'cad'
-                  ? '/static/rower/3dModel.jpeg&#10;/static/rower/IMG_20241119_221533.jpg&#10;/static/rower/car_3d.gif'
-                  : '/static/EV_vehical/EV_car.JPG&#10;/static/EV_vehical/award.png&#10;/static/EV_vehical/IMG_3262.JPG'
+                  ? `/static/rower/3dModel.jpeg\n/static/rower/IMG_20241119_221533.jpg\n/static/rower/car_3d.gif`
+                  : `/static/EV_vehical/EV_car.JPG\n/static/EV_vehical/award.png\n/static/EV_vehical/IMG_3262.JPG`
               }
               className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-900 font-mono focus:outline-none focus:border-blue-500 focus:bg-white"
             />
@@ -503,7 +504,7 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
               value={specsText}
               onChange={(e) => setSpecsText(e.target.value)}
               rows={3}
-              placeholder="Application : Autonomous Agricultural Towing&#10;CAD Software : SolidWorks Parametric Assembly&#10;Manufacturing : FDM Additive Prototyping"
+              placeholder={`Application : Autonomous Agricultural Towing\nCAD Software : SolidWorks Parametric Assembly\nManufacturing : FDM Additive Prototyping`}
               className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-900 font-mono focus:outline-none focus:border-blue-500 focus:bg-white"
             />
           </div>
