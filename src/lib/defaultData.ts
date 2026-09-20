@@ -21,20 +21,28 @@ export const defaultProjects: Project[] = [
     slug: '3d-printing-modeling',
     title: '3D Modeling & Additive Prototyping Projects',
     shortDescription: 'Collection of 6 functional mechanical 3D modeling and additive prototyping projects. Use the interactive project switcher arrows to explore each sub-project with its 3D model, photos, and video demos.',
-    fullDescription: `A comprehensive portfolio of 6 physical hardware prototyping projects spanning wearable IoT enclosures, autonomous agricultural rovers, custom lathe fixtures, motorized display turntables, CNC carving units, and robotic actuator housings.`,
+    fullDescription: `### Project Overview
+This section showcases a collection of 3D printing projects I have undertaken to solve practical problems and explore the capabilities of additive manufacturing. These projects range from creating custom accessories for existing machinery to designing components for new systems. The primary motivation behind these projects is to find cost-effective and tailored solutions that meet specific requirements. I have utilized various 3D printers, including FDM (Fused Deposition Modeling) technology, and experimented with different materials like PLA and ABS to achieve the desired functionality and durability. The design process typically involves CAD software such as SolidWorks and Fusion 360, followed by slicing and printing using software like Cura or PrusaSlicer.
+
+### Key Skills & Learnings:
+- **Advanced CAD Modeling**: Designing for additive manufacturing, including functional constraints, snap fits, and mechanical linkages.
+- **Material Selection**: Understanding the properties of different 3D printing filaments (PLA, ABS, PETG) and selecting the optimal material for thermal and mechanical load conditions.
+- **Slicing & Optimization**: Fine-tuning slicing parameters (layer height, infill geometry and density, print speed, nozzle temp) to achieve maximum structural integrity and surface finish.
+- **Reverse Engineering**: Custom components designed to seamlessly integrate with existing machines and commercial hardware.
+- **Iterative Rapid Prototyping**: Solving mechanical challenges through quick design iterations and functional testing.`,
     category: '3D CAD & Printing',
-    heroImage: '/static/rower/3dModel.jpeg',
+    heroImage: '/static/3dModel.jpeg',
     galleryImages: [
-      '/static/rower/3dModel.jpeg',
+      '/static/3dModel.jpeg',
+      '/static/watch.jpeg',
+      '/static/watch_explore.jpeg',
+      '/static/IMG_3625.JPG',
+      '/static/GPT.jpg',
+      '/static/IMG_3564.JPG',
+      '/static/IMG_3563.JPG',
       '/static/rower/IMG_20241119_221533.jpg',
-      '/static/watch/watch.jpeg',
-      '/static/watch/watch_explore.jpeg',
-      '/static/3d_printing/IMG_3563.JPG',
-      '/static/3d_printing/IMG_3564.JPG',
-      '/static/3d_printing/IMG_3625.JPG',
-      '/static/3d_printing/IMG_3626.JPG',
     ],
-    tools: ['SolidWorks', 'Fusion 360', 'Blender', 'ANSYS FEA', '3D Printing (FDM, SLS)'],
+    tools: ['SolidWorks', 'Fusion 360', 'Blender', 'ANSYS FEA', '3D Printing (FDM)', 'Cura', 'PrusaSlicer'],
     model3d: {
       type: 'sketchfab',
       url: 'https://sketchfab.com/models/fd99e5beff4b4b15a7503bdb507d2df2/embed?autospin=1&autostart=1',
@@ -42,89 +50,110 @@ export const defaultProjects: Project[] = [
     },
     subProjects: [
       {
-        id: 'agricultural-rover',
-        title: '1. Autonomous Agricultural Based Rover (Rower)',
-        shortDescription: 'Custom rover chassis and drivetrain engineered for K.I.T.E. College students for agricultural payload pulling and hill climb incline tasks.',
-        description: `Collaborated with engineering students from **K.I.T.E. Engineering College** to design and calculate a specialized agricultural rover.
-The team required a dedicated chassis capable of pulling high drawbar payload loads across irregular soil conditions and negotiating steep field inclines.`,
-        model3d: {
-          title: 'Agricultural Rover Full Assembly',
-          url: 'https://sketchfab.com/models/fd99e5beff4b4b15a7503bdb507d2df2/embed?autospin=1&autostart=1',
-          type: 'sketchfab',
-        },
-        models3d: [
-          {
-            title: 'Agricultural Rover Full Assembly',
-            url: 'https://sketchfab.com/models/fd99e5beff4b4b15a7503bdb507d2df2/embed?autospin=1&autostart=1',
-            type: 'sketchfab',
-          },
-          {
-            title: 'Agricultural Rover Chassis',
-            url: 'https://sketchfab.com/models/f9d694f2260c42a490f925d8bae35d0e/embed?autospin=1&autostart=1',
-            type: 'sketchfab',
-          },
-        ],
-        videoUrl: 'https://www.youtube.com/embed/2D0GofY40FA',
-        galleryImages: [
-          '/static/rower/3dModel.jpeg',
-          '/static/rower/IMG_20241119_221533.jpg',
-          '/static/rower/car_3d.gif',
-        ],
-        specs: [
-          { label: 'Application', value: 'Agricultural Towing & Field Inspection' },
-          { label: 'CAD Software', value: 'SolidWorks Parametric Assembly' },
-          { label: 'Engineering Calculations', value: 'Drawbar Pull, Incline Gradeability & FEA' },
-          { label: '3D Models Included', value: 'Full Rover Assembly & Bare Chassis' },
-        ],
-      },
-      {
         id: 'smart-watch',
-        title: '2. Smart Health Tracking Watch (ESP32-S3 Wearable)',
-        shortDescription: 'Wearable smart health tracking watch enclosure with snap-fit joints housing ESP32-S3, MAX30102, and MPU6050 sensors.',
-        description: `Currently developing a wearable smart health tracking watch utilizing the **ESP32-S3**. Features MAX30102 heart rate / SpO2 sensor, MPU6050 accelerometer, TP4056 rechargeable battery circuit, and snap-fit PLA+ enclosure.`,
+        title: '1. Smart Health Tracking Watch (Ongoing Project)',
+        shortDescription: 'Wearable smart health tracking watch using ESP32-S3, MAX30102, and MPU6050 with custom 3D-printed enclosure and mobile app.',
+        description: `Currently developing a smart health tracking watch – hardware completed, working on coding and custom mobile app.
+
+This project involves building a wearable smart health tracking watch using the ESP32-S3. The design and hardware connections have been completed, integrating sensors like the MAX30102 (heart rate & SpO₂), MPU6050 (motion/activity), rechargeable battery with TP4056 charging module, and a haptic vibration motor. At present, I am working on the embedded coding and development of a customized mobile application for real-time data monitoring and user interaction. This project demonstrates my skills in hardware design, sensor integration, circuit optimization, and IoT-based health technology development.`,
         model3d: {
           title: 'Smart Health Watch CAD (watch_2)',
           url: 'https://sketchfab.com/models/462b5d8ede60480c998d240b1384288c/embed?autostart=1',
           type: 'sketchfab',
         },
-        videoUrl: 'https://www.youtube.com/embed/O3_xjl86TO4',
+        videoUrl: 'https://www.youtube.com/embed/O3_xjl86TO4?si=ESJH7kZUwNokYcdp',
         galleryImages: [
-          '/static/watch/watch.jpeg',
-          '/static/watch/watch.png',
-          '/static/watch/watch_explore.jpeg',
+          '/static/watch.jpeg',
+          '/static/watch.png',
+          '/static/watch_explore.jpeg',
           '/static/GPT.jpg',
         ],
+        heroImage: '/static/watch.jpeg',
+        tools: ['ESP32-S3', 'Fusion 360', 'MAX30102', 'MPU6050', '3D Printing (PLA)', 'Embedded C', 'Mobile App'],
         specs: [
           { label: 'Processor', value: 'ESP32-S3 Mini Module' },
-          { label: 'Sensors Integrated', value: 'MAX30102 (SpO2/HR) & MPU6050' },
-          { label: 'Power Architecture', value: 'TP4056 USB-C Rechargeable' },
-          { label: 'Manufacturing', value: '3D Printed PLA+ Snap-Fit Joint Enclosure' },
+          { label: 'Sensors Integrated', value: 'MAX30102 (Heart Rate & SpO₂) and MPU6050 (Motion)' },
+          { label: 'Power Architecture', value: 'Rechargeable Battery with TP4056 Module' },
+          { label: 'Haptic Feedback', value: 'Miniature Vibration Motor' },
+          { label: 'Enclosure Material', value: 'Precision 3D-Printed PLA Snap-Fit Enclosure' },
+          { label: 'Application', value: 'Real-time IoT Health Telemetry & Mobile App' },
+        ],
+      },
+      {
+        id: 'agricultural-rover',
+        title: '2. Agricultural Based Rover',
+        shortDescription: 'Specialized agricultural rover (rower) designed with mechanical engineering calculations for high drawbar payload pulling and steep incline climbing.',
+        description: `I had the opportunity to work with students from K.I.T.E. Engineering College on an interesting project. They needed a special type of agricultural tool called a rower, which is used for various tasks in farming. The students came to me with specific ideas and needs for this rower. They told me exactly how big it should be (its length and width), how much weight it needed to be able to pull, and even the steepest hills it should be able to climb.
+
+My job was to take all of these requirements and design a rower that could do everything they needed. To do this, I used my knowledge of mechanical engineering and performed several calculations. These calculations helped me figure out the best materials to use, the right sizes for different parts, and how to make sure the rower would be strong enough to handle the loads and climb the inclines.
+
+The goal of my design was to create a rower that was not only functional but also easy to build. By using mechanical calculations, I could ensure that the design would meet all the students' requirements and be safe and efficient for agricultural work. This project involved understanding the students' needs, applying engineering principles, and creating a design that could potentially be manufactured into a real working tool.`,
+        model3d: {
+          title: 'Agricultural Rover Assembly (Rower)',
+          url: 'https://sketchfab.com/models/fd99e5beff4b4b15a7503bdb507d2df2/embed?autospin=1&autostart=1',
+          type: 'sketchfab',
+        },
+        models3d: [
+          {
+            title: 'Agricultural Rover Assembly (Rower)',
+            url: 'https://sketchfab.com/models/fd99e5beff4b4b15a7503bdb507d2df2/embed?autospin=1&autostart=1',
+            type: 'sketchfab',
+          },
+          {
+            title: 'Agricultural Rover Chassis (rower chase)',
+            url: 'https://sketchfab.com/models/f9d694f2260c42a490f925d8bae35d0e/embed?autospin=1&autostart=1',
+            type: 'sketchfab',
+          },
+        ],
+        videoUrl: 'https://www.youtube.com/embed/2D0GofY40FA?si=uu_nDLT5aZ1KM-MI',
+        galleryImages: [
+          '/static/3dModel.jpeg',
+          '/static/rower/IMG_20241119_221533.jpg',
+          '/static/rower/car_3d.gif',
+        ],
+        heroImage: '/static/3dModel.jpeg',
+        tools: ['SolidWorks', 'Mechanical Calculations', 'Gradeability Analysis', 'Chassis Design'],
+        specs: [
+          { label: 'Client / Collaboration', value: 'K.I.T.E. Engineering College Students' },
+          { label: 'Application', value: 'Agricultural Towing & Field Inspection Tool' },
+          { label: 'CAD Software', value: 'SolidWorks Parametric Assembly' },
+          { label: 'Engineering Calculations', value: 'Drawbar Pull, Incline Gradeability & FEA' },
+          { label: 'Interactive 3D Models', value: 'Full Assembly & Bare Chassis on Sketchfab' },
         ],
       },
       {
         id: '3-jaw-chuck',
         title: '3. Lathe 3-Jaw Chuck for Laser Engraving Machine',
-        shortDescription: 'Custom 3D-printed 3-jaw self-centering chuck enabling cylindrical ring engraving on a CNC laser engraver, saving ₹2,000–₹3,000 in tooling costs.',
-        description: `Engineered an upgrade for a CNC laser engraving machine to engrave names and logos onto cylindrical finger rings using a custom scroll-plate 3-jaw chuck designed in Fusion 360.`,
-        videoUrl: 'https://www.youtube.com/embed/S4zS77OUl8o',
+        shortDescription: 'Custom 3D-printed 3-jaw self-centering chuck designed in Fusion 360 enabling cylindrical ring engraving on a CNC laser engraver, saving ₹2,000–₹3,000 in tooling costs.',
+        description: `The objective of this project was to upgrade my laser engraving machine to enable it to print logos and names on rings. This required a rotating bed to hold the ring securely and rotate it precisely along the X-axis during the engraving process.
+
+Commercially available small chucks suitable for this purpose were priced between ₹2,000 to ₹3,000, which I found to be expensive. To overcome this, I designed and 3D printed my own 3-jaw chuck.
+
+The design was created using Fusion 360, keeping in mind the dimensions required to hold various ring sizes and the mounting mechanism for the laser engraver. The chuck was printed using PLA for its rigidity and ease of printing. After printing, the chuck was tested for its holding capability and rotational accuracy, successfully enabling ring engraving.`,
+        videoUrl: 'https://www.youtube.com/embed/S4zS77OUl8o?si=yeXtsQV6hzcDlwuY',
         galleryImages: [
           '/static/3d_printing/IMG_3563.JPG',
           '/static/3d_printing/IMG_3625.JPG',
         ],
+        heroImage: '/static/3d_printing/IMG_3563.JPG',
+        tools: ['Fusion 360', '3D Printing (PLA)', 'Rotary Axis Kinematics', 'Laser Engraver Upgrades'],
         specs: [
-          { label: 'Commercial Savings', value: 'Saved ₹2,000 – ₹3,000 in hardware tooling' },
+          { label: 'Commercial Savings', value: 'Saved ₹2,000 – ₹3,000 compared to commercial chucks' },
           { label: 'Mechanism Type', value: 'Scroll Plate 3-Jaw Self-Centering Chuck' },
           { label: 'Print Material', value: 'High Infill Rigid PLA' },
-          { label: 'Application', value: 'Rotary Axis Cylindrical Ring Engraving' },
+          { label: 'Application', value: 'Cylindrical Ring and Curved Object Engraving' },
+          { label: 'CAD Tool', value: 'Autodesk Fusion 360' },
         ],
       },
       {
         id: 'rotating-display-bed',
-        title: '4. Rotating Bed for Model Display & Video Capture',
+        title: '4. Rotating Bed for Model Display',
         shortDescription: 'Concentric 360-degree rotating turntable bed designed in Fusion 360 for dynamic CAD model inspection and video recording.',
-        description: `Created a smooth concentric 360-degree rotating display bed to present 3D CAD prototypes dynamically during high-resolution video recordings.`,
+        description: `This project was driven by the need to showcase the 3D models I have designed in a more dynamic way, specifically while recording videos. I wanted a simple yet effective rotating platform that could smoothly turn the models, providing a 360-degree view for better presentation.
+
+I designed a rotating bed with a circular platform using Fusion 360. The design focused on simplicity and ease of printing. It consists of a base and a rotating top, possibly with provisions for a small motor in future iterations for automated rotation. Printed using PLA, this rotating bed has proven useful in creating engaging videos of my 3D printed creations.`,
         model3d: {
-          title: '3D Printed Rotating Display Bed',
+          title: '3D Printed Rotating Display Bed (rotating box)',
           url: 'https://sketchfab.com/models/f9a45683183e4bc3a382eedf9c332771/embed?autospin=1&autostart=1',
           type: 'sketchfab',
         },
@@ -133,25 +162,32 @@ The team required a dedicated chassis capable of pulling high drawbar payload lo
           '/static/3d_printing/IMG_3564.JPG',
           '/static/3d_printing/IMG_3626.JPG',
         ],
+        heroImage: '/static/3d_printing/IMG_3564.JPG',
+        tools: ['Fusion 360', '3D Printing (PLA)', 'Mechanism Design', 'Video Showcase'],
         specs: [
-          { label: 'Rotation Span', value: '360° Continuous Smooth Rotation' },
+          { label: 'Rotation Span', value: '360° Continuous Smooth Dynamic Rotation' },
           { label: 'CAD Tool', value: 'Autodesk Fusion 360' },
-          { label: 'Function', value: 'Cinematic Hardware Review & Presentation' },
+          { label: 'Material', value: 'PLA 3D-Printed Bed' },
+          { label: 'Function', value: 'Cinematic Hardware Review & 360° Presentation' },
         ],
       },
       {
         id: 'cnc-z-axis',
-        title: '5. CNC Laser Engraver Z-Axis Upgrade for Wood Carving',
-        shortDescription: 'Rigid Z-axis gantry carriage upgrade designed in Fusion 360 accommodating a high-RPM spindle motor for 1mm per pass depth milling.',
-        description: `Upgraded the functionality of a 2-axis desktop CNC laser machine to perform precision wood carving and milling with a controlled depth of 1mm per pass in hardwoods and soft aluminum.`,
+        title: '5. Upgrading CNC Laser Engraver Z-Axis for Wood Carving',
+        shortDescription: 'Rigid Z-axis assembly designed in Fusion 360 to expand desktop CNC laser engraver for wood carving and milling with 1mm depth per pass.',
+        description: `My goal with this project was to expand the functionality of my existing CNC laser engraver to include wood carving and milling capabilities, specifically targeting the ability to engrave wood and aluminum with a controlled depth of 1mm per pass.
+
+To achieve this, the primary requirement was an upgrade to the Z-axis of the machine. I designed a new Z-axis assembly using Fusion 360 that could accommodate a spindle motor suitable for milling. The design focused on rigidity and precision to ensure accurate and consistent cutting depth.
+
+Considerations included the mounting mechanism for the spindle, the travel distance of the Z-axis, and the overall stability of the machine. The planned implementation involves using a spindle motor and appropriate end mills to achieve the desired 1mm depth per pass in wood and aluminum.`,
         model3d: {
-          title: 'CNC Z-Axis Upgrade Assembly',
+          title: 'CNC Z-Axis Upgrade Assembly (cnc)',
           url: 'https://sketchfab.com/models/ce1bf2b9e3c340c9a85c28e2003a8a75/embed?autospin=1&autostart=1',
           type: 'sketchfab',
         },
         videoUrl: 'https://youtube.com/embed/zGyGgTdxowI',
         galleryImages: [
-          '/static/leaser_cnc/laser.png',
+          '/static/laser.png',
           '/static/leaser_cnc/IMG_3565.JPG',
           '/static/leaser_cnc/IMG_3566.JPG',
           '/static/leaser_cnc/IMG_3582.JPG',
@@ -163,14 +199,18 @@ The team required a dedicated chassis capable of pulling high drawbar payload lo
           { label: 'Milling Depth', value: '1 mm per pass controlled depth' },
           { label: 'Lead Screw', value: 'T8 Pitch 2mm Lead 8mm' },
           { label: 'Guide System', value: 'Dual 8mm Hardened Chrome Rods' },
-          { label: 'Compatibility', value: 'Laser Module & 775 DC Spindle Motor' },
+          { label: 'Compatibility', value: 'Laser Module & Spindle Motor' },
         ],
       },
       {
         id: 'custom-stepper-motors',
-        title: '6. Custom Stepper Motor Housings (3 Variations)',
-        shortDescription: 'Suite of custom 3D CAD stepper motor models including Stepper Motor v7, Cylindrical v1, and NEMA 21.',
-        description: `Modeled and verified 3 bespoke **stepper motor actuator enclosures and motor geometry assemblies** in SolidWorks and Fusion 360 for robotic manipulator joints.`,
+        title: '6. Custom Stepper Motors for 6-Axis Robotic Arm',
+        shortDescription: 'Custom stepper motor housings modeled in SolidWorks to ensure precise mounting alignment for robotic arm joints, featuring 3 interactive 3D models.',
+        description: `As part of a larger project to design a 6-axis robotic arm, I encountered a challenge related to the fitting of stepper motors at specific joints. The available off-the-shelf stepper motors did not perfectly match the dimensional requirements of the robotic arm design, particularly the alignment of the mounting holes for nuts and bolts.
+
+To address this, I decided to design custom stepper motor housings using SolidWorks. The design process involved carefully measuring the required dimensions and ensuring that the mounting holes would precisely align with the corresponding points on the robotic arm structure.
+
+While the internal components of the stepper motors would likely be standard, the custom-designed housings would guarantee a perfect fit, which is crucial for the structural integrity and functionality of the robotic arm. This project highlights the ability of 3D printing to create custom mechanical components tailored to specific design needs.`,
         model3d: {
           title: 'Stepper Motor v7 (Robotic Joint)',
           url: 'https://sketchfab.com/models/099d6834458b4f1487ff29ad16225d22/embed?autospin=1&autostart=1',
@@ -178,7 +218,7 @@ The team required a dedicated chassis capable of pulling high drawbar payload lo
         },
         models3d: [
           {
-            title: 'Stepper Motor v7 (Robotic Joint)',
+            title: 'Stepper Motor v7',
             url: 'https://sketchfab.com/models/099d6834458b4f1487ff29ad16225d22/embed?autospin=1&autostart=1',
             type: 'sketchfab',
           },
@@ -193,6 +233,7 @@ The team required a dedicated chassis capable of pulling high drawbar payload lo
             type: 'sketchfab',
           },
         ],
+        videoUrl: 'https://youtube.com/embed/3BYo8GMtsGc',
         galleryImages: [
           '/static/3d_printing/IMG_3625.JPG',
           '/static/3d_printing/IMG_3626.JPG',
@@ -277,30 +318,59 @@ The successful design and analysis of the Gearbox Mount were pivotal in ensuring
     id: 'cnc-laser-cutter',
     slug: 'cnc-laser-cutter',
     title: 'Wood Laser Engraving Machine (Arduino CNC Laser Cutter)',
-    shortDescription: 'Custom-built CNC laser engraving and cutting machine using Arduino Uno, GRBL firmware, NEMA17 steppers, and salvaged TVS matrix printer linear axes with 23×30 cm work area.',
-    fullDescription: `### Wood Laser Engraving Machine & Arduino CNC Laser Cutter
+    shortDescription: 'Built during college to engrave logos and vector images on wood and cardboard and cut 2–3 mm softwood with precision using salvaged TVS printer axes and Arduino Uno.',
+    fullDescription: `### Project Overview
+**Project Name:** Wood Laser Engraving Machine
+I built this machine during my college days to support my basic needs. It is capable of engraving logos and vector images on wood and cardboard, and can cut through 2–3 mm softwood with precision.
 
-Built an affordable desktop CNC laser engraving machine during college to cut costs and support practical needs. It is capable of engraving intricate logos and vector images on wood and cardboard, and cleanly cutting through 2–3 mm softwood with high precision.
+### Hardware Components:
+- **Laser Module**: 0.5W Blue Laser, 210mA, ~445–450 nm
+- **Stepper Motors**: NEMA17 high torque
+- **Motor Drivers**: TB6600 microstepping drivers
+- **Controller**: Arduino Uno
+- **Mechanical Frame**: TVS Matrix Printer Axes
+- **Drive System**: Belt Drive
+- **Working Speed**: 5 cm/second
+- **Work Area**: 23 × 30 cm
+- **Bed Material**: Wood
+- **Calibration Tools**: Spirit Level, Caliper
 
-#### Hardware & Mechanical Design:
-- **Linear Axes Salvaged from TVS Matrix Printers**: Repurposed precision linear axes from old TVS matrix printers, saving ₹5000–₹6000 per axis while maintaining smooth linear guidance.
-- **Wooden Bed Calibration**: The wooden bed was leveled using a precision spirit level and calibrated with vernier calipers for accurate focal depth.
-- **Drive System**: Timing belt drive system with NEMA17 stepper motors driven by TB6600 microstepping drivers for smooth, repeatable motion at 5 cm/second.
-- **Laser Optics**: 0.5W 445–450 nm Blue Laser Module (210mA) with adjustable focal lens.
+### Software Used:
+- **Firmware**: OpenBuilds GRBL (for Arduino Uno)
+- **Control Software**: OpenBuilds Control
+- **Design to G-code**: Inkscape (with G-code extension)
 
-#### Software & Control Workflow:
-1. **Design to Vector**: Created artwork, logos, and vector paths in **Inkscape**.
-2. **G-Code Generation**: Converted vector paths to machine G-code using Inkscape's G-code extension.
-3. **Machine Control**: Loaded G-code into **OpenBuilds Control** over USB.
-4. **Firmware Execution**: **Arduino Uno** running **OpenBuilds GRBL** firmware interprets coordinate moves and controls laser PWM.
+### Mechanical Design:
+The axes were salvaged from old TVS Matrix Printers, helping us save ₹5000–₹6000 per axis. The wooden bed was precisely leveled using a spirit level and calibrated with a caliper. A belt drive system ensures smooth motion.
 
-#### Real-World Research & Business Value:
-Conducted local market research before starting the build. While local commercial shops charged ₹2,500–₹3,000 for a 10×15 cm engraving, we offered the exact same quality for ₹1,500 with student discounts (₹800–₹1,000), successfully generating income while mastering mechatronics.
+### Working Principle:
+- **1. Vector Design**: Create logo/vector in Inkscape.
+- **2. G-Code Generation**: Convert it to G-code using Inkscape’s plugin.
+- **3. Controller Stream**: Load G-code into OpenBuilds Control.
+- **4. GRBL Interpretation**: Arduino Uno interprets G-code via GRBL firmware.
+- **5. Precision Execution**: Laser engraves or cuts as instructed.
 
-#### Performance & Results:
-- Clean cuts through 2–3 mm softwood.
-- Sharp high-contrast logo engraving on hardwoods, plywood, and cardboard.
-- Fine-tuned laser feedrate and PWM power levels for distortion-free engraving.`,
+### Performance & Results:
+- Successfully engraved on wood and cardboard.
+- Cut 2–3 mm softwood cleanly.
+- Laser power and speed had to be tuned for best results.
+
+### Real-World Research & Business Idea:
+I conducted local market research before starting this project. While shopkeepers charged ₹2500–₹3000 for a 10×15 cm engraving, we offered the same for ₹1500, with student discounts (₹800–₹1000). This helped us earn while learning.
+
+### Challenges Faced:
+- Axis alignment and calibration on a wooden base.
+- Laser power limitation required a lot of testing.
+- Budget constraints solved using repurposed printer parts.
+
+### Future Improvements:
+- Upgrade to 2.5W or 5W laser for deeper cuts.
+- Add cooling or air assist system.
+- Include protective casing and emergency stop.
+- Implement auto-homing and limit switches.
+
+### Conclusion:
+This project helped me build hands-on engineering and entrepreneurship skills. I successfully designed a low-cost laser engraving machine that delivered practical value while staying within a student budget.`,
     category: 'Engineering Projects',
     heroImage: '/static/laser.png',
     galleryImages: [
@@ -309,17 +379,19 @@ Conducted local market research before starting the build. While local commercia
       '/static/leaser_cnc/IMG_3566.JPG',
       '/static/leaser_cnc/IMG_3582.JPG',
     ],
-    videoUrl: 'https://www.youtube.com/embed/feYczSyh0Ps',
-    tools: ['Arduino Uno', 'GRBL Firmware', 'OpenBuilds Control', 'Inkscape (G-Code)', 'TB6600 Drivers', 'NEMA17 Steppers'],
+    videoUrl: 'https://youtube.com/embed/feYczSyh0Ps',
+    tools: ['Arduino Uno', 'GRBL Firmware', 'OpenBuilds Control', 'Inkscape (with G-code extension)', 'TB6600 Drivers', 'NEMA17 Stepper Motors', 'Belt Drive'],
     specs: [
-      { label: 'Laser Module', value: '0.5W Blue Laser (445–450 nm, 210mA)' },
-      { label: 'Stepper Motors', value: 'NEMA17 High Torque' },
-      { label: 'Motor Drivers', value: 'TB6600 Microstepping' },
-      { label: 'Controller Board', value: 'Arduino Uno running GRBL' },
+      { label: 'Laser Module', value: '0.5W Blue Laser, 210mA, ~445–450 nm' },
+      { label: 'Stepper Motors', value: 'NEMA17' },
+      { label: 'Motor Drivers', value: 'TB6600' },
+      { label: 'Controller', value: 'Arduino Uno' },
+      { label: 'Mechanical Frame', value: 'TVS Matrix Printer Axes' },
+      { label: 'Drive System', value: 'Belt Drive' },
+      { label: 'Working Speed', value: '5 cm/second' },
       { label: 'Work Area', value: '23 × 30 cm' },
-      { label: 'Working Speed', value: '5 cm / second' },
-      { label: 'Frame & Motion', value: 'TVS Matrix Linear Axes + Belt Drive' },
-      { label: 'Cutting Capacity', value: '2–3 mm Softwood / Cardboard' },
+      { label: 'Bed Material', value: 'Wood' },
+      { label: 'Calibration Tools', value: 'Spirit Level, Caliper' },
     ],
     featured: true,
     date: '2023',
@@ -329,36 +401,39 @@ Conducted local market research before starting the build. While local commercia
     id: 'bom-automation',
     slug: 'bom-automation',
     title: 'Automating Project Tracking with Google Sheets using Python',
-    shortDescription: 'Automated master Bill of Materials (BOM) tracker in Python monitoring 3000+ client part numbers across local directory trees, automatically syncing creation status, file paths, and dates to Google Sheets via API.',
-    fullDescription: `### Automating Project Tracking with Google Sheets using Python
+    shortDescription: 'Automating tracking of 3,000+ part numbers from a client Master BOM by developing a Python script that verifies local .SLDASM and .STEP files and updates Google Sheets in real-time.',
+    fullDescription: `### Project Overview
+This project was built to solve a major issue in tracking the creation status of more than 3000 part numbers listed in a client-provided Master BOM. The parts were being created and saved locally as SolidWorks assembly or STEP files, but there was no clear way to track which ones were completed. To automate and simplify this, I developed a script in Python that checks the local system for assembly files and updates a Google Sheet accordingly. The script verifies each part number listed in Column A and updates Column B with "Created" or "Not Created". It also fills in the file path, file type (SLDASM or STEP), and the date it was found.
 
-Built to solve a critical engineering tracking bottleneck in monitoring the creation status of **more than 3,000 part numbers** listed in a client-provided Master BOM.
+### Key Contributions & Tasks:
+- **Gap Identification**: Identified a gap in tracking part creation from the Master BOM provided by the client.
+- **Local Folder Scanner**: Developed a Python script that scans local folders for .SLDASM and .STEP files.
+- **BOM Verification**: Matched these files with the part numbers listed in Google Sheets (Column A).
+- **Automated Updates**: Automatically updated the Google Sheet with part status ("Created"/"Not Created"), file path, file type, and creation date.
+- **Google Sheets API**: Used Google Sheets API to authenticate and push updates from the script to the spreadsheet.
+- **Runtime Flexibility**: Made the tool user-friendly by prompting for the source path at runtime.
 
-Parts were being designed and saved locally as SolidWorks assembly (\`.SLDASM\`) or neutral CAD (\`.STEP\`) files across dozens of subdirectories, making manual progress tracking error-prone and labor-intensive.
+### Technologies Used:
+- **Python**: Core script logic and directory scanning.
+- **Google Sheets API**: Cloud authentication and spreadsheet synchronization.
+- **Google Apps Script**: Extended sheet formatting and workflow integration.
 
-#### Architecture & Automated Workflow:
-- **Local File System Scanner**: Developed a robust Python script that recursively traverses local directory trees to identify newly modeled \`.SLDASM\` and \`.STEP\` files.
-- **BOM Cross-Verification**: The script reads the part numbers from Column A of a cloud-hosted Google Sheet Master BOM and checks if corresponding assembly or part files have been generated.
-- **Google Sheets API v4 Sync**: Directly updates Column B with real-time status ("Created" / "Not Created"), records exact local file paths, detects the file format, and stamps the discovery timestamp.
-- **Interactive Command Prompt**: Designed an interactive runtime prompt allowing project managers to input any target source path or project directory dynamically.
-
-#### Engineering Impact:
-- **Zero Manual Overhead**: Eliminated manual verification across 3,000+ part numbers, saving dozens of engineering hours each week.
-- **Instant Client Visibility**: Provided engineering management and clients with real-time progress transparency via the synchronized Google Spreadsheet.
-- **High Reliability**: Implemented robust exception handling for network retries and automated OAuth token refreshment.`,
+### Challenges & Solutions:
+One of the main challenges was that there was no direct way to monitor the progress of part creation from a long list of part numbers. We were dealing with a large number of files stored in multiple folders. I solved this by automating the process with Python and integrating it with Google Sheets, allowing real-time updates and reducing manual tracking effort. Ensuring correct authentication and file type detection (SLDASM vs STEP) was another technical hurdle, which was handled with proper logic and testing.`,
     category: 'Engineering Projects',
     heroImage: '/static/bom.png',
     galleryImages: [
       '/static/bom.png',
     ],
     videoUrl: 'https://www.youtube.com/embed/zRhuhkMxTAc?si=9mRyQHGl9457Ruwi',
-    tools: ['Python', 'Google Sheets API', 'Google Apps Script', 'SolidWorks BOM', 'Data Automation', 'File System API'],
+    tools: ['Python', 'Google Sheets API', 'Google Apps Script'],
     specs: [
       { label: 'Part Tracking Volume', value: '3,000+ Master BOM Parts' },
-      { label: 'Formats Monitored', value: 'SolidWorks (.SLDASM) & STEP (.STEP)' },
-      { label: 'Integration', value: 'Google Sheets API v4 / OAuth 2.0' },
-      { label: 'Output Columns', value: 'Status, File Path, Extension, Date Found' },
-      { label: 'Scanning Speed', value: 'Automated background scans in seconds' },
+      { label: 'File Formats Monitored', value: '.SLDASM (SolidWorks) and .STEP' },
+      { label: 'Google Sheet Column A', value: 'Part Number from Client Master BOM' },
+      { label: 'Google Sheet Column B', value: 'Status ("Created" / "Not Created")' },
+      { label: 'Metadata Extracted', value: 'File Path, File Type, Discovery Date' },
+      { label: 'Authentication', value: 'Google Sheets API OAuth Credentials' },
     ],
     featured: true,
     date: '2024',
@@ -368,31 +443,41 @@ Parts were being designed and saved locally as SolidWorks assembly (\`.SLDASM\`)
     id: '6-axis-robotic-arm',
     slug: '6-axis-robotic-arm',
     title: '6-Axis Robotic Arm Development',
-    shortDescription: 'Modular 6-DOF robotic manipulator modeled in Fusion 360, fabricated with 3D-printed PLA, stepper motors, TB6600 drivers, encoder feedback, and ANSYS structural simulation.',
-    fullDescription: `### 6-Axis Robotic Arm Development
+    shortDescription: 'Modular 6-axis robotic arm modeled in Fusion 360 with 3D-printed PLA structure, C firmware, stepper motors, TB6600 drivers, encoder feedback, and ANSYS structural simulation.',
+    fullDescription: `### Project Overview
+This ongoing project involves the development of a 6-axis robotic arm with the goal of enhancing my engineering skills across various domains including mechanical design, microcontrollers, feedback systems, and structural analysis. The robotic arm is being modeled in Fusion 360 with a complete 3D-printed structure using PLA material, making it lightweight and modular. I am designing and analyzing linkages, joints, and actuators, while also focusing on structural integrity using ANSYS for static and dynamic load analysis. The control system is based on microcontrollers and stepper motors, with firmware written in C. I'm integrating sensors (like encoders and limit switches) for real-time feedback. The long-term vision includes precise pick-and-place operations, automation tasks, and educational demonstrations.
 
-An advanced robotics and mechatronics project developing a modular **6-axis articulated robotic arm** to integrate mechanical CAD design, embedded microcontrollers, closed-loop sensor feedback, and structural FEA analysis.
+### Key Contributions & Tasks:
+- **CAD Kinematics & Modularity**: Currently designing the robotic arm structure and linkages in Fusion 360 with a focus on joint flexibility, modularity, and 3D-printing feasibility.
+- **Actuators & Electronics**: Selected appropriate stepper motors, microcontrollers, and TB6600 motor drivers for optimal torque and precision.
+- **Control Logic & Firmware**: Developed control logic and motion planning algorithms using the C programming language.
+- **Sensors & Feedback**: Integrated various sensors for feedback including rotary encoders, end-stop switches, and limit sensors.
+- **ANSYS Structural Analysis**: Utilized ANSYS for structural analysis — evaluating stresses, strains, and deformation under different loading conditions to optimize design.
+- **Additive Manufacturing**: Fabricated parts using 3D printing (PLA), ensuring accurate tolerance for smooth movement and alignment.
+- **Prototyping & Testing**: Planning the prototype and testing phase for individual axes before assembling the full robotic system.
 
-#### Key Engineering Contributions & Subsystems:
-- **Structural Design & Modularity**: Modeled the entire 6-DOF arm structure and articulated linkages in **Autodesk Fusion 360** with a focus on joint flexibility, weight distribution, and 3D printing feasibility.
-- **3D Printed Fabrication (PLA)**: Fabricated lightweight, high-rigidity structural segments using FDM 3D printing in PLA, maintaining close dimensional tolerances for bearing presses and pivot alignment.
-- **Actuators & Drive Electronics**: Selected high-torque NEMA stepper motors paired with TB6600 microstepping drivers to supply necessary holding torque and smooth angular velocity per joint.
-- **Firmware & Motion Control**: Programmed coordinate translation and motion planning algorithms in **C** for microcontroller execution.
-- **Sensor Feedback Integration**: Integrated rotary encoders, end-stop microswitches, and limit sensors for homing routines and real-time positional verification.
-- **ANSYS Structural FEA**: Evaluated von Mises stress concentrations, joint deflection, and strain under dynamic payload configurations in ANSYS to reinforce critical load-bearing linkages.`,
+### Technologies Used:
+- **Fusion 360**: 3D CAD modeling of linkages, joints, and motor mounts.
+- **C Programming**: Low-level motion control algorithms and kinematics.
+- **Arduino / Microcontroller**: Master microcontroller orchestrating motor step and direction signals.
+- **Step Motor Control**: High-torque stepper motors driven by TB6600 drivers.
+- **3D Printing (PLA)**: Lightweight modular structural segments.
+- **ANSYS Structural Analysis**: Static and dynamic stress and deflection simulations.
+- **Sensors & Feedback**: Real-time rotary encoders and homing limit switches.`,
     category: 'Engineering Projects',
     heroImage: '/static/arm.jpg',
     galleryImages: [
       '/static/arm.jpg',
     ],
-    tools: ['Fusion 360', 'C Programming', 'Arduino / Microcontroller', 'Stepper Motor Control', '3D Printing (PLA)', 'ANSYS FEA', 'Sensors & Feedback'],
+    tools: ['Fusion 360', 'C Programming', 'Arduino / Microcontroller', 'Step Motor Control', '3D Printing (PLA)', 'ANSYS Structural Analysis', 'Sensors & Feedback'],
     specs: [
-      { label: 'Kinematics', value: '6 Degrees of Freedom (6-DOF)' },
-      { label: 'Structural Material', value: '3D-Printed PLA Structure' },
-      { label: 'Actuators', value: 'High-Torque Stepper Motors' },
-      { label: 'Motor Drivers', value: 'TB6600 Microstepping' },
-      { label: 'Simulation Software', value: 'ANSYS Static & Dynamic FEA' },
-      { label: 'Feedback Sensors', value: 'Rotary Encoders & End-Stop Switches' },
+      { label: 'Kinematics', value: '6-Axis Articulated Manipulator (6-DOF)' },
+      { label: 'CAD Software', value: 'Autodesk Fusion 360' },
+      { label: 'Structure Material', value: 'Modular 3D-Printed PLA' },
+      { label: 'Actuators', value: 'Stepper Motors with TB6600 Drivers' },
+      { label: 'Firmware Language', value: 'C' },
+      { label: 'FEA Simulation', value: 'ANSYS Structural Analysis' },
+      { label: 'Sensors Integrated', value: 'Rotary Encoders, End-Stop Switches, Limit Sensors' },
     ],
     featured: false,
     date: '2024',
@@ -401,25 +486,31 @@ An advanced robotics and mechatronics project developing a modular **6-axis arti
   {
     id: 'advanced-thread-wizard',
     slug: 'advanced-thread-wizard',
-    title: 'SolidWorks Automation — Thread Wizard Add-in & Configuration Macros',
-    shortDescription: 'Custom SolidWorks Add-in and batch configuration VBA macros engineered with the SolidWorks API in C# / VB.NET / VBA, reducing thread generation and batch configuration workflows by over 75%.',
-    fullDescription: `### SolidWorks Automation — Thread Wizard Add-in & Configuration Macros
+    title: 'SolidWorks Macro Automation',
+    shortDescription: 'Custom SolidWorks macros automating configuration part export for open assemblies and batch directories, paired with advanced Thread Wizard automation.',
+    fullDescription: `### Project Overview
+In this project, we worked with SolidWorks assembly files (\`.SLDASM\`) that contained multiple configurations. SolidWorks Premium already has a built-in feature to export each configuration as a separate part file, but I recreated this functionality using custom macros.
 
-Developed a suite of custom SolidWorks automation tools and macros engineered using the **SolidWorks API** in **C# / VB.NET / VBA** to eliminate repetitive design bottlenecks and accelerate CAD production workflows.
+I wrote two types of macros using the SolidWorks API:
 
-#### 1. Advanced Thread Wizard Add-in:
-- **Massive Time Reduction**: Cut thread generation and specification time from **15–20 minutes** (manual standard lookup, profile sketch, and sweep cut/boss) down to **20–40 seconds**.
-- **Standardized Profile Library**: Integrated international thread profiles compliant with **ISO and ASME** standards:
-  - UN, UNJ, and UNR series (including Fine, Extra-Fine, and Special series)
-  - Parallel and Taper pipe threads (NPT, BSPP, BSPT)
-  - Metric Trapezoidal and ACME threads
-- **Parametric Feature Automation**: Fully automated parametric sketch and helical sweep creation, eliminating manual sketching errors and ensuring exact pitch diameters and dimensional tolerances.
-- **Embedded CAD GUI**: Designed an intuitive WPF user interface directly docked inside SolidWorks for instant profile selection, real-time pitch calculation, and live 3D preview.
+- **1. Macro for Open Assemblies**: When an assembly file is already open in SolidWorks and this macro is executed, it prompts the user for a destination folder. Each configuration in the open assembly is then saved as an individual \`.SLDPRT\` file using the configuration name.
+- **2. Batch Conversion Macro**: This macro is designed to handle multiple files. It asks for a *source folder* (containing the assemblies with configurations) and a *destination folder*. It opens each assembly one by one, extracts the configured parts, and saves them as individual \`.SLDPRT\` files in a newly created folder named after each assembly.
 
-#### 2. Configuration & Batch Assembly Macros:
-- **Macro for Open Assemblies**: Prompts the user for a destination directory and automatically exports every configuration within an open \`.SLDASM\` assembly as an individual, cleanly named \`.SLDPRT\` part file.
-- **High-Volume Batch Conversion Macro**: Traverses a source directory containing 80–100+ configurable assemblies, opens each assembly headless, extracts all configured parts, and saves them into dedicated folders matching each assembly's nomenclature.
-- **Time Savings**: Reduced full-day file preparation tasks from **~8 hours down to 1.5–2 hours**, currently deployed and utilized across the engineering design team.`,
+### Key Contributions & Tasks:
+- **Macro Logic Development**: Developed macro logic to automate the export of configuration parts into \`.SLDPRT\` files.
+- **Live & Batch Scenarios**: Handled both live and batch scenarios with user prompts for file paths and folders.
+- **Naming & Organization**: Ensured naming consistency and organization by creating folders for each assembly.
+- **Optimization**: Optimized the script to handle large assemblies and multiple configurations efficiently.
+- **Thread Wizard Add-in**: In addition to configuration macros, engineered the Advanced Thread Wizard Add-in, reducing thread generation time from 15–20 minutes down to 20–40 seconds across ISO and ASME standards.
+
+### Technologies Used:
+- **SolidWorks API**: Programmatic manipulation of assemblies, components, and configurations.
+- **VBA**: Visual Basic for Applications scripting for built-in macro execution.
+- **ChatGPT (Assistance)**: AI-assisted API research and rapid prototyping.
+- **Automation Scripting**: Batch directory processing and file system handling.
+
+### Challenges & Solutions:
+Handling multiple configurations within assemblies and maintaining organized output required careful scripting. Another challenge was ensuring the macros worked reliably in both open and batch modes. I addressed these using SolidWorks API features for configurations and proper folder management logic, ensuring smooth automation even across complex assemblies.`,
     category: 'Engineering Projects',
     heroImage: '/static/macro.png',
     galleryImages: [
@@ -427,14 +518,14 @@ Developed a suite of custom SolidWorks automation tools and macros engineered us
       '/static/GPT.jpg',
     ],
     videoUrl: 'https://www.youtube.com/embed/bX4SZfrD5_c?si=janjobJoquCv1-Fs',
-    tools: ['SolidWorks API', 'C# / .NET', 'VBA Macros', 'ASME & ISO Standards', 'Automation Scripting'],
+    tools: ['SolidWorks API', 'VBA', 'ChatGPT (Assistance)', 'Automation Scripting'],
     specs: [
-      { label: 'Time Efficiency', value: '15-20 min down to 20-40 sec' },
-      { label: 'Batch Processing', value: '80–100+ assemblies per automated batch' },
-      { label: 'Supported Standards', value: 'ISO Metric, ASME UN/UNJ/UNR, Pipe, Trapezoidal' },
-      { label: 'Integration', value: 'Native SolidWorks Add-in (.dll) & VBA Macros' },
-      { label: 'Development Language', value: 'C#, VB.NET, VBA' },
-      { label: 'Tolerance Control', value: 'Precise Pitch & Root Radii Automation' },
+      { label: 'Macro 1', value: 'Open Assembly Configuration Exporter' },
+      { label: 'Macro 2', value: 'Batch Folder Assembly Exporter' },
+      { label: 'Development API', value: 'SolidWorks API with VBA' },
+      { label: 'Export Format', value: 'Individual .SLDPRT Part Files' },
+      { label: 'Folder Organization', value: 'Auto-generates folders per assembly' },
+      { label: 'Batch Processing', value: '80–100+ assemblies per automated run' },
     ],
     featured: true,
     date: '2024',
@@ -450,7 +541,7 @@ Live Website: [https://fastenersstandards.com](https://fastenersstandards.com)
 
 Developed and deployed **fastenersstandards.com**, a specialized online engineering reference tool created to solve the industry pain-point of fragmented and unreliable thread-standard data available online for CAD designers.
 
-#### Project Milestones & Functionality:
+### Project Milestones & Functionality:
 - **Comprehensive Standard Extraction**: Studied ISO and ASME standards in depth to extract precise thread data for:
   - Unified National (UN, UNC, UNF, UNEF) internal and external threads
   - Metric ISO 68-1 and ISO 965 tolerance classes (4h, 6g, 6H, 7H)

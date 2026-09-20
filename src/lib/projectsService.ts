@@ -3,7 +3,7 @@ import { collection, getDocs, doc, setDoc, deleteDoc } from 'firebase/firestore'
 import { Project, SubProject } from './types';
 import { defaultProjects } from './defaultData';
 
-const LOCAL_STORAGE_KEY = 'raviteja_portfolio_projects_v15';
+const LOCAL_STORAGE_KEY = 'raviteja_portfolio_projects_v16';
 
 // IDs of projects that strictly belong inside the single 3D CAD & Printing card collection
 const SUB_PROJECT_IDS = new Set([
