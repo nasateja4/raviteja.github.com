@@ -7,9 +7,11 @@ import ModelViewer from '@/components/ModelViewer';
 import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, Box, Video, Image as ImageIcon, Calendar, Cpu, Layers } from 'lucide-react';
 
 
-function parseInlineMarkdown(text: string) {
+function parseInlineMarkdown(text: string | undefined | null) {
+  if (!text || typeof text !== 'string') return '';
   const parts = text.split(/(\*\*.*?\*\*|`.*?`)/g);
   return parts.map((part, index) => {
+    if (!part) return null;
     if (part.startsWith('**') && part.endsWith('**')) {
       return (
         <strong key={index} className="font-bold text-slate-950">
@@ -28,8 +30,8 @@ function parseInlineMarkdown(text: string) {
   });
 }
 
-function renderMarkdownContent(content: string) {
-  if (!content) return null;
+function renderMarkdownContent(content: string | undefined | null) {
+  if (!content || typeof content !== 'string') return null;
 
   const rawLines = content.split(/\r?\n/);
   const elements: React.ReactNode[] = [];
