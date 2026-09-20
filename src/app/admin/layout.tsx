@@ -235,12 +235,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
           {/* OWNER AUTHENTICATION MODAL */}
           {showAuthModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-200">
-              <div className="max-w-md w-full bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 relative text-left space-y-5">
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-200 overflow-y-auto">
+              <div className="max-w-md w-full bg-white rounded-3xl p-5 sm:p-7 shadow-2xl border border-slate-200 relative text-left space-y-4 max-h-[92vh] overflow-y-auto my-auto">
                 {/* Close Button */}
                 <button
                   onClick={() => setShowAuthModal(false)}
-                  className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-all"
+                  className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-all z-10"
                   aria-label="Close"
                 >
                   <X className="w-5 h-5" />
