@@ -33,7 +33,7 @@ Developed a custom SolidWorks Add-in engineered using the **SolidWorks API** in 
   - Metric Trapezoidal and ACME threads
 - **Parametric Feature Automation**: Fully automated parametric sketch and helical sweep creation, eliminating manual sketching errors and ensuring exact pitch diameters and dimensional tolerances.
 - **Embedded CAD GUI**: Designed an intuitive WPF/Windows Forms user interface directly docked inside SolidWorks for instant profile selection, real-time pitch calculation, and live 3D preview.`,
-    category: 'Engineering Tools',
+    category: 'Engineering Projects',
     heroImage: '',
     galleryImages: [],
     tools: ['SolidWorks API', 'C# / .NET', 'VB.NET / VBA', 'ASME Standards', 'ISO Standards'],
@@ -66,7 +66,7 @@ Developed and deployed **fastenersstandards.com**, a specialized online engineer
 - **Direct CAD Asset Distribution**: Provided downloadable, verified **SolidWorks part and profile files** so mechanical design engineers can immediately incorporate standard thread geometry into their production models.
 - **Real-World Impact**: Receives **25–30 daily active engineering visitors** across mechanical and aerospace design communities.
 - **Continuous Expansion**: Built using modern web technologies and AI-assisted development tools, regularly updated with fastener specifications, bolt grades, and clearance hole charts.`,
-    category: 'Engineering Tools',
+    category: 'Engineering Projects',
     heroImage: '',
     galleryImages: [],
     tools: ['ASME Standards', 'ISO Standards', 'SolidWorks CAD Data', 'Web Development', 'Engineering Calculation'],
@@ -315,7 +315,7 @@ Designed and built an automated desktop CNC laser engraver and upgraded Z-axis m
 - **Gantry Kinematics**: CoreXY dual-axis belt drive mechanism utilizing V-slot aluminum extrusions.
 - **Z-Axis Upgrade Assembly**: Designed a custom rigid Z-axis gantry in Fusion 360 accommodating a spindle motor for 1mm per pass depth milling in wood and soft materials.
 - **Laser Optics**: Equipped with a 5.5W 450nm optical laser module with PWM duty-cycle intensity control.`,
-    category: 'Robotics & Automation',
+    category: 'Engineering Projects',
     heroImage: '/static/leaser_cnc/laser.png',
     galleryImages: [
       '/static/leaser_cnc/laser.png',
@@ -365,7 +365,7 @@ Designed a 6-Degrees-of-Freedom articulated robotic arm optimized for pick-and-p
 #### Kinematics & Reducers:
 - Modeled link lengths and joint clearances in Fusion 360 and SolidWorks with inverse kinematics calculations simulated in Python.
 - Integrated cycloidal and planetary reduction gearsets to maximize torque output and eliminate joint backlash.`,
-    category: 'Robotics & Automation',
+    category: 'Engineering Projects',
     heroImage: '/static/arm.jpg',
     galleryImages: [
       '/static/arm.jpg',
@@ -419,7 +419,7 @@ Developed custom SolidWorks automation macros (enhanced with ChatGPT prompt engi
 - **High-Volume Batch Processing**: Upgraded pipeline to batch-process **80–100+ assemblies in a single run** from a source directory, auto-saving parts while preserving original nomenclature and metadata.
 - **75%+ Time Savings**: Reduced full-day engineering file preparation tasks that typically took **~8 working hours down to 1.5–2 hours**.
 - **Internal Production Adoption**: Replicated and extended functionality equivalent to SolidWorks Premium tools, currently utilized by the internal engineering design team.`,
-    category: 'Software & Scripting',
+    category: 'Engineering Projects',
     heroImage: '/static/macro.png',
     galleryImages: [
       '/static/macro.png',
@@ -450,7 +450,7 @@ Led an engineering team of **18 engineers** in the mechanical and electrical con
 - **Custom Gearbox Mount**: Designed, simulated, and precision-manufactured a structural adapter and gearbox mount bridging the electric motor shaft to the existing automotive transaxle, fitted and road-tested successfully.
 - **Finite Element Analysis (FEA)**: Conducted static structural and vibrational simulations in **ANSYS** to validate yield strength, safety factors, and fatigue endurance of the motor mounting bracket under peak torque.
 - **3D Modeling & Kinematics**: Utilized **Autodesk Fusion 360** for overall powertrain component layout, clearance verification, and assembly packaging.`,
-    category: 'EV & Automotive',
+    category: 'Engineering Projects',
     heroImage: '/static/EV_vehical/EV_car.JPG',
     galleryImages: [
       '/static/EV_vehical/EV_car.JPG',

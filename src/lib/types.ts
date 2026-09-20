@@ -22,7 +22,7 @@ export interface Project {
   title: string;
   shortDescription: string;
   fullDescription: string;
-  category: '3D CAD & Printing' | 'EV & Automotive' | 'Robotics & Automation' | 'Software & Scripting' | 'Engineering Tools';
+  category: '3D CAD & Printing' | 'Engineering Projects';
   heroImage: string;
   galleryImages: string[];
   tools: string[];

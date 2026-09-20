@@ -31,7 +31,7 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
   const [title, setTitle] = useState(initialData?.title || '');
   const [slug, setSlug] = useState(initialData?.slug || '');
   const [category, setCategory] = useState<Project['category']>(
-    initialData?.category || (projectMode === 'cad' ? '3D CAD & Printing' : 'EV & Automotive')
+    initialData?.category || (projectMode === 'cad' ? '3D CAD & Printing' : 'Engineering Projects')
   );
   const [shortDescription, setShortDescription] = useState(initialData?.shortDescription || '');
   const [fullDescription, setFullDescription] = useState(initialData?.fullDescription || '');
@@ -63,11 +63,7 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
   // Update category when switching mode
   const handleModeChange = (mode: 'cad' | 'engineering') => {
     setProjectMode(mode);
-    if (mode === 'cad') {
-      setCategory('3D CAD & Printing');
-    } else if (category === '3D CAD & Printing') {
-      setCategory('EV & Automotive');
-    }
+    setCategory(mode === 'cad' ? '3D CAD & Printing' : 'Engineering Projects');
   };
 
   const handleTitleChange = (val: string) => {
@@ -246,11 +242,11 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
             <div className="flex items-center gap-2">
               <Cpu className="w-4 h-4 text-slate-700 shrink-0" />
               <span>
-                <strong>Standalone Engineering Project:</strong> Add projects in EV, Robotics, Automation, or Software & Tools.
+                <strong>Engineering Projects:</strong> Unique engineering projects, prototyping, research, EV, robotics, or software tools.
               </span>
             </div>
-            <span className="font-mono font-bold text-[10px] bg-slate-200 px-2 py-0.5 rounded text-slate-700 shrink-0">
-              Engineering Disciplines
+            <span className="font-mono font-bold text-[10px] bg-slate-200 px-2.5 py-1 rounded-full text-slate-700 shrink-0">
+              Category: Engineering Projects
             </span>
           </div>
         )}
@@ -297,68 +293,29 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
             </div>
           </div>
 
-          {/* Row 2: Category (only shown in Engineering mode, as CAD is pre-set!) */}
-          {projectMode === 'engineering' ? (
-            <div className="grid sm:grid-cols-3 gap-4">
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Category *</label>
-                <select
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value as any)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500 focus:bg-white font-medium"
-                >
-                  <option value="EV & Automotive">EV & Automotive</option>
-                  <option value="Robotics & Automation">Robotics & Automation</option>
-                  <option value="Software & Scripting">Software & Scripting</option>
-                  <option value="Engineering Tools">Engineering Tools</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Year / Date</label>
-                <input
-                  type="text"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  placeholder="e.g. 2024"
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500 focus:bg-white"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Display Order</label>
-                <input
-                  type="number"
-                  value={order}
-                  onChange={(e) => setOrder(Number(e.target.value))}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500 focus:bg-white"
-                />
-              </div>
+          {/* Row 2: Year / Date & Display Order */}
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">Year / Date</label>
+              <input
+                type="text"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                placeholder="e.g. 2024"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500 focus:bg-white"
+              />
             </div>
-          ) : (
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Year / Date</label>
-                <input
-                  type="text"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  placeholder="e.g. 2024"
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500 focus:bg-white"
-                />
-              </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Display Order</label>
-                <input
-                  type="number"
-                  value={order}
-                  onChange={(e) => setOrder(Number(e.target.value))}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500 focus:bg-white"
-                />
-              </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">Display Order</label>
+              <input
+                type="number"
+                value={order}
+                onChange={(e) => setOrder(Number(e.target.value))}
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500 focus:bg-white"
+              />
             </div>
-          )}
+          </div>
 
           {/* Short Summary */}
           <div>

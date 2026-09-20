@@ -92,7 +92,7 @@ export default function HomePage() {
     loadData();
   }, []);
 
-  const categories = ['All', 'Engineering Tools', '3D CAD & Printing', 'EV & Automotive', 'Robotics & Automation', 'Software & Scripting'];
+  const categories = ['All', '3D CAD & Printing', 'Engineering Projects'];
 
   const filteredProjects = selectedCategory === 'All'
     ? projects

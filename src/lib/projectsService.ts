@@ -3,25 +3,34 @@ import { collection, getDocs, doc, setDoc, deleteDoc, updateDoc } from 'firebase
 import { Project } from './types';
 import { defaultProjects } from './defaultData';
 
-const LOCAL_STORAGE_KEY = 'raviteja_portfolio_projects_v5';
+const LOCAL_STORAGE_KEY = 'raviteja_portfolio_projects_v6';
+
+function normalizeProject(p: any): Project {
+  const category = p.category === '3D CAD & Printing' ? '3D CAD & Printing' : 'Engineering Projects';
+  return {
+    ...p,
+    category,
+  };
+}
 
 // Helper to get projects from localStorage fallback with auto-sync of default projects
 function getLocalProjects(): Project[] {
-  if (typeof window === 'undefined') return defaultProjects;
+  if (typeof window === 'undefined') return defaultProjects.map(normalizeProject);
   const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
   if (!stored) {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(defaultProjects));
-    return defaultProjects;
+    const initialized = defaultProjects.map(normalizeProject);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(initialized));
+    return initialized;
   }
   try {
-    const parsed: Project[] = JSON.parse(stored);
+    const parsed: Project[] = JSON.parse(stored).map(normalizeProject);
     // Ensure all default projects exist in stored data (merge missing ones)
     let updated = false;
     const merged = [...parsed];
     for (const def of defaultProjects) {
       const existingIndex = merged.findIndex((p) => p.id === def.id || p.slug === def.slug);
       if (existingIndex === -1) {
-        merged.push(def);
+        merged.push(normalizeProject(def));
         updated = true;
       }
     }
@@ -31,13 +40,13 @@ function getLocalProjects(): Project[] {
     }
     return merged;
   } catch (e) {
-    return defaultProjects;
+    return defaultProjects.map(normalizeProject);
   }
 }
 
 function saveLocalProjects(projects: Project[]) {
   if (typeof window !== 'undefined') {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(projects));
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(projects.map(normalizeProject)));
   }
 }
 
@@ -53,7 +62,7 @@ export async function getProjects(): Promise<Project[]> {
       if (!snapshot.empty) {
         const fetched: Project[] = [];
         snapshot.forEach((docSnap) => {
-          fetched.push({ id: docSnap.id, ...docSnap.data() } as Project);
+          fetched.push(normalizeProject({ id: docSnap.id, ...docSnap.data() }));
         });
         fetched.sort((a, b) => a.order - b.order);
         return fetched;
@@ -61,9 +70,9 @@ export async function getProjects(): Promise<Project[]> {
         // First-time seed into Firestore
         console.log('Seeding initial projects to Firestore...');
         for (const proj of defaultProjects) {
-          await setDoc(doc(db, 'projects', proj.id), proj);
+          await setDoc(doc(db, 'projects', proj.id), normalizeProject(proj));
         }
-        return defaultProjects;
+        return defaultProjects.map(normalizeProject);
       }
     } catch (err) {
       console.warn('Firestore fetch failed or timed out, falling back to local storage:', err);
