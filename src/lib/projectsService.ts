@@ -3,7 +3,7 @@ import { collection, getDocs, doc, setDoc, deleteDoc, updateDoc } from 'firebase
 import { Project } from './types';
 import { defaultProjects } from './defaultData';
 
-const LOCAL_STORAGE_KEY = 'raviteja_portfolio_projects_v6';
+const LOCAL_STORAGE_KEY = 'raviteja_portfolio_projects_v7';
 
 function normalizeProject(p: any): Project {
   const category = p.category === '3D CAD & Printing' ? '3D CAD & Printing' : 'Engineering Projects';

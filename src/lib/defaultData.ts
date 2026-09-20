@@ -82,9 +82,248 @@ Developed and deployed **fastenersstandards.com**, a specialized online engineer
     order: 2,
   },
   {
+    id: 'agricultural-rover',
+    slug: 'agricultural-rover',
+    title: 'Autonomous Agricultural Rover (Rower)',
+    shortDescription: 'Custom rover chassis and drivetrain engineered for agricultural payload pulling and steep hill climb tasks with interactive 3D model on Sketchfab.',
+    fullDescription: `### Autonomous Agricultural Rover (Rower) — Chassis & Drivetrain
+Collaborated with engineering students from **K.I.T.E. Engineering College** to design, calculate, and fabricate a specialized agricultural rover.
+
+#### Engineering Challenges & Key Deliverables:
+- **Chassis Architecture**: Designed an optimized tubular and sheet metal chassis to satisfy strict crop row clearance, track width, and wheelbase constraints.
+- **Tractive Calculations**: Performed comprehensive mechanical calculations to determine tractive effort, gear reduction ratios, structural beam sizing, and center of gravity placement.
+- **Incline & Gradeability**: Engineered to pull heavy agricultural payload trailers across irregular soil conditions and negotiate steep terrain inclines.
+- **3D CAD Assemblies**: Modeled full assembly and bare chassis in SolidWorks for FEA structural stress verification and ease of CNC sheet cutting and welding.`,
+    category: '3D CAD & Printing',
+    heroImage: '/static/rower/3dModel.jpeg',
+    galleryImages: [
+      '/static/rower/3dModel.jpeg',
+      '/static/rower/IMG_20241119_221533.jpg',
+      '/static/rower/car_3d.gif',
+    ],
+    tools: ['SolidWorks', 'Mechanical Calculations', 'Chassis Design', 'Drawbar Pull Analysis', '3D Printing'],
+    model3d: {
+      type: 'sketchfab',
+      url: 'https://sketchfab.com/models/fd99e5beff4b4b15a7503bdb507d2df2/embed?autospin=1&autostart=1',
+      title: 'Agricultural Rover Full Assembly',
+    },
+    models3d: [
+      {
+        title: 'Agricultural Rover Full Assembly',
+        url: 'https://sketchfab.com/models/fd99e5beff4b4b15a7503bdb507d2df2/embed?autospin=1&autostart=1',
+        type: 'sketchfab',
+      },
+      {
+        title: 'Agricultural Rover Chassis',
+        url: 'https://sketchfab.com/models/f9d694f2260c42a490f925d8bae35d0e/embed?autospin=1&autostart=1',
+        type: 'sketchfab',
+      },
+    ],
+    videoUrl: 'https://www.youtube.com/embed/2D0GofY40FA',
+    specs: [
+      { label: 'Application', value: 'Agricultural Towing & Field Inspection' },
+      { label: 'CAD Software', value: 'SolidWorks Parametric Assembly' },
+      { label: 'Engineering Calculations', value: 'Drawbar Pull, Incline Gradeability & FEA' },
+      { label: '3D Models Included', value: 'Full Rover Assembly & Bare Chassis' },
+    ],
+    featured: true,
+    date: '2024',
+    order: 3,
+  },
+  {
+    id: 'smart-health-watch',
+    slug: 'smart-health-watch',
+    title: 'Smart Health Tracking Watch (ESP32-S3 Wearable)',
+    shortDescription: 'Wearable smart health tracking watch enclosure with snap-fit joints housing ESP32-S3, MAX30102, and MPU6050 sensors.',
+    fullDescription: `### Smart Health Tracking Watch (ESP32-S3 Wearable Enclosure)
+Engineered a functional wearable smart health tracking watch utilizing the **ESP32-S3** microcontroller.
+
+#### Mechanical & Hardware Integration:
+- **Compact Sensor Packaging**: Cleanly integrated MAX30102 (heart rate and SpO2 optical sensor), MPU6050 (6-axis accelerometer/gyroscope), and TP4056 rechargeable lithium battery circuit.
+- **Snap-Fit Joint Engineering**: Designed precision interlocking snap-fit clips and sealing bezels in SolidWorks and Fusion 360, tuned for FDM 3D printing tolerances without screws.
+- **Ergonomics & Wearability**: Optimized wrist curvature, strap lugs, and tactile button openings for comfortable daily wear.`,
+    category: '3D CAD & Printing',
+    heroImage: '/static/watch/watch.jpeg',
+    galleryImages: [
+      '/static/watch/watch.jpeg',
+      '/static/watch/watch.png',
+      '/static/watch/watch_explore.jpeg',
+      '/static/GPT.jpg',
+    ],
+    tools: ['SolidWorks', 'Fusion 360', 'Ultimaker Cura', 'Snap-Fit Joints', '3D Printing (PLA+)'],
+    model3d: {
+      type: 'sketchfab',
+      url: 'https://sketchfab.com/models/462b5d8ede60480c998d240b1384288c/embed?autostart=1',
+      title: 'Smart Health Watch CAD (watch_2)',
+    },
+    videoUrl: 'https://www.youtube.com/embed/O3_xjl86TO4',
+    specs: [
+      { label: 'Processor', value: 'ESP32-S3 Mini Module' },
+      { label: 'Sensors Integrated', value: 'MAX30102 (SpO2/HR) & MPU6050' },
+      { label: 'Power Architecture', value: 'TP4056 USB-C Rechargeable' },
+      { label: 'Manufacturing', value: '3D Printed PLA+ Snap-Fit Enclosure' },
+    ],
+    featured: true,
+    date: '2024',
+    order: 4,
+  },
+  {
+    id: 'lathe-3-jaw-chuck',
+    slug: 'lathe-3-jaw-chuck',
+    title: 'Lathe 3-Jaw Chuck for Laser Engraving Machine',
+    shortDescription: 'Custom 3D-printed 3-jaw self-centering chuck enabling cylindrical ring engraving on a CNC laser engraver, saving ₹2,000–₹3,000 in tooling costs.',
+    fullDescription: `### Lathe 3-Jaw Self-Centering Chuck for Laser Engraving
+Engineered an innovative rotary upgrade for a CNC laser engraving machine to engrave names and vector logos onto cylindrical jewelry rings.
+
+#### Engineering & Cost Savings:
+- **Cost Reduction**: Commercially available micro-chucks were priced between ₹2,000 and ₹3,000. Solved this with a fully customized 3D-printed design.
+- **Scroll Mechanism**: Modeled an interlocking scroll plate and stepped jaws in **Autodesk Fusion 360** that evenly advance all 3 jaws toward the center upon rotation.
+- **Print Optimization**: Sliced with high infill density and rigid perimeter shells using PLA, ensuring tight concentricity and repeatable clamping force.`,
+    category: '3D CAD & Printing',
+    heroImage: '/static/3d_printing/IMG_3563.JPG',
+    galleryImages: [
+      '/static/3d_printing/IMG_3563.JPG',
+      '/static/3d_printing/IMG_3625.JPG',
+    ],
+    tools: ['Autodesk Fusion 360', 'FDM 3D Printing', 'Cura Slicer', 'Scroll Mechanism Design'],
+    videoUrl: 'https://www.youtube.com/embed/S4zS77OUl8o',
+    specs: [
+      { label: 'Commercial Savings', value: 'Saved ₹2,000 – ₹3,000 in hardware tooling' },
+      { label: 'Mechanism Type', value: 'Scroll Plate 3-Jaw Self-Centering Chuck' },
+      { label: 'Print Material', value: 'High Infill Rigid PLA' },
+      { label: 'Application', value: 'Rotary Axis Cylindrical Ring Engraving' },
+    ],
+    featured: true,
+    date: '2024',
+    order: 5,
+  },
+  {
+    id: 'rotating-display-bed',
+    slug: 'rotating-display-bed',
+    title: 'Motorized Rotating Bed for Model Display & Video Capture',
+    shortDescription: 'Concentric 360-degree rotating turntable bed designed in Fusion 360 for dynamic CAD model inspection and video recording.',
+    fullDescription: `### Motorized Rotating Display Bed for CAD Showcase
+Designed and manufactured a smooth concentric 360-degree rotating turntable bed to dynamically present 3D CAD prototypes during high-resolution video recordings.
+
+#### Design Highlights:
+- **Low-Friction Bearing Alignment**: Modeled in **Fusion 360** with race tracks for ball bearings to eliminate wobble and ensure whisper-quiet rotation.
+- **FDM Prototyping**: Printed in high-impact PLA with optimized shell thickness for dimensional stability and load-bearing capacity.`,
+    category: '3D CAD & Printing',
+    heroImage: '/static/3d_printing/IMG_3564.JPG',
+    galleryImages: [
+      '/static/3d_printing/IMG_3564.JPG',
+      '/static/3d_printing/IMG_3626.JPG',
+    ],
+    tools: ['Fusion 360', '3D Printing (PLA)', 'Bearing Assembly', 'Turntable Design'],
+    model3d: {
+      type: 'sketchfab',
+      url: 'https://sketchfab.com/models/f9a45683183e4bc3a382eedf9c332771/embed?autospin=1&autostart=1',
+      title: '3D Printed Rotating Display Bed',
+    },
+    videoUrl: 'https://youtube.com/embed/-SqQ3uOOTR8',
+    specs: [
+      { label: 'Rotation Span', value: '360° Continuous Smooth Rotation' },
+      { label: 'CAD Tool', value: 'Autodesk Fusion 360' },
+      { label: 'Function', value: 'Cinematic Hardware Review & Presentation' },
+    ],
+    featured: true,
+    date: '2024',
+    order: 6,
+  },
+  {
+    id: 'cnc-z-axis-upgrade',
+    slug: 'cnc-z-axis-upgrade',
+    title: 'CNC Laser Engraver Z-Axis Upgrade for Wood Carving',
+    shortDescription: 'Rigid Z-axis gantry carriage upgrade designed in Fusion 360 accommodating a high-RPM spindle motor for 1mm per pass depth milling.',
+    fullDescription: `### CNC Laser Engraver Z-Axis Spindle Carriage Upgrade
+Upgraded a 2-axis desktop CNC laser machine to perform precision wood carving and milling with a controlled depth of 1mm per pass in hardwoods and soft aluminum.
+
+#### Mechanical Engineering Features:
+- **Rigid Carriage**: Designed a custom Z-axis gantry carriage in **Fusion 360** engineered to support a 775 spindle motor, lead screw, and anti-backlash nut.
+- **Kinematic Balance**: Preserved X-axis gantry balance and V-slot wheel alignment under motor torque and plunge cutting forces.`,
+    category: '3D CAD & Printing',
+    heroImage: '/static/leaser_cnc/laser.png',
+    galleryImages: [
+      '/static/leaser_cnc/laser.png',
+      '/static/leaser_cnc/IMG_3565.JPG',
+      '/static/leaser_cnc/IMG_3566.JPG',
+      '/static/leaser_cnc/IMG_3582.JPG',
+    ],
+    tools: ['Fusion 360', '3D Printing', 'CNC Machining', 'Lead Screw Drive', 'GRBL'],
+    model3d: {
+      type: 'sketchfab',
+      url: 'https://sketchfab.com/models/ce1bf2b9e3c340c9a85c28e2003a8a75/embed?autospin=1&autostart=1',
+      title: 'CNC Z-Axis Upgrade Assembly',
+    },
+    videoUrl: 'https://youtube.com/embed/zGyGgTdxowI',
+    specs: [
+      { label: 'Milling Depth', value: '1 mm per pass controlled depth' },
+      { label: 'Drive Mechanism', value: 'Precision Lead Screw with Anti-Backlash Nut' },
+      { label: 'Structural Carriage', value: 'Reinforced 3D Printed Spindle Mount' },
+    ],
+    featured: true,
+    date: '2023',
+    order: 7,
+  },
+  {
+    id: 'custom-stepper-motors',
+    slug: 'custom-stepper-motors',
+    title: 'Custom Stepper Motor Enclosures (Stepper v7, Cylindrical, NEMA 21)',
+    shortDescription: 'Tailored stepper motor actuator housings (Stepper Motor v7, Cylindrical v1, NEMA 21) designed in SolidWorks for robotic joint alignment.',
+    fullDescription: `### Custom Stepper Motor Actuator Enclosures for Robotic Arm
+During the mechanical design of a 6-axis articulated robotic arm, off-the-shelf stepper motors failed to match tight joint envelope constraints and mounting bolt alignments.
+
+#### 3 Interactive 3D Models on Sketchfab:
+1. **Stepper Motor v7**: Custom joint actuator housing with tailored bolt circle and mounting flange tolerances.
+2. **Cylindrical Stepper Motor v1**: Ergonomic compact cylindrical joint motor assembly.
+3. **NEMA 21 Stepper Motor v1**: High-torque mounting bracket and faceplate design.
+
+#### Manufacturing & Tolerances:
+- Modeled outer housings and bearing pockets in **SolidWorks** to interface seamlessly with planetary and cycloidal joint reducers.
+- 3D-printed prototypes with fine layer height to verify fitment and heat dissipation.`,
+    category: '3D CAD & Printing',
+    heroImage: '/static/arm.jpg',
+    galleryImages: [
+      '/static/arm.jpg',
+      '/static/3d_printing/IMG_3625.JPG',
+    ],
+    tools: ['SolidWorks', 'Fusion 360', '3D Printing', 'Actuator Enclosures', 'Robotics'],
+    model3d: {
+      type: 'sketchfab',
+      url: 'https://sketchfab.com/models/099d6834458b4f1487ff29ad16225d22/embed?autospin=1&autostart=1',
+      title: 'Stepper Motor v7 Joint Actuator',
+    },
+    models3d: [
+      {
+        title: 'Stepper Motor v7 (Robotic Joint)',
+        url: 'https://sketchfab.com/models/099d6834458b4f1487ff29ad16225d22/embed?autospin=1&autostart=1',
+        type: 'sketchfab',
+      },
+      {
+        title: 'Cylindrical Stepper Motor v1',
+        url: 'https://sketchfab.com/models/bc19dc85c3f74694924033dab609fb1a/embed?autospin=1&autostart=1',
+        type: 'sketchfab',
+      },
+      {
+        title: 'NEMA 21 Stepper Motor v1',
+        url: 'https://sketchfab.com/models/61e9fc0271ed49e6af784659e9026f69/embed?autospin=1&autostart=1',
+        type: 'sketchfab',
+      },
+    ],
+    videoUrl: 'https://youtube.com/embed/3BYo8GMtsGc',
+    specs: [
+      { label: '3D Models Included', value: 'Stepper Motor v7, Cylindrical v1, NEMA 21' },
+      { label: 'CAD Tool', value: 'SolidWorks 2024' },
+      { label: 'Application', value: 'Robotic Manipulator Joint Packaging' },
+    ],
+    featured: true,
+    date: '2023',
+    order: 8,
+  },
+  {
     id: '3d-printing-modeling',
     slug: '3d-printing-modeling',
-    title: '3D Modeling & Additive Prototyping Projects',
+    title: '3D Modeling & Additive Prototyping Projects (Collection Overview)',
     shortDescription: 'Collection of 6 functional mechanical 3D modeling and additive prototyping projects. Use the interactive project switcher arrows to explore each sub-project with its 3D model, photos, and video demos.',
     fullDescription: `A comprehensive portfolio of 6 physical hardware prototyping projects spanning wearable IoT enclosures, autonomous agricultural rovers, custom lathe fixtures, motorized display turntables, CNC carving units, and robotic actuator housings.`,
     category: '3D CAD & Printing',
@@ -111,13 +350,7 @@ Developed and deployed **fastenersstandards.com**, a specialized online engineer
         title: '1. Autonomous Agricultural Based Rover (Rower)',
         shortDescription: 'Custom rover chassis and drivetrain engineered for K.I.T.E. College students for agricultural payload pulling and hill climb incline tasks.',
         description: `Collaborated with engineering students from **K.I.T.E. Engineering College** to design and calculate a specialized agricultural rover.
-
-The team required a dedicated chassis capable of:
-- Specific dimensional constraints (track width, wheelbase, and crop row clearance)
-- Pulling high drawbar payload loads across irregular soil conditions
-- Negotiating steep field inclines and terrain angles
-
-Performed comprehensive mechanical calculations to determine tractive effort, gear reduction ratios, structural beam sizing, and center of gravity placement. Modeled the full assembly and independent chassis in SolidWorks to ensure high strength-to-weight ratio and ease of fabrication.`,
+The team required a dedicated chassis capable of pulling high drawbar payload loads across irregular soil conditions and negotiating steep field inclines.`,
         model3d: {
           title: 'Agricultural Rover Full Assembly',
           url: 'https://sketchfab.com/models/fd99e5beff4b4b15a7503bdb507d2df2/embed?autospin=1&autostart=1',
@@ -152,15 +385,7 @@ Performed comprehensive mechanical calculations to determine tractive effort, ge
         id: 'smart-watch',
         title: '2. Smart Health Tracking Watch (ESP32-S3 Wearable)',
         shortDescription: 'Wearable smart health tracking watch enclosure with snap-fit joints housing ESP32-S3, MAX30102, and MPU6050 sensors.',
-        description: `Currently developing a wearable smart health tracking watch utilizing the **ESP32-S3**. 
-
-The mechanical design and hardware connections have been completed, cleanly integrating:
-- **MAX30102**: Heart rate and blood oxygen (SpO₂) optical monitoring sensor
-- **MPU6050**: 6-axis motion and activity accelerometer/gyroscope
-- **TP4056 & LiPo Battery**: Rechargeable lithium polymer power management circuit
-- **Haptic Vibration Motor**: Tactile user notification feedback
-
-At present, working on embedded firmware and development of a customized mobile application for real-time telemetry and health monitoring. Demonstrates expertise in wearable hardware packaging, sensor integration, and ergonomic snap-fit CAD design.`,
+        description: `Currently developing a wearable smart health tracking watch utilizing the **ESP32-S3**. Features MAX30102 heart rate / SpO2 sensor, MPU6050 accelerometer, TP4056 rechargeable battery circuit, and snap-fit PLA+ enclosure.`,
         model3d: {
           title: 'Smart Health Watch CAD (watch_2)',
           url: 'https://sketchfab.com/models/462b5d8ede60480c998d240b1384288c/embed?autostart=1',
@@ -184,11 +409,7 @@ At present, working on embedded firmware and development of a customized mobile 
         id: '3-jaw-chuck',
         title: '3. Lathe 3-Jaw Chuck for Laser Engraving Machine',
         shortDescription: 'Custom 3D-printed 3-jaw self-centering chuck enabling cylindrical ring engraving on a CNC laser engraver, saving ₹2,000–₹3,000 in tooling costs.',
-        description: `Engineered an upgrade for a CNC laser engraving machine to engrave names and logos onto cylindrical finger rings.
-
-This required a rotary bed to securely center the ring and rotate it precisely along the X-axis during the vector burning process. Commercially available small chucks were priced between ₹2,000 to ₹3,000. 
-
-To overcome this, designed and 3D printed a custom 3-jaw self-centering scroll chuck in **Autodesk Fusion 360**. Sliced with high infill density using PLA for dimensional rigidity and wear resistance. Verified concentricity and holding force, successfully achieving clean 360° ring engravings.`,
+        description: `Engineered an upgrade for a CNC laser engraving machine to engrave names and logos onto cylindrical finger rings using a custom scroll-plate 3-jaw chuck designed in Fusion 360.`,
         videoUrl: 'https://www.youtube.com/embed/S4zS77OUl8o',
         galleryImages: [
           '/static/3d_printing/IMG_3563.JPG',
@@ -205,9 +426,7 @@ To overcome this, designed and 3D printed a custom 3-jaw self-centering scroll c
         id: 'rotating-display-bed',
         title: '4. Rotating Bed for Model Display & Video Capture',
         shortDescription: 'Concentric 360-degree rotating turntable bed designed in Fusion 360 for dynamic CAD model inspection and video recording.',
-        description: `Created a smooth concentric 360-degree rotating display bed to present 3D CAD prototypes dynamically during high-resolution video recordings.
-
-Designed in **Fusion 360** with focus on low rotational friction, smooth bearing alignment, and compact print volume. Sliced and printed in PLA, providing a stable motorized platform for cinematic product reveals.`,
+        description: `Created a smooth concentric 360-degree rotating display bed to present 3D CAD prototypes dynamically during high-resolution video recordings.`,
         model3d: {
           title: '3D Printed Rotating Display Bed',
           url: 'https://sketchfab.com/models/f9a45683183e4bc3a382eedf9c332771/embed?autospin=1&autostart=1',
@@ -228,9 +447,7 @@ Designed in **Fusion 360** with focus on low rotational friction, smooth bearing
         id: 'cnc-z-axis',
         title: '5. CNC Laser Engraver Z-Axis Upgrade for Wood Carving',
         shortDescription: 'Rigid Z-axis gantry carriage upgrade designed in Fusion 360 accommodating a high-RPM spindle motor for 1mm per pass depth milling.',
-        description: `Upgraded the functionality of a 2-axis desktop CNC laser machine to perform precision wood carving and milling with a controlled depth of 1mm per pass in hardwoods and soft aluminum.
-
-Designed a new rigid Z-axis carriage in **Fusion 360** engineered to support a spindle motor, lead screw drive, and anti-backlash nut assembly while preserving X-axis gantry balance.`,
+        description: `Upgraded the functionality of a 2-axis desktop CNC laser machine to perform precision wood carving and milling with a controlled depth of 1mm per pass in hardwoods and soft aluminum.`,
         model3d: {
           title: 'CNC Z-Axis Upgrade Assembly',
           url: 'https://sketchfab.com/models/ce1bf2b9e3c340c9a85c28e2003a8a75/embed?autospin=1&autostart=1',
@@ -253,9 +470,7 @@ Designed a new rigid Z-axis carriage in **Fusion 360** engineered to support a s
         id: 'stepper-motors',
         title: '6. Custom Stepper Motors for 6-Axis Robotic Arm',
         shortDescription: 'Tailored stepper motor actuator housings (Stepper Motor v7, Cylindrical v1, NEMA 21) designed in SolidWorks for robotic joint alignment.',
-        description: `During the design of the 6-axis articulated robotic arm, off-the-shelf stepper motors failed to match tight joint envelope constraints and mounting bolt alignments.
-
-Designed custom stepper motor outer housings and mounting flanges in **SolidWorks**. Tailored the bolt circle diameters, shaft clearances, and bearing pockets to interface seamlessly with planetary and cycloidal joint reducers. Includes 3 interactive 3D models on Sketchfab.`,
+        description: `Custom stepper motor outer housings and mounting flanges designed in SolidWorks. Tailored bolt circle diameters, shaft clearances, and bearing pockets interface with joint reducers.`,
         model3d: {
           title: 'Stepper Motor v7 (Robotic Joint)',
           url: 'https://sketchfab.com/models/099d6834458b4f1487ff29ad16225d22/embed?autospin=1&autostart=1',
@@ -297,9 +512,9 @@ Designed custom stepper motor outer housings and mounting flanges in **SolidWork
       { label: 'Manufacturing Process', value: 'FDM & SLS 3D Printing' },
       { label: 'Materials Tested', value: 'PLA+, PETG, ABS' },
     ],
-    featured: true,
+    featured: false,
     date: '2024',
-    order: 3,
+    order: 9,
   },
   {
     id: 'cnc-laser-cutter',
