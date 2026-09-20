@@ -67,13 +67,13 @@ export default function HomePage() {
       <Hero profile={defaultProfile} />
 
       {/* 2. Interactive 3D Model Spotlight with Left/Right Navigation Arrows */}
-      <section className="max-w-7xl mx-auto px-6">
-        <div className="glass-panel bg-white p-6 sm:p-8 rounded-3xl border border-blue-200 shadow-xl relative overflow-hidden">
+      <section className="max-w-7xl mx-auto px-3 sm:px-6">
+        <div className="glass-panel bg-white p-4 sm:p-8 rounded-3xl border border-blue-200 shadow-xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-80 h-80 bg-blue-100/50 rounded-full blur-3xl pointer-events-none" />
           
-          <div className="grid lg:grid-cols-12 gap-8 items-center">
+          <div className="grid lg:grid-cols-12 gap-6 lg:gap-8 items-center">
             {/* Left Column: Dynamic Model Details */}
-            <div className="lg:col-span-5 space-y-4">
+            <div className="lg:col-span-5 space-y-3 sm:space-y-4">
               <div className="flex flex-wrap items-center gap-2">
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold shadow-sm">
                   <Sparkles className="w-3.5 h-3.5 text-blue-600" />
@@ -86,7 +86,7 @@ export default function HomePage() {
                 </span>
               </div>
 
-              <h2 className="text-2xl sm:text-3xl font-display font-extrabold text-slate-950 transition-all">
+              <h2 className="text-xl sm:text-3xl font-display font-extrabold text-slate-950 transition-all leading-tight">
                 {currentSpotlight.title}
               </h2>
 
@@ -94,55 +94,37 @@ export default function HomePage() {
                 {currentSpotlight.subtitle}
               </p>
 
-              <p className="text-slate-600 text-sm leading-relaxed min-h-[60px]">
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed min-h-[48px] sm:min-h-[60px]">
                 {currentSpotlight.description}
               </p>
 
-              <div className="flex flex-wrap gap-2 pt-1">
+              <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-1">
                 {currentSpotlight.tools.map((t) => (
-                  <span key={t} className="text-xs font-mono font-medium px-2.5 py-1 rounded-md bg-slate-100 border border-slate-200 text-slate-700">
+                  <span key={t} className="text-[11px] sm:text-xs font-mono font-medium px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-slate-100 border border-slate-200 text-slate-700">
                     {t}
                   </span>
                 ))}
               </div>
 
-              <div className="pt-3 flex items-center gap-3">
+              <div className="pt-2 sm:pt-3">
                 <a
                   href={`/projects/${currentSpotlight.slug}${
                     currentSpotlight.subProjectId ? `?sub=${encodeURIComponent(currentSpotlight.subProjectId)}` : ''
                   }`}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm transition-all shadow-md hover:shadow-lg"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm transition-all shadow-md hover:shadow-lg"
                 >
                   <span>Full Case Study & Specs</span>
                 </a>
-
-                {/* Mobile-friendly Arrow Controls under text */}
-                <div className="flex lg:hidden items-center gap-2">
-                  <button
-                    onClick={handlePrevSpotlight}
-                    className="p-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 shadow-sm"
-                    title="Previous 3D Model"
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={handleNextSpotlight}
-                    className="p-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 shadow-sm"
-                    title="Next 3D Model"
-                  >
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                </div>
               </div>
             </div>
 
-            {/* Right Column: 3D Model Viewport with Left/Right Arrow Marks directly beside canvas */}
-            <div className="lg:col-span-7">
+            {/* Right Column: 3D Model Viewport with Responsive Controls */}
+            <div className="lg:col-span-7 space-y-3">
               <div className="flex items-center gap-2 sm:gap-3.5 w-full">
-                {/* Left Arrow Button */}
+                {/* Desktop Left Arrow Button (visible on tablet/desktop) */}
                 <button
                   onClick={handlePrevSpotlight}
-                  className="shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white hover:bg-blue-600 text-slate-700 hover:text-white border-2 border-slate-300 hover:border-blue-600 shadow-md hover:shadow-xl transition-all duration-200 flex items-center justify-center cursor-pointer group active:scale-95"
+                  className="hidden sm:flex shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white hover:bg-blue-600 text-slate-700 hover:text-white border-2 border-slate-300 hover:border-blue-600 shadow-md hover:shadow-xl transition-all duration-200 items-center justify-center cursor-pointer group active:scale-95"
                   title="Previous 3D Model"
                   aria-label="Previous 3D Model"
                   id="prev-spotlight-btn"
@@ -150,8 +132,8 @@ export default function HomePage() {
                   <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 transition-transform group-hover:-translate-x-0.5" />
                 </button>
 
-                {/* 3D Model Canvas */}
-                <div className="flex-1 min-w-0 transition-all">
+                {/* 3D Model Canvas (takes 100% full width on mobile) */}
+                <div className="flex-1 min-w-0 transition-all w-full">
                   <ModelViewer
                     key={currentSpotlight.url}
                     url={currentSpotlight.url}
@@ -160,10 +142,10 @@ export default function HomePage() {
                   />
                 </div>
 
-                {/* Right Arrow Button */}
+                {/* Desktop Right Arrow Button (visible on tablet/desktop) */}
                 <button
                   onClick={handleNextSpotlight}
-                  className="shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white hover:bg-blue-600 text-slate-700 hover:text-white border-2 border-slate-300 hover:border-blue-600 shadow-md hover:shadow-xl transition-all duration-200 flex items-center justify-center cursor-pointer group active:scale-95"
+                  className="hidden sm:flex shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white hover:bg-blue-600 text-slate-700 hover:text-white border-2 border-slate-300 hover:border-blue-600 shadow-md hover:shadow-xl transition-all duration-200 items-center justify-center cursor-pointer group active:scale-95"
                   title="Next 3D Model"
                   aria-label="Next 3D Model"
                   id="next-spotlight-btn"
@@ -172,16 +154,43 @@ export default function HomePage() {
                 </button>
               </div>
 
-              {/* Model selection quick indicators */}
-              <div className="flex items-center justify-center gap-2 mt-3.5">
+              {/* Mobile Dedicated Touch Navigation Controls Bar (visible on mobile screens) */}
+              <div className="flex sm:hidden items-center justify-between gap-2 px-1 pt-1">
+                <button
+                  onClick={handlePrevSpotlight}
+                  className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 font-bold text-xs shadow-sm active:scale-95 transition-all"
+                  title="Previous 3D Model"
+                  aria-label="Previous 3D Model"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  <span>Prev Model</span>
+                </button>
+
+                <span className="text-[11px] font-mono font-bold px-2 py-1 rounded-lg bg-blue-50 border border-blue-200 text-blue-700 shrink-0">
+                  {safeSpotlightIndex + 1} / {spotlightModels.length}
+                </span>
+
+                <button
+                  onClick={handleNextSpotlight}
+                  className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-sm active:scale-95 transition-all"
+                  title="Next 3D Model"
+                  aria-label="Next 3D Model"
+                >
+                  <span>Next Model</span>
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Model selection quick indicator dots */}
+              <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 mt-2 sm:mt-3.5 max-w-full px-1">
                 {spotlightModels.map((m, idx) => (
                   <button
                     key={m.id || idx}
                     onClick={() => setActiveSpotlightIndex(idx)}
-                    className={`h-2 rounded-full transition-all duration-300 ${
+                    className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
                       safeSpotlightIndex === idx
-                        ? 'w-8 bg-blue-600 shadow-sm'
-                        : 'w-2 bg-slate-300 hover:bg-slate-400'
+                        ? 'w-6 sm:w-8 bg-blue-600 shadow-sm'
+                        : 'w-1.5 sm:w-2 bg-slate-300 hover:bg-slate-400'
                     }`}
                     title={m.title}
                     aria-label={`Jump to ${m.title}`}
