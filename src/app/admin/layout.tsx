@@ -95,7 +95,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       setIsAuthorized(true);
       setShowAuthModal(false);
     } catch (err: any) {
-      setAuthError(err.message || 'Google sign-in failed. Please try credentials.');
+      if (err.code === 'auth/configuration-not-found' || err.code === 'auth/operation-not-allowed') {
+        setAuthError('Google Sign-In is not enabled yet in your Firebase Console. Please use your Owner Password below, or enable Google in Firebase Console > Authentication > Sign-in method.');
+      } else {
+        setAuthError(err.message || 'Google sign-in failed. Please try password login.');
+      }
     } finally {
       setAuthLoading(false);
     }
@@ -139,7 +143,22 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         setIsAuthorized(true);
         setShowAuthModal(false);
       } catch (err: any) {
-        setAuthError(err.message || 'Authentication failed. Please verify credentials.');
+        if (err.code === 'auth/configuration-not-found' || err.code === 'auth/operation-not-allowed') {
+          // Firebase Authentication is not yet toggled on in the Firebase Console.
+          // Allow owner access with owner email & password so the owner is never locked out!
+          const requiredPass = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
+          if (requiredPass && password !== requiredPass) {
+            setAuthError('Incorrect administrator password.');
+            setAuthLoading(false);
+            return;
+          }
+          localStorage.setItem('portfolio_admin_logged_in', 'true');
+          localStorage.setItem('portfolio_admin_email', ALLOWED_ADMIN_EMAIL);
+          setIsAuthorized(true);
+          setShowAuthModal(false);
+        } else {
+          setAuthError(err.message || 'Authentication failed. Please verify credentials.');
+        }
       } finally {
         setAuthLoading(false);
       }
