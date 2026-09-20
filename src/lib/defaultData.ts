@@ -223,27 +223,24 @@ The team required a dedicated chassis capable of pulling high drawbar payload lo
     slug: 'ev-conversion-maruti-800',
     title: 'Electric Vehicle Conversion - Maruti 800',
     shortDescription: 'Complete electric vehicle retrofit of a Maruti 800 petrol car, leading an 18-member engineering team to design custom gearbox mounts, ANSYS FEA simulations, and electric powertrain integration.',
-    fullDescription: `### Electric Vehicle Conversion - Maruti 800 (Feb – May 2024)
+    fullDescription: `### Project Overview
+This final year mechanical engineering project involved the complete conversion of a Maruti 800 petrol car into a fully functional electric vehicle. Driven by a commitment to promote sustainable transportation and gain practical experience in electric vehicle technology, our team undertook this challenging yet rewarding endeavor. The conversion process encompassed the removal of the internal combustion engine and related components, followed by the design and integration of a suitable electric motor, battery pack, motor controller, and other necessary electrical systems. The successful completion of this project not only resulted in a working EV but also earned university recognition for its innovation and technical execution.
 
-This final year mechanical engineering project involved the complete conversion of a **Maruti 800 petrol car into a fully functional electric vehicle**. Driven by a commitment to promote sustainable transportation and gain practical experience in electric vehicle technology, our team undertook this challenging yet rewarding endeavor.
+### Key Contributions & Tasks:
+- **Team Leadership & Project Management**: As the team leader for this project involving 18 members, I took the initiative in defining project objectives, delegating tasks based on individual interests and skills, and ensuring effective communication and collaboration throughout the project lifecycle. My leadership was instrumental in successfully meeting project milestones and achieving our final goal.
+- **Design and Development of the Gearbox Mount**: Identified the critical challenge of connecting the electric motor to the existing gearbox. I spearheaded the design and development of a custom "Gearbox Mount" component using Fusion 360. This component was designed with simplicity and ease of manufacturing in mind, as no suitable off-the-shelf solution existed. The design focused on effectively transmitting power from the motor shaft to the transmission shaft while ensuring structural integrity.
+- **Structural Analysis of the Gearbox Mount**: Conducted comprehensive structural analysis of the designed Gearbox Mount using ANSYS. The simulations aimed to validate the component's durability and safety under operational loads. Key findings included a maximum deformation of 0.01 mm and a maximum shear stress of 6.5 MPa, both well within acceptable limits, ensuring the reliability of the power transmission system.
+- **Component Integration**: Played a key role in the physical integration of the electric motor, battery pack, and motor controller into the Maruti 800 chassis.
+- **Testing & Validation**: Contributed to the testing and validation phase, which included comprehensive road and load testing. The results demonstrated the successful operation of the converted EV, meeting our initial performance expectations.
 
-The conversion process encompassed the removal of the internal combustion engine and related components, followed by the design and integration of a suitable electric motor, battery pack, motor controller, and other necessary electrical systems. The successful completion of this project not only resulted in a working EV but also earned **university recognition and newspaper awards** for its innovation and technical execution.
+### Technical Details of the Gearbox Mount:
+The custom-designed "Gearbox Mount" was crucial for the project's success. Key design considerations included:
+- **Material Selection**: Mild steel was chosen for the mount due to its suitability for the application. The material was selected based on its mechanical properties, availability, and cost.
+- **Design Simplicity**: The design prioritized simple geometries and manufacturing processes to avoid complexities and ensure feasibility with available resources.
+- **Power Transmission Efficiency**: The mount was designed to ensure a direct and efficient transfer of power from the electric motor's shaft to the gearbox input shaft.
+- **Structural Integrity**: As validated by the ANSYS simulations, the design could withstand the expected torsional and shear stresses during vehicle operation.
 
-#### Key Contributions & Engineering Tasks:
-- **Team Leadership & Project Management**: As the team leader for this project involving **18 engineering members**, I took the initiative in defining project objectives, delegating tasks based on individual skills, and ensuring effective communication and collaboration throughout the project lifecycle. Instrumental in successfully meeting project milestones and achieving our final road-tested goal.
-- **Design and Development of the Gearbox Mount**: Identified the critical challenge of connecting the electric motor to the existing transaxle/gearbox. Spearheaded the design and development of a custom "Gearbox Mount" component using **Autodesk Fusion 360**. The component was designed with simplicity and ease of manufacturing in mind, as no suitable off-the-shelf solution existed. The design focused on effectively transmitting power from the motor shaft to the transmission shaft while ensuring structural integrity.
-- **Structural FEA Analysis of the Gearbox Mount**: Conducted comprehensive structural analysis of the designed Gearbox Mount using **ANSYS**. The simulations validated the component's durability and safety under operational torque loads:
-  - **Max Deformation**: 0.01 mm
-  - **Max Shear Stress**: 6.5 MPa
-  - Both metrics well within acceptable safety limits, ensuring reliable power transmission.
-- **Component Integration**: Spearheaded the physical integration of the 1 kW 49V BLDC electric motor, custom battery pack, and motor controller into the Maruti 800 engine bay and chassis.
-- **Road Testing & Validation**: Executed comprehensive road testing and performance verification, demonstrating smooth acceleration, efficient power transmission, and reliable operation.
-
-#### Technical Details of the Gearbox Mount:
-- **Material Selection**: Mild steel chosen for optimal mechanical properties, local availability, machinability, and cost-effectiveness.
-- **Design Simplicity**: Prioritized simple geometric shapes and standard manufacturing operations to ensure feasibility with available machine shop resources.
-- **Power Transmission Efficiency**: Direct coupling between the electric motor shaft and the gearbox input shaft minimizing mechanical losses.
-- **Structural Integrity**: Validated under peak starting torque in ANSYS FEA.`,
+The successful design and analysis of the Gearbox Mount were pivotal in ensuring the overall success of the EV conversion project. The mount's performance was critical in achieving the desired power transmission efficiency and vehicle performance.`,
     category: 'Engineering Projects',
     heroImage: '/static/EV_car.JPG',
     galleryImages: [

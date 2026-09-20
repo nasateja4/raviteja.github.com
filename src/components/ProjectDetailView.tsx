@@ -6,6 +6,98 @@ import { Project, Model3D, SubProject } from '@/lib/types';
 import ModelViewer from '@/components/ModelViewer';
 import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, Box, Video, Image as ImageIcon, Calendar, Cpu, Layers } from 'lucide-react';
 
+function parseInlineMarkdown(text: string) {
+  const parts = text.split(/(\*\*.*?\*\*|`.*?`)/g);
+  return parts.map((part, index) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return (
+        <strong key={index} className="font-bold text-slate-950">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    if (part.startsWith('`') && part.endsWith('`')) {
+      return (
+        <code key={index} className="font-mono text-xs bg-blue-50 text-blue-800 px-1.5 py-0.5 rounded border border-blue-200">
+          {part.slice(1, -1)}
+        </code>
+      );
+    }
+    return part;
+  });
+}
+
+function renderMarkdownContent(content: string) {
+  if (!content) return null;
+  const blocks = content.split(/\n\n+/);
+
+  return (
+    <div className="space-y-4 text-slate-700 leading-relaxed text-sm sm:text-base">
+      {blocks.map((block, bIdx) => {
+        const trimmed = block.trim();
+        if (!trimmed) return null;
+
+        // Heading 3 or 2
+        if (trimmed.startsWith('### ') || trimmed.startsWith('## ')) {
+          const text = trimmed.replace(/^#{2,3}\s+/, '');
+          return (
+            <h4
+              key={bIdx}
+              className="text-lg sm:text-xl font-display font-bold text-blue-700 mt-6 first:mt-0 pt-2 border-b border-slate-100 pb-2"
+            >
+              {text}
+            </h4>
+          );
+        }
+
+        // Heading 4
+        if (trimmed.startsWith('#### ')) {
+          const text = trimmed.replace(/^####\s+/, '');
+          return (
+            <h5 key={bIdx} className="text-base sm:text-lg font-display font-bold text-slate-900 mt-4">
+              {text}
+            </h5>
+          );
+        }
+
+        // Lines in block
+        const lines = trimmed.split('\n');
+        const hasBullets = lines.some((l) => l.trim().startsWith('- ') || l.trim().startsWith('* '));
+
+        if (hasBullets) {
+          return (
+            <div key={bIdx} className="space-y-2">
+              {lines.map((line, lIdx) => {
+                const isBullet = line.trim().startsWith('- ') || line.trim().startsWith('* ');
+                if (isBullet) {
+                  const itemText = line.trim().replace(/^[-*]\s+/, '');
+                  return (
+                    <div key={lIdx} className="flex items-start gap-2.5 my-2 pl-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-2 shrink-0" />
+                      <span className="text-slate-700 leading-relaxed">{parseInlineMarkdown(itemText)}</span>
+                    </div>
+                  );
+                }
+                return (
+                  <p key={lIdx} className="mb-2 leading-relaxed">
+                    {parseInlineMarkdown(line)}
+                  </p>
+                );
+              })}
+            </div>
+          );
+        }
+
+        return (
+          <p key={bIdx} className="leading-relaxed">
+            {parseInlineMarkdown(trimmed)}
+          </p>
+        );
+      })}
+    </div>
+  );
+}
+
 interface ProjectDetailViewProps {
   project: Project;
 }
@@ -440,9 +532,9 @@ export default function ProjectDetailView({ project }: ProjectDetailViewProps) {
 
       {/* DYNAMIC ENGINEERING DESCRIPTION FOR THIS SUB-PROJECT */}
       <div className="glass-panel bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-        <h3 className="font-display font-bold text-2xl text-slate-900">Engineering Overview & Implementation</h3>
-        <div className="text-slate-700 text-base leading-relaxed space-y-4 whitespace-pre-line">
-          {activeFullDescription}
+        <h3 className="font-display font-bold text-2xl text-slate-900 border-b border-slate-100 pb-3">Engineering Overview & Implementation</h3>
+        <div className="pt-2">
+          {renderMarkdownContent(activeFullDescription)}
         </div>
       </div>
 

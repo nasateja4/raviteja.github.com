@@ -3,7 +3,7 @@ import { collection, getDocs, doc, setDoc, deleteDoc } from 'firebase/firestore'
 import { Project, SubProject } from './types';
 import { defaultProjects } from './defaultData';
 
-const LOCAL_STORAGE_KEY = 'raviteja_portfolio_projects_v14';
+const LOCAL_STORAGE_KEY = 'raviteja_portfolio_projects_v15';
 
 // IDs of projects that strictly belong inside the single 3D CAD & Printing card collection
 const SUB_PROJECT_IDS = new Set([
@@ -58,6 +58,10 @@ function getLocalProjects(): Project[] {
         updated = true;
       } else {
         const cur = merged[existingIndex];
+        if (def.fullDescription && cur.fullDescription !== def.fullDescription) {
+          cur.fullDescription = def.fullDescription;
+          updated = true;
+        }
         if (def.videoUrl && cur.videoUrl !== def.videoUrl) {
           cur.videoUrl = def.videoUrl;
           updated = true;
@@ -147,6 +151,10 @@ export async function getProjects(): Promise<Project[]> {
           } else {
             const cur = fetched[index];
             let needsSync = false;
+            if (def.fullDescription && cur.fullDescription !== def.fullDescription) {
+              cur.fullDescription = def.fullDescription;
+              needsSync = true;
+            }
             if (def.videoUrl && cur.videoUrl !== def.videoUrl) {
               cur.videoUrl = def.videoUrl;
               needsSync = true;
