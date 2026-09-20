@@ -6,6 +6,8 @@ import { auth, isFirebaseConfigured } from '@/lib/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { Lock, Mail, ArrowRight, Sparkles } from 'lucide-react';
 
+const ALLOWED_ADMIN_EMAIL = (process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'nasateja4@gmail.com').toLowerCase().trim();
+
 export default function AdminLoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
@@ -16,12 +18,37 @@ export default function AdminLoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    const inputEmail = email.trim().toLowerCase();
+    if (!inputEmail || !password) {
+      setError('Please enter your administrator email and password.');
+      return;
+    }
+
+    // STRICT OWNER CHECK: Only allow the portfolio owner's email
+    if (inputEmail !== ALLOWED_ADMIN_EMAIL) {
+      setError(`Access Denied: Only the portfolio owner (${ALLOWED_ADMIN_EMAIL}) is authorized to access the Admin CMS.`);
+      return;
+    }
+
     setLoading(true);
 
     if (isFirebaseConfigured && auth) {
       try {
-        await signInWithEmailAndPassword(auth, email, password);
+        const userCredential = await signInWithEmailAndPassword(auth, inputEmail, password);
+        const authedEmail = userCredential.user?.email?.toLowerCase().trim();
+        
+        if (authedEmail !== ALLOWED_ADMIN_EMAIL) {
+          await auth.signOut();
+          localStorage.removeItem('portfolio_admin_logged_in');
+          localStorage.removeItem('portfolio_admin_email');
+          setError(`Access Denied: Account ${authedEmail} is not authorized for administrator privileges.`);
+          setLoading(false);
+          return;
+        }
+
         localStorage.setItem('portfolio_admin_logged_in', 'true');
+        localStorage.setItem('portfolio_admin_email', ALLOWED_ADMIN_EMAIL);
         router.push('/admin');
       } catch (err: any) {
         setError(err.message || 'Authentication failed. Please verify credentials.');
@@ -29,19 +56,12 @@ export default function AdminLoginPage() {
         setLoading(false);
       }
     } else {
-      if (email && password) {
-        localStorage.setItem('portfolio_admin_logged_in', 'true');
-        router.push('/admin');
-      } else {
-        setError('Please enter your administrator email and password.');
-      }
+      // Local fallback mode when Firebase Auth is not active
+      localStorage.setItem('portfolio_admin_logged_in', 'true');
+      localStorage.setItem('portfolio_admin_email', ALLOWED_ADMIN_EMAIL);
+      router.push('/admin');
       setLoading(false);
     }
-  };
-
-  const handleQuickDemoAccess = () => {
-    localStorage.setItem('portfolio_admin_logged_in', 'true');
-    router.push('/admin');
   };
 
   return (
@@ -53,7 +73,7 @@ export default function AdminLoginPage() {
           </div>
           <h1 className="text-2xl font-display font-bold text-slate-900">Admin CMS Portal</h1>
           <p className="text-xs text-slate-500">
-            Secure management for projects, 3D CAD models, and portfolio content.
+            Secure owner management for projects, 3D CAD models, and portfolio content.
           </p>
         </div>
 
@@ -66,22 +86,23 @@ export default function AdminLoginPage() {
         </div>
 
         {error && (
-          <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs">
+          <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium leading-relaxed">
             {error}
           </div>
         )}
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1.5">Email Address</label>
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5">Authorized Owner Email</label>
             <div className="relative">
               <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@raviteja.com"
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500 focus:bg-white"
+                placeholder="nasateja4@gmail.com"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500 focus:bg-white transition-all"
+                required
               />
             </div>
           </div>
@@ -95,7 +116,8 @@ export default function AdminLoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500 focus:bg-white"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500 focus:bg-white transition-all"
+                required
               />
             </div>
           </div>
@@ -103,24 +125,12 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md flex items-center justify-center gap-2 transition-all"
+            className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md flex items-center justify-center gap-2 transition-all disabled:opacity-50"
           >
-            {loading ? 'Authenticating...' : 'Sign In to Admin Panel'}
+            {loading ? 'Authenticating...' : 'Sign In as Owner'}
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
-
-        {/* Quick Testing Access */}
-        <div className="pt-4 border-t border-slate-100 text-center">
-          <button
-            onClick={handleQuickDemoAccess}
-            type="button"
-            className="text-xs text-blue-600 hover:underline font-semibold flex items-center justify-center gap-1.5 mx-auto"
-          >
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Instant Admin Access (Local / Offline Mode)</span>
-          </button>
-        </div>
       </div>
     </div>
   );

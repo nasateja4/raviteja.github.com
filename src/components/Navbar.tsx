@@ -7,13 +7,30 @@ import { Menu, X, Box, Settings, Globe, ExternalLink } from 'lucide-react';
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    // Only show the admin button if logged in with the owner's authorized email
+    const checkAdmin = () => {
+      if (typeof window !== 'undefined') {
+        const loggedIn = localStorage.getItem('portfolio_admin_logged_in') === 'true';
+        const email = localStorage.getItem('portfolio_admin_email')?.toLowerCase().trim();
+        const allowed = (process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'nasateja4@gmail.com').toLowerCase().trim();
+        setIsAdminLoggedIn(loggedIn && (!email || email === allowed));
+      }
+    };
+    checkAdmin();
+    window.addEventListener('storage', checkAdmin);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('storage', checkAdmin);
+    };
   }, []);
 
   const navLinks = [
@@ -75,15 +92,17 @@ export default function Navbar() {
             <ExternalLink className="w-3 h-3 text-cyan-500" />
           </a>
 
-          {/* Admin CMS Access Button */}
-          <Link
-            href="/admin"
-            className="flex items-center gap-2 text-xs font-semibold px-3.5 py-2 rounded-lg bg-blue-50 border border-blue-200 hover:border-blue-400 hover:bg-blue-100 text-blue-700 transition-all duration-200 shadow-sm"
-            title="Manage Projects & 3D Models"
-          >
-            <Settings className="w-3.5 h-3.5 text-blue-600" />
-            <span>Admin CMS</span>
-          </Link>
+          {/* Admin CMS Access Button (Only visible to the logged-in owner, completely hidden for all visitors) */}
+          {isAdminLoggedIn && (
+            <Link
+              href="/admin"
+              className="flex items-center gap-2 text-xs font-semibold px-3.5 py-2 rounded-lg bg-blue-50 border border-blue-200 hover:border-blue-400 hover:bg-blue-100 text-blue-700 transition-all duration-200 shadow-sm"
+              title="Manage Projects & 3D Models"
+            >
+              <Settings className="w-3.5 h-3.5 text-blue-600" />
+              <span>Admin CMS</span>
+            </Link>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -120,16 +139,18 @@ export default function Navbar() {
               <span>FastenersStandards.com ↗</span>
             </a>
           </div>
-          <div className="pt-3 border-t border-slate-200">
-            <Link
-              href="/admin"
-              onClick={() => setIsOpen(false)}
-              className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-blue-600 text-white font-semibold text-sm shadow-sm"
-            >
-              <Settings className="w-4 h-4" />
-              <span>Admin Management Portal</span>
-            </Link>
-          </div>
+          {isAdminLoggedIn && (
+            <div className="pt-3 border-t border-slate-200">
+              <Link
+                href="/admin"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-blue-600 text-white font-semibold text-sm shadow-sm"
+              >
+                <Settings className="w-4 h-4" />
+                <span>Admin Management Portal</span>
+              </Link>
+            </div>
+          )}
         </div>
       )}
     </header>

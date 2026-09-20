@@ -15,10 +15,18 @@ export default function AdminDashboardPage() {
   const [loading, setLoading] = useState(true);
   const [actionMessage, setActionMessage] = useState('');
 
+  const ALLOWED_ADMIN_EMAIL = (process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'nasateja4@gmail.com').toLowerCase().trim();
+
   const checkAuth = () => {
     if (typeof window !== 'undefined') {
-      const loggedIn = localStorage.getItem('portfolio_admin_logged_in');
-      if (!loggedIn && !auth?.currentUser) {
+      const loggedIn = localStorage.getItem('portfolio_admin_logged_in') === 'true';
+      const storedEmail = localStorage.getItem('portfolio_admin_email')?.toLowerCase().trim();
+      const currentAuthEmail = auth?.currentUser?.email?.toLowerCase().trim();
+      const email = currentAuthEmail || storedEmail;
+
+      if (!loggedIn || (email && email !== ALLOWED_ADMIN_EMAIL)) {
+        localStorage.removeItem('portfolio_admin_logged_in');
+        localStorage.removeItem('portfolio_admin_email');
         router.push('/admin/login');
       }
     }
@@ -38,10 +46,13 @@ export default function AdminDashboardPage() {
 
   const handleLogout = async () => {
     if (isFirebaseConfigured && auth) {
-      await signOut(auth);
+      try {
+        await signOut(auth);
+      } catch {}
     }
     localStorage.removeItem('portfolio_admin_logged_in');
-    router.push('/admin/login');
+    localStorage.removeItem('portfolio_admin_email');
+    router.push('/');
   };
 
   const handleDelete = async (id: string, title: string) => {

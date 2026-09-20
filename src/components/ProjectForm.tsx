@@ -77,6 +77,18 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  // Protect project creation and edit forms from unauthorized users
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const loggedIn = localStorage.getItem('portfolio_admin_logged_in') === 'true';
+      const storedEmail = localStorage.getItem('portfolio_admin_email')?.toLowerCase().trim();
+      const allowed = (process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'nasateja4@gmail.com').toLowerCase().trim();
+      if (!loggedIn || (storedEmail && storedEmail !== allowed)) {
+        router.push('/admin/login');
+      }
+    }
+  }, [router]);
+
   // If editing an existing 3D CAD subproject, populate its data
   useEffect(() => {
     if (subIdParam && projectMode === 'cad') {
