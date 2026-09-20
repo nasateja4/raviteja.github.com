@@ -156,17 +156,21 @@ The team required a dedicated chassis capable of pulling high drawbar payload lo
           '/static/leaser_cnc/IMG_3566.JPG',
           '/static/leaser_cnc/IMG_3582.JPG',
         ],
+        heroImage: '/static/leaser_cnc/IMG_3565.JPG',
+        tools: ['Fusion 360', 'SolidWorks', '3D Printing', 'GRBL Firmware', 'Lead Screw Kinematics'],
         specs: [
+          { label: 'Z-Travel Stroke', value: '65 mm Linear Travel' },
           { label: 'Milling Depth', value: '1 mm per pass controlled depth' },
-          { label: 'Drive Mechanism', value: 'Precision Lead Screw with Anti-Backlash Nut' },
-          { label: 'Structural Carriage', value: 'Reinforced 3D Printed Spindle Mount' },
+          { label: 'Lead Screw', value: 'T8 Pitch 2mm Lead 8mm' },
+          { label: 'Guide System', value: 'Dual 8mm Hardened Chrome Rods' },
+          { label: 'Compatibility', value: 'Laser Module & 775 DC Spindle Motor' },
         ],
       },
       {
-        id: 'stepper-motors',
-        title: '6. Custom Stepper Motors for 6-Axis Robotic Arm',
-        shortDescription: 'Tailored stepper motor actuator housings (Stepper Motor v7, Cylindrical v1, NEMA 21) designed in SolidWorks for robotic joint alignment.',
-        description: `Custom stepper motor outer housings and mounting flanges designed in SolidWorks. Tailored bolt circle diameters, shaft clearances, and bearing pockets interface with joint reducers.`,
+        id: 'custom-stepper-motors',
+        title: '6. Custom Stepper Motor Housings (3 Variations)',
+        shortDescription: 'Suite of custom 3D CAD stepper motor models including Stepper Motor v7, Cylindrical v1, and NEMA 21.',
+        description: `Modeled and verified 3 bespoke **stepper motor actuator enclosures and motor geometry assemblies** in SolidWorks and Fusion 360 for robotic manipulator joints.`,
         model3d: {
           title: 'Stepper Motor v7 (Robotic Joint)',
           url: 'https://sketchfab.com/models/099d6834458b4f1487ff29ad16225d22/embed?autospin=1&autostart=1',
@@ -189,14 +193,16 @@ The team required a dedicated chassis capable of pulling high drawbar payload lo
             type: 'sketchfab',
           },
         ],
-        videoUrl: 'https://youtube.com/embed/3BYo8GMtsGc',
         galleryImages: [
-          '/static/arm.jpg',
           '/static/3d_printing/IMG_3625.JPG',
+          '/static/3d_printing/IMG_3626.JPG',
         ],
+        heroImage: '/static/3d_printing/IMG_3625.JPG',
+        tools: ['SolidWorks', 'Fusion 360', 'Parametric Modeling', '3D Printing'],
         specs: [
-          { label: '3D Models Included', value: 'Stepper Motor v7, Cylindrical v1, NEMA 21' },
-          { label: 'CAD Tool', value: 'SolidWorks 2024' },
+          { label: 'Models Included', value: 'v7, Cylindrical v1, NEMA 21' },
+          { label: 'Interactive CAD', value: '3 Sketchfab 3D Models' },
+          { label: 'Shaft Standard', value: '5 mm D-Cut Precision Steel Shaft' },
           { label: 'Application', value: 'Robotic Manipulator Joint Packaging' },
         ],
       },
@@ -213,36 +219,229 @@ The team required a dedicated chassis capable of pulling high drawbar payload lo
     order: 1,
   },
   {
+    id: 'ev-conversion-maruti-800',
+    slug: 'ev-conversion-maruti-800',
+    title: 'Electric Vehicle Conversion - Maruti 800',
+    shortDescription: 'Complete electric vehicle retrofit of a Maruti 800 petrol car, leading an 18-member engineering team to design custom gearbox mounts, ANSYS FEA simulations, and electric powertrain integration.',
+    fullDescription: `### Electric Vehicle Conversion - Maruti 800 (Feb – May 2024)
+
+This final year mechanical engineering project involved the complete conversion of a **Maruti 800 petrol car into a fully functional electric vehicle**. Driven by a commitment to promote sustainable transportation and gain practical experience in electric vehicle technology, our team undertook this challenging yet rewarding endeavor.
+
+The conversion process encompassed the removal of the internal combustion engine and related components, followed by the design and integration of a suitable electric motor, battery pack, motor controller, and other necessary electrical systems. The successful completion of this project not only resulted in a working EV but also earned **university recognition and newspaper awards** for its innovation and technical execution.
+
+#### Key Contributions & Engineering Tasks:
+- **Team Leadership & Project Management**: As the team leader for this project involving **18 engineering members**, I took the initiative in defining project objectives, delegating tasks based on individual skills, and ensuring effective communication and collaboration throughout the project lifecycle. Instrumental in successfully meeting project milestones and achieving our final road-tested goal.
+- **Design and Development of the Gearbox Mount**: Identified the critical challenge of connecting the electric motor to the existing transaxle/gearbox. Spearheaded the design and development of a custom "Gearbox Mount" component using **Autodesk Fusion 360**. The component was designed with simplicity and ease of manufacturing in mind, as no suitable off-the-shelf solution existed. The design focused on effectively transmitting power from the motor shaft to the transmission shaft while ensuring structural integrity.
+- **Structural FEA Analysis of the Gearbox Mount**: Conducted comprehensive structural analysis of the designed Gearbox Mount using **ANSYS**. The simulations validated the component's durability and safety under operational torque loads:
+  - **Max Deformation**: 0.01 mm
+  - **Max Shear Stress**: 6.5 MPa
+  - Both metrics well within acceptable safety limits, ensuring reliable power transmission.
+- **Component Integration**: Spearheaded the physical integration of the 1 kW 49V BLDC electric motor, custom battery pack, and motor controller into the Maruti 800 engine bay and chassis.
+- **Road Testing & Validation**: Executed comprehensive road testing and performance verification, demonstrating smooth acceleration, efficient power transmission, and reliable operation.
+
+#### Technical Details of the Gearbox Mount:
+- **Material Selection**: Mild steel chosen for optimal mechanical properties, local availability, machinability, and cost-effectiveness.
+- **Design Simplicity**: Prioritized simple geometric shapes and standard manufacturing operations to ensure feasibility with available machine shop resources.
+- **Power Transmission Efficiency**: Direct coupling between the electric motor shaft and the gearbox input shaft minimizing mechanical losses.
+- **Structural Integrity**: Validated under peak starting torque in ANSYS FEA.`,
+    category: 'Engineering Projects',
+    heroImage: '/static/EV_car.JPG',
+    galleryImages: [
+      '/static/EV_car.JPG',
+      '/static/group.png',
+      '/static/news.png',
+      '/static/award.png',
+      '/static/TBNL9271.JPG',
+      '/static/EV_vehical/IMG_3262.JPG',
+      '/static/EV_vehical/IMG_3263.JPG',
+      '/static/EV_vehical/IMG_3265.JPG',
+      '/static/EV_vehical/IMG_2140.JPG',
+      '/static/EV_vehical/IMG_2590.JPG',
+      '/static/EV_vehical/IMG_2600.JPG',
+      '/static/EV_vehical/IMG_2603.JPG',
+      '/static/EV_vehical/IMG_3353.JPG',
+    ],
+    videoUrl: 'https://www.youtube.com/embed/7_O1lP-1Th8?si=NZfBGNgome2cuAVv',
+    tools: ['Fusion 360', 'ANSYS FEA', 'Electric Vehicle Components', 'Power Transmission', 'Vehicle Conversion', 'Project Management'],
+    specs: [
+      { label: 'Team Leadership', value: 'Lead Engineer (18-Member Team)' },
+      { label: 'Powertrain', value: '1 kW, 49 V BLDC Motor' },
+      { label: 'Gearbox Mount Material', value: 'Mild Steel (Custom Machined)' },
+      { label: 'ANSYS Max Deformation', value: '0.01 mm' },
+      { label: 'ANSYS Max Shear Stress', value: '6.5 MPa' },
+      { label: 'Donor Vehicle Chassis', value: 'Maruti 800 Petrol' },
+      { label: 'Recognition', value: 'University Innovation Award & News Press' },
+    ],
+    featured: true,
+    date: '2024',
+    order: 2,
+  },
+  {
+    id: 'cnc-laser-cutter',
+    slug: 'cnc-laser-cutter',
+    title: 'Wood Laser Engraving Machine (Arduino CNC Laser Cutter)',
+    shortDescription: 'Custom-built CNC laser engraving and cutting machine using Arduino Uno, GRBL firmware, NEMA17 steppers, and salvaged TVS matrix printer linear axes with 23×30 cm work area.',
+    fullDescription: `### Wood Laser Engraving Machine & Arduino CNC Laser Cutter
+
+Built an affordable desktop CNC laser engraving machine during college to cut costs and support practical needs. It is capable of engraving intricate logos and vector images on wood and cardboard, and cleanly cutting through 2–3 mm softwood with high precision.
+
+#### Hardware & Mechanical Design:
+- **Linear Axes Salvaged from TVS Matrix Printers**: Repurposed precision linear axes from old TVS matrix printers, saving ₹5000–₹6000 per axis while maintaining smooth linear guidance.
+- **Wooden Bed Calibration**: The wooden bed was leveled using a precision spirit level and calibrated with vernier calipers for accurate focal depth.
+- **Drive System**: Timing belt drive system with NEMA17 stepper motors driven by TB6600 microstepping drivers for smooth, repeatable motion at 5 cm/second.
+- **Laser Optics**: 0.5W 445–450 nm Blue Laser Module (210mA) with adjustable focal lens.
+
+#### Software & Control Workflow:
+1. **Design to Vector**: Created artwork, logos, and vector paths in **Inkscape**.
+2. **G-Code Generation**: Converted vector paths to machine G-code using Inkscape's G-code extension.
+3. **Machine Control**: Loaded G-code into **OpenBuilds Control** over USB.
+4. **Firmware Execution**: **Arduino Uno** running **OpenBuilds GRBL** firmware interprets coordinate moves and controls laser PWM.
+
+#### Real-World Research & Business Value:
+Conducted local market research before starting the build. While local commercial shops charged ₹2,500–₹3,000 for a 10×15 cm engraving, we offered the exact same quality for ₹1,500 with student discounts (₹800–₹1,000), successfully generating income while mastering mechatronics.
+
+#### Performance & Results:
+- Clean cuts through 2–3 mm softwood.
+- Sharp high-contrast logo engraving on hardwoods, plywood, and cardboard.
+- Fine-tuned laser feedrate and PWM power levels for distortion-free engraving.`,
+    category: 'Engineering Projects',
+    heroImage: '/static/laser.png',
+    galleryImages: [
+      '/static/laser.png',
+      '/static/leaser_cnc/IMG_3565.JPG',
+      '/static/leaser_cnc/IMG_3566.JPG',
+      '/static/leaser_cnc/IMG_3582.JPG',
+    ],
+    videoUrl: 'https://www.youtube.com/embed/feYczSyh0Ps',
+    tools: ['Arduino Uno', 'GRBL Firmware', 'OpenBuilds Control', 'Inkscape (G-Code)', 'TB6600 Drivers', 'NEMA17 Steppers'],
+    specs: [
+      { label: 'Laser Module', value: '0.5W Blue Laser (445–450 nm, 210mA)' },
+      { label: 'Stepper Motors', value: 'NEMA17 High Torque' },
+      { label: 'Motor Drivers', value: 'TB6600 Microstepping' },
+      { label: 'Controller Board', value: 'Arduino Uno running GRBL' },
+      { label: 'Work Area', value: '23 × 30 cm' },
+      { label: 'Working Speed', value: '5 cm / second' },
+      { label: 'Frame & Motion', value: 'TVS Matrix Linear Axes + Belt Drive' },
+      { label: 'Cutting Capacity', value: '2–3 mm Softwood / Cardboard' },
+    ],
+    featured: true,
+    date: '2023',
+    order: 3,
+  },
+  {
+    id: 'bom-automation',
+    slug: 'bom-automation',
+    title: 'Automating Project Tracking with Google Sheets using Python',
+    shortDescription: 'Automated master Bill of Materials (BOM) tracker in Python monitoring 3000+ client part numbers across local directory trees, automatically syncing creation status, file paths, and dates to Google Sheets via API.',
+    fullDescription: `### Automating Project Tracking with Google Sheets using Python
+
+Built to solve a critical engineering tracking bottleneck in monitoring the creation status of **more than 3,000 part numbers** listed in a client-provided Master BOM.
+
+Parts were being designed and saved locally as SolidWorks assembly (\`.SLDASM\`) or neutral CAD (\`.STEP\`) files across dozens of subdirectories, making manual progress tracking error-prone and labor-intensive.
+
+#### Architecture & Automated Workflow:
+- **Local File System Scanner**: Developed a robust Python script that recursively traverses local directory trees to identify newly modeled \`.SLDASM\` and \`.STEP\` files.
+- **BOM Cross-Verification**: The script reads the part numbers from Column A of a cloud-hosted Google Sheet Master BOM and checks if corresponding assembly or part files have been generated.
+- **Google Sheets API v4 Sync**: Directly updates Column B with real-time status ("Created" / "Not Created"), records exact local file paths, detects the file format, and stamps the discovery timestamp.
+- **Interactive Command Prompt**: Designed an interactive runtime prompt allowing project managers to input any target source path or project directory dynamically.
+
+#### Engineering Impact:
+- **Zero Manual Overhead**: Eliminated manual verification across 3,000+ part numbers, saving dozens of engineering hours each week.
+- **Instant Client Visibility**: Provided engineering management and clients with real-time progress transparency via the synchronized Google Spreadsheet.
+- **High Reliability**: Implemented robust exception handling for network retries and automated OAuth token refreshment.`,
+    category: 'Engineering Projects',
+    heroImage: '/static/bom.png',
+    galleryImages: [
+      '/static/bom.png',
+    ],
+    videoUrl: 'https://www.youtube.com/embed/zRhuhkMxTAc?si=9mRyQHGl9457Ruwi',
+    tools: ['Python', 'Google Sheets API', 'Google Apps Script', 'SolidWorks BOM', 'Data Automation', 'File System API'],
+    specs: [
+      { label: 'Part Tracking Volume', value: '3,000+ Master BOM Parts' },
+      { label: 'Formats Monitored', value: 'SolidWorks (.SLDASM) & STEP (.STEP)' },
+      { label: 'Integration', value: 'Google Sheets API v4 / OAuth 2.0' },
+      { label: 'Output Columns', value: 'Status, File Path, Extension, Date Found' },
+      { label: 'Scanning Speed', value: 'Automated background scans in seconds' },
+    ],
+    featured: true,
+    date: '2024',
+    order: 4,
+  },
+  {
+    id: '6-axis-robotic-arm',
+    slug: '6-axis-robotic-arm',
+    title: '6-Axis Robotic Arm Development',
+    shortDescription: 'Modular 6-DOF robotic manipulator modeled in Fusion 360, fabricated with 3D-printed PLA, stepper motors, TB6600 drivers, encoder feedback, and ANSYS structural simulation.',
+    fullDescription: `### 6-Axis Robotic Arm Development
+
+An advanced robotics and mechatronics project developing a modular **6-axis articulated robotic arm** to integrate mechanical CAD design, embedded microcontrollers, closed-loop sensor feedback, and structural FEA analysis.
+
+#### Key Engineering Contributions & Subsystems:
+- **Structural Design & Modularity**: Modeled the entire 6-DOF arm structure and articulated linkages in **Autodesk Fusion 360** with a focus on joint flexibility, weight distribution, and 3D printing feasibility.
+- **3D Printed Fabrication (PLA)**: Fabricated lightweight, high-rigidity structural segments using FDM 3D printing in PLA, maintaining close dimensional tolerances for bearing presses and pivot alignment.
+- **Actuators & Drive Electronics**: Selected high-torque NEMA stepper motors paired with TB6600 microstepping drivers to supply necessary holding torque and smooth angular velocity per joint.
+- **Firmware & Motion Control**: Programmed coordinate translation and motion planning algorithms in **C** for microcontroller execution.
+- **Sensor Feedback Integration**: Integrated rotary encoders, end-stop microswitches, and limit sensors for homing routines and real-time positional verification.
+- **ANSYS Structural FEA**: Evaluated von Mises stress concentrations, joint deflection, and strain under dynamic payload configurations in ANSYS to reinforce critical load-bearing linkages.`,
+    category: 'Engineering Projects',
+    heroImage: '/static/arm.jpg',
+    galleryImages: [
+      '/static/arm.jpg',
+    ],
+    tools: ['Fusion 360', 'C Programming', 'Arduino / Microcontroller', 'Stepper Motor Control', '3D Printing (PLA)', 'ANSYS FEA', 'Sensors & Feedback'],
+    specs: [
+      { label: 'Kinematics', value: '6 Degrees of Freedom (6-DOF)' },
+      { label: 'Structural Material', value: '3D-Printed PLA Structure' },
+      { label: 'Actuators', value: 'High-Torque Stepper Motors' },
+      { label: 'Motor Drivers', value: 'TB6600 Microstepping' },
+      { label: 'Simulation Software', value: 'ANSYS Static & Dynamic FEA' },
+      { label: 'Feedback Sensors', value: 'Rotary Encoders & End-Stop Switches' },
+    ],
+    featured: false,
+    date: '2024',
+    order: 5,
+  },
+  {
     id: 'advanced-thread-wizard',
     slug: 'advanced-thread-wizard',
-    title: 'Advanced Thread Wizard – SolidWorks Add-in',
-    shortDescription: 'Custom SolidWorks add-in generating standard and custom threads directly inside CAD, slashing thread creation from 15–20 minutes to 20–40 seconds.',
-    fullDescription: `### Advanced Thread Wizard for SolidWorks
+    title: 'SolidWorks Automation — Thread Wizard Add-in & Configuration Macros',
+    shortDescription: 'Custom SolidWorks Add-in and batch configuration VBA macros engineered with the SolidWorks API in C# / VB.NET / VBA, reducing thread generation and batch configuration workflows by over 75%.',
+    fullDescription: `### SolidWorks Automation — Thread Wizard Add-in & Configuration Macros
 
-Developed a custom SolidWorks Add-in engineered using the **SolidWorks API** in **C# / VB.NET / VBA** to automate standard and custom thread generation directly inside the CAD design environment.
+Developed a suite of custom SolidWorks automation tools and macros engineered using the **SolidWorks API** in **C# / VB.NET / VBA** to eliminate repetitive design bottlenecks and accelerate CAD production workflows.
 
-#### Key Engineering & Software Highlights:
+#### 1. Advanced Thread Wizard Add-in:
 - **Massive Time Reduction**: Cut thread generation and specification time from **15–20 minutes** (manual standard lookup, profile sketch, and sweep cut/boss) down to **20–40 seconds**.
 - **Standardized Profile Library**: Integrated international thread profiles compliant with **ISO and ASME** standards:
   - UN, UNJ, and UNR series (including Fine, Extra-Fine, and Special series)
   - Parallel and Taper pipe threads (NPT, BSPP, BSPT)
   - Metric Trapezoidal and ACME threads
 - **Parametric Feature Automation**: Fully automated parametric sketch and helical sweep creation, eliminating manual sketching errors and ensuring exact pitch diameters and dimensional tolerances.
-- **Embedded CAD GUI**: Designed an intuitive WPF/Windows Forms user interface directly docked inside SolidWorks for instant profile selection, real-time pitch calculation, and live 3D preview.`,
+- **Embedded CAD GUI**: Designed an intuitive WPF user interface directly docked inside SolidWorks for instant profile selection, real-time pitch calculation, and live 3D preview.
+
+#### 2. Configuration & Batch Assembly Macros:
+- **Macro for Open Assemblies**: Prompts the user for a destination directory and automatically exports every configuration within an open \`.SLDASM\` assembly as an individual, cleanly named \`.SLDPRT\` part file.
+- **High-Volume Batch Conversion Macro**: Traverses a source directory containing 80–100+ configurable assemblies, opens each assembly headless, extracts all configured parts, and saves them into dedicated folders matching each assembly's nomenclature.
+- **Time Savings**: Reduced full-day file preparation tasks from **~8 hours down to 1.5–2 hours**, currently deployed and utilized across the engineering design team.`,
     category: 'Engineering Projects',
-    heroImage: '',
-    galleryImages: [],
-    tools: ['SolidWorks API', 'C# / .NET', 'VB.NET / VBA', 'ASME Standards', 'ISO Standards'],
+    heroImage: '/static/macro.png',
+    galleryImages: [
+      '/static/macro.png',
+      '/static/GPT.jpg',
+    ],
+    videoUrl: 'https://www.youtube.com/embed/bX4SZfrD5_c?si=janjobJoquCv1-Fs',
+    tools: ['SolidWorks API', 'C# / .NET', 'VBA Macros', 'ASME & ISO Standards', 'Automation Scripting'],
     specs: [
       { label: 'Time Efficiency', value: '15-20 min down to 20-40 sec' },
+      { label: 'Batch Processing', value: '80–100+ assemblies per automated batch' },
       { label: 'Supported Standards', value: 'ISO Metric, ASME UN/UNJ/UNR, Pipe, Trapezoidal' },
-      { label: 'Integration', value: 'Native SolidWorks Add-in (.dll)' },
+      { label: 'Integration', value: 'Native SolidWorks Add-in (.dll) & VBA Macros' },
       { label: 'Development Language', value: 'C#, VB.NET, VBA' },
       { label: 'Tolerance Control', value: 'Precise Pitch & Root Radii Automation' },
     ],
     featured: true,
     date: '2024',
-    order: 2,
+    order: 6,
   },
   {
     id: 'fasteners-standards',
@@ -274,187 +473,6 @@ Developed and deployed **fastenersstandards.com**, a specialized online engineer
       { label: 'Deliverables', value: 'Online Dimension Engine & SolidWorks Files' },
     ],
     featured: true,
-    date: '2024',
-    order: 3,
-  },
-  {
-    id: 'cnc-laser-cutter',
-    slug: 'cnc-laser-cutter',
-    title: 'Arduino-Based CNC Laser Cutting & Z-Axis Milling',
-    shortDescription: 'Engineered a 2-axis CNC laser cutter and custom Z-axis assembly with interactive 3D model on Sketchfab for wood carving and depth milling.',
-    fullDescription: `### Arduino-Based CNC Laser Cutting Machine & Z-Axis Upgrade
-
-Designed and built an automated desktop CNC laser engraver and upgraded Z-axis milling unit for precision laser cutting and controlled depth wood carving.
-
-#### Interactive 3D CAD:
-- Features an interactive 3D model of the custom CNC assembly on Sketchfab.
-- **Gantry Kinematics**: CoreXY dual-axis belt drive mechanism utilizing V-slot aluminum extrusions.
-- **Z-Axis Upgrade Assembly**: Designed a custom rigid Z-axis gantry in Fusion 360 accommodating a spindle motor for 1mm per pass depth milling in wood and soft materials.
-- **Laser Optics**: Equipped with a 5.5W 450nm optical laser module with PWM duty-cycle intensity control.`,
-    category: 'Engineering Projects',
-    heroImage: '/static/leaser_cnc/laser.png',
-    galleryImages: [
-      '/static/leaser_cnc/laser.png',
-      '/static/leaser_cnc/IMG_3565.JPG',
-      '/static/leaser_cnc/IMG_3566.JPG',
-      '/static/leaser_cnc/IMG_3582.JPG',
-    ],
-    tools: ['SolidWorks', 'Fusion 360', 'Arduino', 'GRBL', 'CNC Machining', 'LaserGRBL', '3D Printing'],
-    model3d: {
-      type: 'sketchfab',
-      url: 'https://sketchfab.com/models/ce1bf2b9e3c340c9a85c28e2003a8a75/embed?autospin=1&autostart=1',
-      title: 'CNC Laser Z-Axis Upgrade Assembly',
-    },
-    models3d: [
-      {
-        title: 'CNC Laser Z-Axis Upgrade Assembly',
-        url: 'https://sketchfab.com/models/ce1bf2b9e3c340c9a85c28e2003a8a75/embed?autospin=1&autostart=1',
-        type: 'sketchfab',
-      },
-    ],
-    videoUrl: 'https://youtube.com/embed/zGyGgTdxowI',
-    specs: [
-      { label: 'Interactive 3D Model', value: 'Sketchfab Interactive View' },
-      { label: 'Work Area', value: '400mm x 400mm' },
-      { label: 'Laser Module', value: '5.5W 450nm Focusable Blue Laser' },
-      { label: 'Controller', value: 'Arduino Nano with CNC Shield' },
-      { label: 'Z-Axis Travel', value: 'Custom Spindle Carriage for Milling' },
-    ],
-    featured: true,
-    date: '2023',
-    order: 4,
-  },
-  {
-    id: '6-axis-robotic-arm',
-    slug: '6-axis-robotic-arm',
-    title: '6-Axis Robotic Arm & Custom Stepper Motors',
-    shortDescription: 'Kinematics modeling and custom 3D-modeled stepper motor housings (Stepper Motor v7, Cylindrical v1, NEMA 21) with 3 interactive Sketchfab 3D models.',
-    fullDescription: `### 6-Axis Robotic Arm & Custom Stepper Motor Actuators
-
-Designed a 6-Degrees-of-Freedom articulated robotic arm optimized for pick-and-place automation and experimental payload handling, including custom-designed stepper motor mounting enclosures.
-
-#### 3 Interactive 3D Models on Sketchfab:
-1. **Stepper Motor v7**: Custom joint actuator housing with tailored bolt circle and mounting flange tolerances.
-2. **Cylindrical Stepper Motor v1**: Ergonomic compact cylindrical joint motor assembly.
-3. **NEMA 21 Stepper Motor v1**: High-torque mounting bracket and faceplate design.
-
-#### Kinematics & Reducers:
-- Modeled link lengths and joint clearances in Fusion 360 and SolidWorks with inverse kinematics calculations simulated in Python.
-- Integrated cycloidal and planetary reduction gearsets to maximize torque output and eliminate joint backlash.`,
-    category: 'Engineering Projects',
-    heroImage: '/static/arm.jpg',
-    galleryImages: [
-      '/static/arm.jpg',
-      '/static/3d_printing/IMG_3625.JPG',
-    ],
-    tools: ['SolidWorks', 'Fusion 360', 'Python Kinematics', 'Microcontrollers', 'Robotics', 'Stepper Motors'],
-    model3d: {
-      type: 'sketchfab',
-      url: 'https://sketchfab.com/models/099d6834458b4f1487ff29ad16225d22/embed?autospin=1&autostart=1',
-      title: 'Stepper Motor v7 Joint Actuator',
-    },
-    models3d: [
-      {
-        title: 'Stepper Motor v7 (Robotic Joint)',
-        url: 'https://sketchfab.com/models/099d6834458b4f1487ff29ad16225d22/embed?autospin=1&autostart=1',
-        type: 'sketchfab',
-      },
-      {
-        title: 'Cylindrical Stepper Motor v1',
-        url: 'https://sketchfab.com/models/bc19dc85c3f74694924033dab609fb1a/embed?autospin=1&autostart=1',
-        type: 'sketchfab',
-      },
-      {
-        title: 'NEMA 21 Stepper Motor v1',
-        url: 'https://sketchfab.com/models/61e9fc0271ed49e6af784659e9026f69/embed?autospin=1&autostart=1',
-        type: 'sketchfab',
-      },
-    ],
-    videoUrl: 'https://youtube.com/embed/3BYo8GMtsGc',
-    specs: [
-      { label: 'Interactive 3D Models', value: '3 Sketchfab Actuator Models' },
-      { label: 'Degrees of Freedom', value: '6 Axis (Rotational)' },
-      { label: 'Actuator Types', value: 'Stepper Motor v7, Cylindrical, NEMA 21' },
-      { label: 'Control Method', value: 'ESP32 / Inverse Kinematics Python GUI' },
-    ],
-    featured: true,
-    date: '2023',
-    order: 5,
-  },
-  {
-    id: 'solidworks-macro-automation',
-    slug: 'solidworks-macro-automation',
-    title: 'SolidWorks Macro Automation – Configuration & Batch Conversion',
-    shortDescription: 'Custom VBA macros for batch processing 80–100+ assemblies, converting configurable assemblies to part files and cutting 8-hour workflows to 1.5–2 hours.',
-    fullDescription: `### SolidWorks Parametric & Batch Conversion Macros
-
-Developed custom SolidWorks automation macros (enhanced with ChatGPT prompt engineering) to streamline large-scale assembly configuration and manufacturing release workflows.
-
-#### Engineering Achievements:
-- **Configurable Assembly Splitting**: Automated parsing of complex configurable assemblies to extract and save individual part files with custom user-selected destination directories.
-- **High-Volume Batch Processing**: Upgraded pipeline to batch-process **80–100+ assemblies in a single run** from a source directory, auto-saving parts while preserving original nomenclature and metadata.
-- **75%+ Time Savings**: Reduced full-day engineering file preparation tasks that typically took **~8 working hours down to 1.5–2 hours**.
-- **Internal Production Adoption**: Replicated and extended functionality equivalent to SolidWorks Premium tools, currently utilized by the internal engineering design team.`,
-    category: 'Engineering Projects',
-    heroImage: '/static/macro.png',
-    galleryImages: [
-      '/static/macro.png',
-      '/static/bom.png',
-      '/static/GPT.jpg',
-    ],
-    tools: ['SolidWorks API', 'VBA Macros (VBA)', 'ChatGPT Automation', 'Batch File Processing'],
-    specs: [
-      { label: 'Batch Capacity', value: '80–100+ assemblies per execution' },
-      { label: 'Time Reduction', value: '8 hours down to 1.5–2 hours' },
-      { label: 'Language', value: 'SolidWorks VBA / COM API' },
-      { label: 'Output', value: 'Individual Parts & Neutral Formats (STEP/DXF)' },
-    ],
-    featured: false,
-    date: '2024',
-    order: 6,
-  },
-  {
-    id: 'ev-conversion-maruti-800',
-    slug: 'ev-conversion-maruti-800',
-    title: 'Electric Vehicle Conversion – Maruti 800',
-    shortDescription: 'Led an 18-engineer team retrofitting a Maruti 800 into a functional EV powered by a 1 kW 49V BLDC motor, custom gearbox mount, and ANSYS FEA.',
-    fullDescription: `### Electric Vehicle Conversion – Maruti 800 (Feb – May 2024)
-
-Led an engineering team of **18 engineers** in the mechanical and electrical conversion of an ICE Maruti 800 into a fully operational electric vehicle powered by a **1 kW, 49 V Brushless DC (BLDC) motor**.
-
-#### Engineering Deliverables:
-- **Custom Gearbox Mount**: Designed, simulated, and precision-manufactured a structural adapter and gearbox mount bridging the electric motor shaft to the existing automotive transaxle, fitted and road-tested successfully.
-- **Finite Element Analysis (FEA)**: Conducted static structural and vibrational simulations in **ANSYS** to validate yield strength, safety factors, and fatigue endurance of the motor mounting bracket under peak torque.
-- **3D Modeling & Kinematics**: Utilized **Autodesk Fusion 360** for overall powertrain component layout, clearance verification, and assembly packaging.`,
-    category: 'Engineering Projects',
-    heroImage: '/static/EV_vehical/EV_car.JPG',
-    galleryImages: [
-      '/static/EV_vehical/EV_car.JPG',
-      '/static/EV_vehical/award.png',
-      '/static/EV_vehical/news.png',
-      '/static/EV_vehical/IMG_3262.JPG',
-      '/static/EV_vehical/IMG_3263.JPG',
-      '/static/EV_vehical/IMG_3265.JPG',
-      '/static/EV_vehical/IMG_2140.JPG',
-      '/static/EV_vehical/IMG_2590.JPG',
-      '/static/EV_vehical/IMG_2600.JPG',
-      '/static/EV_vehical/IMG_2603.JPG',
-      '/static/EV_vehical/IMG_3353.JPG',
-      '/static/EV_vehical/IWDY3040.JPG',
-      '/static/EV_vehical/MRYC6906.JPG',
-      '/static/EV_vehical/PCFH9191.JPG',
-      '/static/EV_vehical/TBNL9271.JPG',
-      '/static/EV_vehical/TKAP1058.JPG',
-    ],
-    tools: ['Fusion 360', 'ANSYS Structural', 'BLDC Motor Powertrain', 'Gearbox Mount', 'Fabrication'],
-    specs: [
-      { label: 'Team Leadership', value: 'Lead Engineer (18 engineers)' },
-      { label: 'Powertrain', value: '1 kW, 49 V BLDC Motor' },
-      { label: 'CAD Software', value: 'Autodesk Fusion 360' },
-      { label: 'Structural Simulation', value: 'ANSYS Mechanical FEA' },
-      { label: 'Vehicle Result', value: 'Fully Functional & Road-Tested' },
-    ],
-    featured: false,
     date: '2024',
     order: 7,
   },

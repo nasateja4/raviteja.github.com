@@ -3,7 +3,7 @@ import { collection, getDocs, doc, setDoc, deleteDoc } from 'firebase/firestore'
 import { Project, SubProject } from './types';
 import { defaultProjects } from './defaultData';
 
-const LOCAL_STORAGE_KEY = 'raviteja_portfolio_projects_v10';
+const LOCAL_STORAGE_KEY = 'raviteja_portfolio_projects_v12';
 
 // IDs of projects that strictly belong inside the single 3D CAD & Printing card collection
 const SUB_PROJECT_IDS = new Set([
@@ -17,6 +17,14 @@ const SUB_PROJECT_IDS = new Set([
   'cnc-z-axis',
   'custom-stepper-motors',
   'stepper-motors',
+]);
+
+// Old template placeholders to purge
+const OBSOLETE_PROJECT_IDS = new Set([
+  'aerospace-bracket-generative-design',
+  'planetary-gearbox-reduction-drive',
+  'hydraulic-linear-actuator',
+  'sheet-metal-industrial-chassis',
 ]);
 
 function normalizeProject(p: any): Project {
@@ -38,7 +46,7 @@ function getLocalProjects(): Project[] {
   }
   try {
     const parsed: Project[] = JSON.parse(stored)
-      .filter((p: Project) => !SUB_PROJECT_IDS.has(p.id) && !SUB_PROJECT_IDS.has(p.slug))
+      .filter((p: Project) => !SUB_PROJECT_IDS.has(p.id) && !SUB_PROJECT_IDS.has(p.slug) && !OBSOLETE_PROJECT_IDS.has(p.id) && !OBSOLETE_PROJECT_IDS.has(p.slug))
       .map(normalizeProject);
     // Ensure all default projects exist in stored data (merge missing ones)
     let updated = false;
@@ -77,7 +85,7 @@ function getLocalProjects(): Project[] {
 function saveLocalProjects(projects: Project[]) {
   if (typeof window !== 'undefined') {
     const filtered = projects
-      .filter((p) => !SUB_PROJECT_IDS.has(p.id) && !SUB_PROJECT_IDS.has(p.slug))
+      .filter((p) => !SUB_PROJECT_IDS.has(p.id) && !SUB_PROJECT_IDS.has(p.slug) && !OBSOLETE_PROJECT_IDS.has(p.id) && !OBSOLETE_PROJECT_IDS.has(p.slug))
       .map(normalizeProject);
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(filtered));
   }
@@ -102,19 +110,27 @@ export async function getProjects(): Promise<Project[]> {
             deleteDoc(doc(db, 'projects', id)).catch(() => {});
             return;
           }
+          // If obsolete template project, purge it
+          if (OBSOLETE_PROJECT_IDS.has(id) || OBSOLETE_PROJECT_IDS.has(data.slug)) {
+            deleteDoc(doc(db, 'projects', id)).catch(() => {});
+            return;
+          }
           fetched.push(normalizeProject({ id: docSnap.id, ...data }));
         });
 
+        // Ensure all default projects are present
+        for (const def of defaultProjects) {
+          const exists = fetched.some((p) => p.id === def.id || p.slug === def.slug);
+          if (!exists) {
+            const normalizedDef = normalizeProject(def);
+            fetched.push(normalizedDef);
+            setDoc(doc(db, 'projects', def.id), normalizedDef).catch(() => {});
+          }
+        }
+
         // Ensure 3d-printing-modeling is present and pinned to order: 1 (Top of list)
         const p3d = fetched.find((p) => p.slug === '3d-printing-modeling' || p.id === '3d-printing-modeling');
-        if (!p3d) {
-          const def3D = defaultProjects.find((p) => p.slug === '3d-printing-modeling');
-          if (def3D) {
-            const normalized3D = normalizeProject({ ...def3D, order: 1 });
-            fetched.push(normalized3D);
-            setDoc(doc(db, 'projects', '3d-printing-modeling'), normalized3D).catch(() => {});
-          }
-        } else if (p3d.order !== 1) {
+        if (p3d && p3d.order !== 1) {
           p3d.order = 1;
           setDoc(doc(db, 'projects', p3d.id), p3d, { merge: true }).catch(() => {});
         }
