@@ -512,11 +512,8 @@ I wrote two types of macros using the SolidWorks API:
 ### Challenges & Solutions:
 Handling multiple configurations within assemblies and maintaining organized output required careful scripting. Another challenge was ensuring the macros worked reliably in both open and batch modes. I addressed these using SolidWorks API features for configurations and proper folder management logic, ensuring smooth automation even across complex assemblies.`,
     category: 'Engineering Projects',
-    heroImage: '/static/macro.png',
-    galleryImages: [
-      '/static/macro.png',
-      '/static/GPT.jpg',
-    ],
+    heroImage: '',
+    galleryImages: [],
     videoUrl: 'https://www.youtube.com/embed/bX4SZfrD5_c?si=janjobJoquCv1-Fs',
     tools: ['SolidWorks API', 'VBA', 'ChatGPT (Assistance)', 'Automation Scripting'],
     specs: [

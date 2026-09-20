@@ -3,8 +3,8 @@ import { collection, getDocs, doc, setDoc, deleteDoc } from 'firebase/firestore'
 import { Project, SubProject } from './types';
 import { defaultProjects } from './defaultData';
 
-const LOCAL_STORAGE_KEY = 'raviteja_portfolio_projects_v17';
-const DELETED_PROJECTS_KEY = 'raviteja_portfolio_deleted_v17';
+const LOCAL_STORAGE_KEY = 'raviteja_portfolio_projects_v18';
+const DELETED_PROJECTS_KEY = 'raviteja_portfolio_deleted_v18';
 
 function getDeletedProjectIds(): Set<string> {
   if (typeof window === 'undefined') return new Set();
