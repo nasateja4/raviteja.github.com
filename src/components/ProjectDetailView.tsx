@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Project, Model3D, SubProject, VideoItem } from '@/lib/types';
-import { parseVideoList } from '@/lib/projectsService';
+import { parseVideoList } from '@/lib/mediaUtils';
 import ModelViewer from '@/components/ModelViewer';
 import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, Box, Video, Image as ImageIcon, Calendar, Cpu, Layers } from 'lucide-react';
 
@@ -132,6 +132,24 @@ interface ProjectDetailViewProps {
 export default function ProjectDetailView({ project }: ProjectDetailViewProps) {
   const hasSubProjects = Boolean(project.subProjects && project.subProjects.length > 0);
   const [activeSubIndex, setActiveSubIndex] = useState(0);
+
+  // Automatically activate the specific subproject if linked with ?sub= from the homepage spotlight
+  useEffect(() => {
+    if (typeof window !== 'undefined' && project.subProjects && project.subProjects.length > 0) {
+      const params = new URLSearchParams(window.location.search);
+      const subId = params.get('sub');
+      if (subId) {
+        const foundIdx = project.subProjects.findIndex(
+          (s) =>
+            s.id.toLowerCase() === subId.toLowerCase() ||
+            s.title.toLowerCase().includes(subId.toLowerCase())
+        );
+        if (foundIdx >= 0) {
+          setActiveSubIndex(foundIdx);
+        }
+      }
+    }
+  }, [project.subProjects]);
 
   // Active sub-project (or the main project if no sub-projects)
   const currentSub: SubProject | null = hasSubProjects

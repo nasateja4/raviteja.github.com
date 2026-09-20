@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import Hero from '@/components/Hero';
 import ProjectCard from '@/components/ProjectCard';
 import ModelViewer from '@/components/ModelViewer';
@@ -9,73 +9,15 @@ import ExperienceTimeline from '@/components/ExperienceTimeline';
 import { getProjects } from '@/lib/projectsService';
 import { defaultProfile, defaultExperiences, defaultEducation, defaultSkillCategories, defaultProjects } from '@/lib/defaultData';
 import { Project } from '@/lib/types';
+import { extractSpotlightModels, SpotlightModelItem } from '@/lib/mediaUtils';
 import { Sparkles, ChevronLeft, ChevronRight, Box, Layers } from 'lucide-react';
-
-// Curated list of all interactive 3D CAD models for the homepage spotlight
-// Default is set to the Agricultural Rover (Rower) as requested!
-const spotlightModels = [
-  {
-    id: 'rower-full',
-    title: 'Autonomous Agricultural Rover (Rower)',
-    subtitle: 'Agricultural Tool & High-Incline Towing Drivetrain',
-    description: 'Custom autonomous agricultural rover assembly designed for K.I.T.E. Engineering College students. Engineered with mechanical calculations for heavy drawbar payload pulling and steep hill climb gradeability.',
-    url: 'https://sketchfab.com/models/fd99e5beff4b4b15a7503bdb507d2df2/embed?autospin=1&autostart=1',
-    tools: ['SolidWorks', 'Calculations', 'Chassis Design', '3D Printing'],
-    slug: '3d-printing-modeling',
-  },
-  {
-    id: 'rower-chassis',
-    title: 'Agricultural Rover Structural Chassis',
-    subtitle: 'Lightweight Terrain Clearance Frame',
-    description: 'Chassis frame geometry engineered with mechanical stress analysis to ensure structural integrity and terrain clearance across irregular agricultural soil.',
-    url: 'https://sketchfab.com/models/f9d694f2260c42a490f925d8bae35d0e/embed?autospin=1&autostart=1',
-    tools: ['SolidWorks', 'FEA Structural', 'Sheet Metal'],
-    slug: '3d-printing-modeling',
-  },
-  {
-    id: 'smart-watch',
-    title: 'Smart Health Tracking Watch (watch_2)',
-    subtitle: 'Wearable ESP32-S3 Snap-Fit Housing',
-    description: 'Compact wearable IoT watch enclosure designed with snap-fit joints, integrating ESP32-S3, MAX30102 pulse oximeter, and MPU6050 accelerometer.',
-    url: 'https://sketchfab.com/models/462b5d8ede60480c998d240b1384288c/embed?autostart=1',
-    tools: ['Fusion 360', 'UltiMaker Cura', 'Snap-Fit Enclosure', 'IoT Wearable'],
-    slug: '3d-printing-modeling',
-  },
-  {
-    id: 'cnc-z-axis',
-    title: 'CNC Laser Z-Axis Upgrade Assembly',
-    subtitle: 'Precision Depth Wood & Aluminum Milling',
-    description: 'Rigid Z-axis gantry carriage accommodating a high-RPM spindle motor for 1mm per pass depth milling in hardwoods and soft aluminum.',
-    url: 'https://sketchfab.com/models/ce1bf2b9e3c340c9a85c28e2003a8a75/embed?autospin=1&autostart=1',
-    tools: ['Fusion 360', 'CNC Machining', 'Lead Screw Drive', 'GRBL'],
-    slug: '3d-printing-modeling',
-  },
-  {
-    id: 'rotating-bed',
-    title: '3D Printed Concentric Rotating Display Bed',
-    subtitle: '360° Motorized Turntable for Video & CAD',
-    description: 'Concentric 360-degree rotating turntable bed designed in Fusion 360 for dynamic CAD model inspection and video recording.',
-    url: 'https://sketchfab.com/models/f9a45683183e4bc3a382eedf9c332771/embed?autospin=1&autostart=1',
-    tools: ['Fusion 360', 'FDM 3D Printing', 'Product Presentation'],
-    slug: '3d-printing-modeling',
-  },
-  {
-    id: 'stepper-v7',
-    title: 'Custom Stepper Motor v7 Robotic Housing',
-    subtitle: '6-Axis Robotic Arm Joint Actuator',
-    description: 'Tailored stepper motor outer housing and mounting flange designed in SolidWorks to guarantee structural alignment with robotic joint reducers.',
-    url: 'https://sketchfab.com/models/099d6834458b4f1487ff29ad16225d22/embed?autospin=1&autostart=1',
-    tools: ['SolidWorks', 'Robotics Kinematics', 'Actuator Enclosures'],
-    slug: '3d-printing-modeling',
-  },
-];
 
 export default function HomePage() {
   const [projects, setProjects] = useState<Project[]>(defaultProjects);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [loading, setLoading] = useState<boolean>(false);
 
-  // Default to index 0: Rower (Agricultural Rover) as requested!
+  // Active spotlight index (defaults to index 0: Autonomous Agricultural Rover Rower)
   const [activeSpotlightIndex, setActiveSpotlightIndex] = useState<number>(0);
 
   useEffect(() => {
@@ -92,13 +34,20 @@ export default function HomePage() {
     loadData();
   }, []);
 
+  // Dynamically extract every 3D model uploaded across all projects and subprojects!
+  const spotlightModels: SpotlightModelItem[] = useMemo(() => {
+    return extractSpotlightModels(projects);
+  }, [projects]);
+
+  // Ensure index stays safely bounded if list expands or contracts dynamically
+  const safeSpotlightIndex = activeSpotlightIndex < spotlightModels.length ? activeSpotlightIndex : 0;
+  const currentSpotlight = spotlightModels[safeSpotlightIndex] || spotlightModels[0];
+
   const categories = ['All', '3D CAD & Printing', 'Engineering Projects'];
 
   const filteredProjects = selectedCategory === 'All'
     ? projects
     : projects.filter((p) => p.category === selectedCategory);
-
-  const currentSpotlight = spotlightModels[activeSpotlightIndex];
 
   const handlePrevSpotlight = () => {
     setActiveSpotlightIndex((prev) =>
@@ -133,7 +82,7 @@ export default function HomePage() {
 
                 {/* Model Counter Indicator */}
                 <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-cyan-50 border border-cyan-200 text-cyan-800">
-                  Model {activeSpotlightIndex + 1} of {spotlightModels.length}
+                  Model {safeSpotlightIndex + 1} of {spotlightModels.length}
                 </span>
               </div>
 
@@ -159,7 +108,9 @@ export default function HomePage() {
 
               <div className="pt-3 flex items-center gap-3">
                 <a
-                  href={`/projects/${currentSpotlight.slug}`}
+                  href={`/projects/${currentSpotlight.slug}${
+                    currentSpotlight.subProjectId ? `?sub=${encodeURIComponent(currentSpotlight.subProjectId)}` : ''
+                  }`}
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm transition-all shadow-md hover:shadow-lg"
                 >
                   <span>Full Case Study & Specs</span>
@@ -205,7 +156,7 @@ export default function HomePage() {
                     key={currentSpotlight.url}
                     url={currentSpotlight.url}
                     title={currentSpotlight.title}
-                    type="sketchfab"
+                    type={currentSpotlight.type || 'sketchfab'}
                   />
                 </div>
 
@@ -225,10 +176,10 @@ export default function HomePage() {
               <div className="flex items-center justify-center gap-2 mt-3.5">
                 {spotlightModels.map((m, idx) => (
                   <button
-                    key={m.id}
+                    key={m.id || idx}
                     onClick={() => setActiveSpotlightIndex(idx)}
                     className={`h-2 rounded-full transition-all duration-300 ${
-                      activeSpotlightIndex === idx
+                      safeSpotlightIndex === idx
                         ? 'w-8 bg-blue-600 shadow-sm'
                         : 'w-2 bg-slate-300 hover:bg-slate-400'
                     }`}
