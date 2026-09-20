@@ -138,6 +138,32 @@ function getLocalProjects(): Project[] {
       if (existingIndex === -1) {
         merged.push(normalizeProject(def));
         updated = true;
+      } else if (def.subProjects && def.subProjects.length > 0) {
+        const existingProj = merged[existingIndex];
+        const existingSubs = existingProj.subProjects || [];
+        const mergedSubs = [...existingSubs];
+        let subUpdated = false;
+
+        for (const defSub of def.subProjects) {
+          const subIdx = mergedSubs.findIndex((s: any) => s.id === defSub.id);
+          if (subIdx === -1) {
+            mergedSubs.push(defSub);
+            subUpdated = true;
+          } else {
+            const curSub = mergedSubs[subIdx];
+            const curModelsCount = (curSub.models3d?.length || 0) + (curSub.model3d?.url ? 1 : 0);
+            const defModelsCount = (defSub.models3d?.length || 0) + (defSub.model3d?.url ? 1 : 0);
+            if (defModelsCount > curModelsCount) {
+              mergedSubs[subIdx] = { ...defSub, ...curSub, models3d: defSub.models3d, model3d: defSub.model3d };
+              subUpdated = true;
+            }
+          }
+        }
+
+        if (subUpdated) {
+          merged[existingIndex] = { ...existingProj, subProjects: mergedSubs };
+          updated = true;
+        }
       }
       // Note: Do NOT overwrite user-modified fields with static defaults
     }
@@ -191,7 +217,7 @@ export async function getProjects(): Promise<Project[]> {
       const colRef = collection(db, 'projects');
       const fetchPromise = getDocs(colRef);
       const timeoutPromise = new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error('Firestore timeout')), 2500)
+        setTimeout(() => reject(new Error('Firestore timeout')), 7000)
       );
       const snapshot = await Promise.race([fetchPromise, timeoutPromise]);
       if (!snapshot.empty) {
@@ -221,6 +247,32 @@ export async function getProjects(): Promise<Project[]> {
             const normalizedDef = normalizeProject(def);
             fetched.push(normalizedDef);
             setDoc(doc(db, 'projects', def.id), sanitizeForFirestore(normalizedDef)).catch(() => {});
+          } else if (def.subProjects && def.subProjects.length > 0) {
+            const fetchedProj = fetched[index];
+            const fetchedSubs = fetchedProj.subProjects || [];
+            const mergedSubs = [...fetchedSubs];
+            let subUpdated = false;
+
+            for (const defSub of def.subProjects) {
+              const subIdx = mergedSubs.findIndex((s: any) => s.id === defSub.id);
+              if (subIdx === -1) {
+                mergedSubs.push(defSub);
+                subUpdated = true;
+              } else {
+                const curSub = mergedSubs[subIdx];
+                const curModelsCount = (curSub.models3d?.length || 0) + (curSub.model3d?.url ? 1 : 0);
+                const defModelsCount = (defSub.models3d?.length || 0) + (defSub.model3d?.url ? 1 : 0);
+                if (defModelsCount > curModelsCount) {
+                  mergedSubs[subIdx] = { ...defSub, ...curSub, models3d: defSub.models3d, model3d: defSub.model3d };
+                  subUpdated = true;
+                }
+              }
+            }
+
+            if (subUpdated) {
+              fetched[index] = { ...fetchedProj, subProjects: mergedSubs };
+              setDoc(doc(db, 'projects', fetchedProj.id), sanitizeForFirestore(fetched[index])).catch(() => {});
+            }
           }
           // Do NOT overwrite user modifications stored in Firestore with default data
         }
