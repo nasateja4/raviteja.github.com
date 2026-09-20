@@ -138,14 +138,14 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
       if (projectMode === 'cad') {
         // Save directly into the single 3D CAD & Printing card collection
         const subData: SubProject = {
-          id: slug,
-          title,
-          shortDescription,
-          description: fullDescription,
-          model3d: modelUrl ? { type: 'sketchfab', url: modelUrl, title: modelTitle || title } : undefined,
-          videoUrl: videoUrl || undefined,
-          heroImage: heroImage || (galleryImages.length > 0 ? galleryImages[0] : undefined),
-          galleryImages: galleryImages.length > 0 ? galleryImages : heroImage ? [heroImage] : [],
+          id: slug.trim(),
+          title: title.trim(),
+          shortDescription: shortDescription.trim(),
+          description: fullDescription.trim(),
+          model3d: modelUrl.trim() ? { type: 'sketchfab', url: modelUrl.trim(), title: modelTitle.trim() || title.trim() } : undefined,
+          videoUrl: videoUrl.trim() ? videoUrl.trim() : undefined,
+          heroImage: heroImage.trim() || (galleryImages.length > 0 ? galleryImages[0] : undefined),
+          galleryImages: galleryImages.length > 0 ? galleryImages : heroImage.trim() ? [heroImage.trim()] : [],
           tools,
           specs,
         };
@@ -154,21 +154,21 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
       } else {
         // Save as independent Engineering Project card
         const projectData: Project = {
-          id: initialData?.id || slug,
-          slug,
-          title,
+          id: initialData?.id || slug.trim(),
+          slug: slug.trim(),
+          title: title.trim(),
           category: 'Engineering Projects',
-          shortDescription,
-          fullDescription,
+          shortDescription: shortDescription.trim(),
+          fullDescription: fullDescription.trim(),
           heroImage: heroImage.trim(),
           galleryImages,
           tools,
-          model3d: modelUrl ? { type: 'sketchfab', url: modelUrl, title: modelTitle || title } : undefined,
-          videoUrl: videoUrl || undefined,
-          externalUrl: externalUrl || undefined,
+          model3d: modelUrl.trim() ? { type: 'sketchfab', url: modelUrl.trim(), title: modelTitle.trim() || title.trim() } : undefined,
+          videoUrl: videoUrl.trim() ? videoUrl.trim() : undefined,
+          externalUrl: externalUrl.trim() ? externalUrl.trim() : undefined,
           specs,
           featured,
-          date,
+          date: date.trim(),
           order: Number(order) || 1,
         };
 

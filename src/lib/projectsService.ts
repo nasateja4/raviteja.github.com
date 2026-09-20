@@ -56,6 +56,65 @@ const OBSOLETE_PROJECT_IDS = new Set([
   'sheet-metal-industrial-chassis',
 ]);
 
+/**
+ * Normalizes any YouTube URL (watch, shorts, share youtu.be, or embed)
+ * into a clean standard embed URL: https://www.youtube.com/embed/{id}.
+ * If empty or whitespace, returns undefined so it can be cleanly deleted.
+ */
+export function formatYouTubeEmbedUrl(url?: string): string | undefined {
+  if (!url || !url.trim()) return undefined;
+  const trimmed = url.trim();
+
+  // If already embed URL with or without parameters:
+  const embedMatch = trimmed.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/);
+  if (embedMatch) {
+    return `https://www.youtube.com/embed/${embedMatch[1]}`;
+  }
+
+  // Standard watch URL or youtu.be short URL or shorts URL:
+  const watchMatch = trimmed.match(/(?:youtube\.com\/(?:watch\?.*v=|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  if (watchMatch) {
+    return `https://www.youtube.com/embed/${watchMatch[1]}`;
+  }
+
+  return trimmed;
+}
+
+/**
+ * Recursively strips any `undefined` values and empty plain objects from data
+ * so Firestore setDoc does not throw "Unsupported field value: undefined",
+ * and allows clean field updates and field deletions.
+ */
+export function sanitizeForFirestore<T = any>(obj: T): T {
+  if (obj === null || obj === undefined) return null as any;
+  if (Array.isArray(obj)) {
+    return obj
+      .filter((item) => item !== undefined)
+      .map((item) => (typeof item === 'object' && item !== null ? sanitizeForFirestore(item) : item)) as any;
+  }
+  if (typeof obj === 'object') {
+    const cleaned: Record<string, any> = {};
+    for (const [key, value] of Object.entries(obj)) {
+      if (value !== undefined) {
+        if (typeof value === 'object' && value !== null) {
+          const res = sanitizeForFirestore(value);
+          if (res !== undefined && res !== null) {
+            if (!Array.isArray(res) && Object.keys(res).length === 0) {
+              // skip empty plain object
+            } else {
+              cleaned[key] = res;
+            }
+          }
+        } else {
+          cleaned[key] = value;
+        }
+      }
+    }
+    return cleaned as any;
+  }
+  return obj;
+}
+
 function normalizeProject(p: any): Project {
   const category = p.category === '3D CAD & Printing' ? '3D CAD & Printing' : 'Engineering Projects';
   return {
@@ -182,7 +241,7 @@ export async function getProjects(): Promise<Project[]> {
           if (index === -1) {
             const normalizedDef = normalizeProject(def);
             fetched.push(normalizedDef);
-            setDoc(doc(db, 'projects', def.id), normalizedDef).catch(() => {});
+            setDoc(doc(db, 'projects', def.id), sanitizeForFirestore(normalizedDef)).catch(() => {});
           }
           // Do NOT overwrite user modifications stored in Firestore with default data
         }
@@ -191,7 +250,7 @@ export async function getProjects(): Promise<Project[]> {
         const p3d = fetched.find((p) => p.slug === '3d-printing-modeling' || p.id === '3d-printing-modeling');
         if (p3d && p3d.order !== 1) {
           p3d.order = 1;
-          setDoc(doc(db, 'projects', p3d.id), p3d, { merge: true }).catch(() => {});
+          setDoc(doc(db, 'projects', p3d.id), sanitizeForFirestore(p3d), { merge: true }).catch(() => {});
         }
 
         // Shift any non-3D project that claims order <= 1 so 3D card stays #1
@@ -211,7 +270,7 @@ export async function getProjects(): Promise<Project[]> {
         for (const proj of defaultProjects) {
           const norm = normalizeProject(proj);
           seeded.push(norm);
-          await setDoc(doc(db, 'projects', proj.id), norm);
+          await setDoc(doc(db, 'projects', proj.id), sanitizeForFirestore(norm));
         }
         saveLocalProjects(seeded);
         return seeded;
@@ -249,22 +308,39 @@ export async function saveProject(project: Project): Promise<void> {
   unmarkProjectDeleted(project.id);
   if (project.slug) unmarkProjectDeleted(project.slug);
 
+  // Normalize YouTube URL: If empty or whitespace, clean to undefined. If valid URL, format into standard embed URL.
+  if (project.videoUrl !== undefined) {
+    project.videoUrl = formatYouTubeEmbedUrl(project.videoUrl);
+  }
+
+  // Ensure heroImage, externalUrl, etc. are properly trimmed or undefined if empty
+  if (project.heroImage !== undefined) {
+    project.heroImage = project.heroImage.trim();
+  }
+  if (project.externalUrl !== undefined) {
+    project.externalUrl = project.externalUrl.trim() || undefined;
+  }
+
+  // Sanitize payload recursively so NO undefined fields are sent to Firestore (preventing Firestore invalid-argument crashes)
+  const sanitized = sanitizeForFirestore(project) as Project;
+
   if (isFirebaseConfigured && db) {
     try {
       const docRef = doc(db, 'projects', project.id);
-      await setDoc(docRef, project);
+      await setDoc(docRef, sanitized);
     } catch (err) {
       console.error('Error saving to Firestore:', err);
+      throw err;
     }
   }
 
-  // Always keep local copy synchronized
+  // Always keep local copy synchronized with exact sanitized document
   const local = getLocalProjects();
   const index = local.findIndex((p) => p.id === project.id || p.slug === project.slug);
   if (index >= 0) {
-    local[index] = project;
+    local[index] = sanitized;
   } else {
-    local.push(project);
+    local.push(sanitized);
   }
   saveLocalProjects(local);
 }
@@ -301,6 +377,13 @@ export async function getSubProjectById(subId: string): Promise<SubProject | nul
 }
 
 export async function saveSubProject(sub: SubProject): Promise<void> {
+  if (sub.videoUrl !== undefined) {
+    sub.videoUrl = formatYouTubeEmbedUrl(sub.videoUrl);
+  }
+  if (sub.heroImage !== undefined) {
+    sub.heroImage = sub.heroImage.trim() || undefined;
+  }
+
   const container = await get3DContainerProject();
   const currentSubs = container.subProjects ? [...container.subProjects] : [];
   const idx = currentSubs.findIndex((s) => s.id === sub.id);
@@ -327,7 +410,7 @@ export async function resetProjectsToDefault(): Promise<void> {
   }
   if (isFirebaseConfigured && db) {
     for (const p of defaultProjects) {
-      await setDoc(doc(db, 'projects', p.id), normalizeProject(p));
+      await setDoc(doc(db, 'projects', p.id), sanitizeForFirestore(normalizeProject(p)));
     }
   }
 }
